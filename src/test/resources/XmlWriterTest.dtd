@@ -1,0 +1,25 @@
+<!-- A DTD for testing the XMLWriter class -->
+
+<!-- General entities -->
+<!ENTITY Copyr "Copyright 2006 C Thing Software">
+
+<!-- Paramter entities -->
+<!ENTITY % Entity1
+   "foo (F|T) 'F'"
+>
+
+<!-- DTD body -->
+<!ELEMENT elem1 (elem2,t1:elem3,elem4)>
+<!ATTLIST elem1
+	version NMTOKEN #REQUIRED
+	xmlns CDATA #REQUIRED
+>
+<!ELEMENT elem2 (#PCDATA)>
+<!ATTLIST elem2 src NMTOKEN #REQUIRED>
+<!ELEMENT elem4 (#PCDATA)>
+<!ELEMENT t1:elem3 EMPTY>
+<!ATTLIST t1:elem3
+	isGood (true|false) 'true'
+	dst NMTOKEN #REQUIRED
+	xmlns:t1 CDATA #REQUIRED
+>

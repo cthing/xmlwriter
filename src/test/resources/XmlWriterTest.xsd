@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- A Schema for testing the XMLWriter class -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="elem1">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="elem2"/>
+                <xs:element ref="elem3"/>
+                <xs:element ref="elem4"/>
+            </xs:sequence>
+            <xs:attribute name="version" use="required" type="xs:integer"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="elem2">
+        <xs:complexType mixed="true">
+            <xs:attribute name="src" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="elem3">
+        <xs:complexType>
+			<xs:attribute name="isGood" type="xs:boolean" default="true"/>
+            <xs:attribute name="dst" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="elem4" type="xs:string"/>
+</xs:schema>

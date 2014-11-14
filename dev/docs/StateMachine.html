@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>XmlWriter Formatting State Machine</title>
+        <style type="text/css">
+            .StateTable {
+                font-family: verdana, helvetica, sans-serif;
+                font-size: 10pt;
+                border: 1px solid #BBBBBB;
+                border-collapse: collapse;
+                margin-top: 14pt;
+			}
+            .StateTable th {
+                text-align: left;
+                border: 1px solid #BBBBBB;
+                padding: 3pt 5pt 3pt 5pt;
+                background-color: #FFFFCC;
+			}
+            .StateTable td {
+                border: 1px solid #BBBBBB;
+                padding: 3pt 5pt 3pt 5pt;
+                vertical-align: middle;
+			}
+        </style>
+    </head>
+    <body>
+        <h3>Overview</h3>
+        <p>This document describes the state machine at the core of the XmlWriter class.
+        </p>
+
+        <h3>State Diagram</h3>
+        <p><img src="StateMachine.gif" alt="State machine diagram" width="556" height="254"/></p>
+
+        <h3>State Transitions</h3>
+        <table class="StateTable">
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">BEFORE_DOC</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td></td><td>THROW</td></tr>
+            <tr><td>BLOCK_REF</td>      <td></td><td>THROW</td></tr>
+            <tr><td>CHARACTERS</td>     <td></td><td>THROW</td></tr>
+            <tr><td>COMMENT</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td></td><td>THROW</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td></td><td>THROW</td></tr>
+            <tr><td>NEWLINE</td>        <td></td><td>THROW</td></tr>
+            <tr><td>PI</td>             <td></td><td>THROW</td></tr>
+            <tr><td>START_CDATA</td>    <td></td><td>THROW</td></tr>
+            <tr><td>START_DOCUMENT</td> <td>Write XML prolog</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td></td><td>THROW</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">BEFORE_ROOT</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td>Write ref</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>BLOCK_REF</td>      <td>Write ref</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write characters</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>COMMENT</td>        <td>Write comment</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td>Cleanup</td><td>AFTER_DOC</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td></td><td>THROW</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write newline</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>PI</td>             <td>Write PI</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>START_CDATA</td>    <td></td><td>THROW</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td>Write doctype</td><td>IN_DTD</td></tr>
+            <tr><td>START_ELEMENT</td>  <td>Push new element on stack</td><td>IN_START_TAG</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">IN_START_TAG</td><td>ATTRIBUTE</td><td>Add attribute to top element</td><td>IN_START_TAG</td></tr>
+            <tr><td>INLINE_REF</td>     <td>Write top element, write ref</td><td>AFTER_DATA</td></tr>
+            <tr><td>BLOCK_REF</td>      <td>Write top element, write ref</td><td>AFTER_TAG</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write top element, write characters</td><td>AFTER_DATA</td></tr>
+            <tr><td>COMMENT</td>        <td>Write top element, write comment</td><td>AFTER_TAG</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td>Write top element, cleanup</td><td>AFTER_DOC</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td>Write top element (minimize_, pop</td><td>AFTER_TAG<br/>AFTER_ROOT</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write top element, write newline</td><td>AFTER_TAG</td></tr>
+            <tr><td>PI</td>             <td>Write top element, write PI</td><td>AFTER_TAG</td></tr>
+            <tr><td>START_CDATA</td>    <td>Write top element, open CDATA section</td><td>IN_CDATA</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td>Write top element, push new element</td><td>IN_START_TAG</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">IN_CDATA</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td>Write ref</td><td>IN_CDATA</td></tr>
+            <tr><td>BLOCK_REF</td>      <td>Write ref</td><td>IN_CDATA</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write characters - do not escape</td><td>IN_CDATA</td></tr>
+            <tr><td>COMMENT</td>        <td>Write comment</td><td>IN_CDATA</td></tr>
+            <tr><td>END_CDATA</td>      <td>Close CDATA section</td><td>AFTER_DATA</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td></td><td>THROW</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td></td><td>THROW</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write newline</td><td>IN_CDATA</td></tr>
+            <tr><td>PI</td>             <td></td><td>THROW</td></tr>
+            <tr><td>START_CDATA</td>    <td></td><td>THROW</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td></td><td>THROW</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">IN_DTD</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td></td><td>THROW</td></tr>
+            <tr><td>BLOCK_REF</td>      <td></td><td>THROW</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write characters</td><td>IN_DTD</td></tr>
+            <tr><td>COMMENT</td>        <td>Write comment</td><td>IN_DTD</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td></td><td>THROW</td></tr>
+            <tr><td>END_DTD</td>        <td>No op</td><td>BEFORE_ROOT</td></tr>
+            <tr><td>END_ELEMENT</td>    <td></td><td>THROW</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write newline</td><td>IN_DTD</td></tr>
+            <tr><td>PI</td>             <td></td><td>THROW</td></tr>
+            <tr><td>START_CDATA</td>    <td></td><td>THROW</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td></td><td>THROW</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">AFTER_TAG</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td>Write ref</td><td>AFTER_DATA</td></tr>
+            <tr><td>BLOCK_REF</td>      <td>Write ref</td><td>AFTER_TAG</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write characters</td><td>AFTER_DATA</td></tr>
+            <tr><td>COMMENT</td>        <td>Write comment</td><td>AFTER_TAG</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td>Cleanup</td><td>THROW</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td>Write end tag, pop</td><td>AFTER_TAG<br/>AFTER_ROOT</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write newline</td><td>AFTER_TAG</td></tr>
+            <tr><td>PI</td>             <td>Write PI</td><td>AFTER_TAG</td></tr>
+            <tr><td>START_CDATA</td>    <td>Open CDATA section</td><td>IN_CDATA</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td>Push new element</td><td>IN_START_TAG</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">AFTER_DATA</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td>Write ref</td><td>AFTER_DATA</td></tr>
+            <tr><td>BLOCK_REF</td>      <td>Write ref</td><td>AFTER_DATA</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write characters</td><td>AFTER_DATA</td></tr>
+            <tr><td>COMMENT</td>        <td>Write comment</td><td>AFTER_DATA</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td>Cleanup</td><td>THROW</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td>Write end tag, pop</td><td>AFTER_TAG<br/>AFTER_ROOT</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write newline</td><td>AFTER_DATA</td></tr>
+            <tr><td>PI</td>             <td>Write PI</td><td>AFTER_DATA</td></tr>
+            <tr><td>START_CDATA</td>    <td>Open CDATA section</td><td>IN_CDATA</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td>Push new element</td><td>IN_START_TAG</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">AFTER_ROOT</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td>Write ref</td><td>AFTER_ROOT</td></tr>
+            <tr><td>BLOCK_REF</td>      <td>Write ref</td><td>AFTER_ROOT</td></tr>
+            <tr><td>CHARACTERS</td>     <td>Write characters</td><td>AFTER_ROOT</td></tr>
+            <tr><td>COMMENT</td>        <td>Write comment</td><td>AFTER_ROOT</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td>Cleanup</td><td>AFTER_DOC</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td></td><td>THROW</td></tr>
+            <tr><td>NEWLINE</td>        <td>Write newline</td><td>AFTER_ROOT</td></tr>
+            <tr><td>PI</td>             <td>Write PI</td><td>AFTER_ROOT</td></tr>
+            <tr><td>START_CDATA</td>    <td></td><td>THROW</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td></td><td>THROW</td></tr>
+
+            <tr><th>Current State</th><th>Event</th><th>Action</th><th>Next State</th></tr>
+            <tr><td rowspan="15">AFTER_DOC</td><td>ATTRIBUTE</td><td></td><td>THROW</td></tr>
+            <tr><td>INLINE_REF</td>     <td></td><td>THROW</td></tr>
+            <tr><td>BLOCK_REF</td>      <td></td><td>THROW</td></tr>
+            <tr><td>CHARACTERS</td>     <td></td><td>THROW</td></tr>
+            <tr><td>COMMENT</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_CDATA</td>      <td></td><td>THROW</td></tr>
+            <tr><td>END_DOCUMENT</td>   <td></td><td>THROW</td></tr>
+            <tr><td>END_DTD</td>        <td></td><td>THROW</td></tr>
+            <tr><td>END_ELEMENT</td>    <td></td><td>THROW</td></tr>
+            <tr><td>NEWLINE</td>        <td></td><td>THROW</td></tr>
+            <tr><td>PI</td>             <td></td><td>THROW</td></tr>
+            <tr><td>START_CDATA</td>    <td></td><td>THROW</td></tr>
+            <tr><td>START_DOCUMENT</td> <td></td><td>THROW</td></tr>
+            <tr><td>START_DTD</td>      <td></td><td>THROW</td></tr>
+            <tr><td>START_ELEMENT</td>  <td></td><td>THROW</td></tr>
+		</table>
+    </body>
+</html>
