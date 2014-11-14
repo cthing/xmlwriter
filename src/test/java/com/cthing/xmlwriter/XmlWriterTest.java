@@ -252,8 +252,7 @@ public class XmlWriterTest {
 
         xmlWriter.startDocument();
         xmlWriter.startElement("elem1");
-        xmlWriter.startElement("elem2");
-        xmlWriter.endElement();
+        xmlWriter.startElement("elem2").endElement();
         xmlWriter.emptyElement("elem3");
         xmlWriter.setMinimizeEmpty(false);
         xmlWriter.startElement("elem4");
@@ -273,12 +272,10 @@ public class XmlWriterTest {
         xmlWriter.setPrettyPrint(true);
         xmlWriter.startDocument();
         xmlWriter.startElement("elem1");
-        xmlWriter.startElement("elem2");
-        xmlWriter.endElement();
+        xmlWriter.startElement("elem2").endElement();
         xmlWriter.emptyElement("elem3");
         xmlWriter.setMinimizeEmpty(false);
-        xmlWriter.startElement("elem4");
-        xmlWriter.endElement();
+        xmlWriter.startElement("elem4").endElement();
         xmlWriter.startElement("elem5");
         xmlWriter.startElement("elem6");
         xmlWriter.endElement();
@@ -341,8 +338,7 @@ public class XmlWriterTest {
 
         xmlWriter.startDocument();
         xmlWriter.startElement("elem1", attrs1);
-        xmlWriter.startElement("elem2", attrs2);
-        xmlWriter.endElement();
+        xmlWriter.startElement("elem2", attrs2).endElement();
         xmlWriter.endElement();
         xmlWriter.endDocument();
 
@@ -364,9 +360,7 @@ public class XmlWriterTest {
         xmlWriter.setOutput(writer);
 
         xmlWriter.startDocument();
-        xmlWriter.emptyElement("elem1", attrs1);
-        xmlWriter.addAttribute("z1", 13);
-        xmlWriter.addAttributes(attrs2);
+        xmlWriter.emptyElement("elem1", attrs1).addAttribute("z1", 13).addAttributes(attrs2);
         xmlWriter.endDocument();
 
         showOutput(writer, "attributes - augmenting");
@@ -413,9 +407,7 @@ public class XmlWriterTest {
         xmlWriter.setPrettyPrint(true);
         xmlWriter.startDocument();
         xmlWriter.startElement("elem1");
-        xmlWriter.startElement("elem2");
-        xmlWriter.characters("Hello World");
-        xmlWriter.endElement();
+        xmlWriter.startElement("elem2").characters("Hello World").endElement();
         xmlWriter.startElement("elem3");
         xmlWriter.newline();
         xmlWriter.comment(" A comment ");
@@ -486,9 +478,7 @@ public class XmlWriterTest {
         xmlWriter.emptyElement("elem3");
         xmlWriter.emptyElement("elem4");
         xmlWriter.newline();
-        xmlWriter.comment(" Second comment ");
-        xmlWriter.entityRef("charFile");
-        xmlWriter.comment(" Third comment ");
+        xmlWriter.comment(" Second comment ").entityRef("charFile").comment(" Third comment ");
         xmlWriter.emptyElement("elem5");
         xmlWriter.newline();
         xmlWriter.comment(" Fourth comment ");

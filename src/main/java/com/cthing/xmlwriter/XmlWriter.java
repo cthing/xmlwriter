@@ -533,8 +533,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param reader  Parent in the filter chain or {@code null} if there is no chain.
      */
     public XmlWriter(final XMLReader reader) {
-        super(reader);
-        init(null);
+        this(reader, null);
     }
 
     /**
@@ -634,16 +633,18 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param prefix  Prefix for the namespace URI. Use an empty string ("") to specify the default namespace.
      * @param uri  URI to be represented by the specified prefix
+     * @return This class instance
      *
      * @see #addNSRootDecl(String)
      * @see #addNSRootDecl(String, String)
      */
-    public void addNSPrefix(final String prefix, final String uri) {
+    public XmlWriter addNSPrefix(final String prefix, final String uri) {
         if (prefix == null || uri == null) {
             throw new IllegalArgumentException("arguments cannot be null");
         }
 
         this.nsPrefixMap.put(uri, prefix);
+        return this;
     }
 
     /**
@@ -656,12 +657,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * For more information refer to the discussion of namespace support in the class overview documentation.
      *
      * @param uri  The namespace URI to declare on the root element.
+     * @return This class instance
      *
      * @see #addNSRootDecl(String, String)
      * @see #addNSPrefix(String, String)
      */
-    public void addNSRootDecl(final String uri) {
+    public XmlWriter addNSRootDecl(final String uri) {
         this.nsRootDeclSet.add(uri);
+        return this;
     }
 
     /**
@@ -677,13 +680,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param prefix  Prefix for the namespace URI. Use an empty string ("") to specify the default namespace.
      * @param uri  The namespace URI to declare on the root element.
+     * @return This class instance
      *
      * @see #addNSRootDecl(String)
      * @see #addNSPrefix(String, String)
      */
-    public void addNSRootDecl(final String prefix, final String uri) {
+    public XmlWriter addNSRootDecl(final String prefix, final String uri) {
         addNSPrefix(prefix, uri);
         addNSRootDecl(uri);
+        return this;
     }
 
     /**
@@ -898,11 +903,12 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param sa  Specify {@code true} if the document does not contain any external markup declarations.
      * @param isFragment  Specify {@code true} if the document is only a fragment of a larger XML document in which
      *      case the XML header is not written.
+     * @return This class instance
      * @throws SAXException  If there is a problem writing the XML header.
      *
      * @see #startDocument()
      */
-    public void startDocument(final String encoding, final boolean sa, final boolean isFragment) throws SAXException {
+    public XmlWriter startDocument(final String encoding, final boolean sa, final boolean isFragment) throws SAXException {
         handleEvent(Event.START_DOCUMENT_EVENT);
 
         if (!isFragment) {
@@ -918,6 +924,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
             writeNewline();
             writeNewline();
         }
+
+        return this;
     }
 
     /**
@@ -946,11 +954,13 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param name  Root element name
      * @param publicId  Public identifier or {@code null} if no public identifier is available.
      * @param systemId  System identifier (must be specified).
+     * @return This class instance
      * @throws SAXException If there is a problem writing the DOCTYPE.
      */
-    public void doctype(final String name, final String publicId, final String systemId) throws SAXException {
+    public XmlWriter doctype(final String name, final String publicId, final String systemId) throws SAXException {
         startDTD(name, publicId, systemId);
         endDTD();
+        return this;
     }
 
     /**
@@ -963,10 +973,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *      zero size collection if there are no entities to declare.
      * @param notations  Collection of Notation objects to declare in an internal subset. Specify {@code null} or a
      *      zero size collection if there are no notations to declare.
+     * @return This class instance
      * @throws SAXException If there is a problem writing the DOCTYPE.
      */
-    public void doctype(final String name, final String publicId, final String systemId,
-                        final Collection<Entity> entities, final Collection<Notation> notations) throws SAXException {
+    public XmlWriter doctype(final String name, final String publicId, final String systemId,
+                             final Collection<Entity> entities, final Collection<Notation> notations) throws SAXException {
         startDTD(name, publicId, systemId);
         if ((entities != null && !entities.isEmpty()) || (notations != null && !notations.isEmpty())) {
             writeRaw(" [");
@@ -988,6 +999,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
             writeRaw(']');
         }
         endDTD();
+        return this;
     }
 
     /**
@@ -1094,13 +1106,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param qName  The element's qualified (prefixed) name, or the empty string if none is available. This method
      *      will use the qName as a template for generating a prefix if necessary, but it is not guaranteed to use
      *      the same qName.
+     * @return This class instance
      * @throws SAXException If there is an error writing the start tag, or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #startElement(String, String, String, Attributes)
      */
-    public void startElement(final String uri, final String localName, final String qName) throws SAXException {
+    public XmlWriter startElement(final String uri, final String localName, final String qName) throws SAXException {
         startElement(uri, localName, qName, EMPTY_ATTRS);
+        return this;
     }
 
     /**
@@ -1114,13 +1128,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param uri  The element's namespace URI
      * @param localName  The element's local name
      * @param attrs  An initial set of attributes for the element.
+     * @return This class instance
      * @throws SAXException If there is an error writing the start tag, or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #startElement(String, String, String, Attributes)
      */
-    public void startElement(final String uri, final String localName, final Attributes attrs) throws SAXException {
+    public XmlWriter startElement(final String uri, final String localName, final Attributes attrs) throws SAXException {
         startElement(uri, localName, "", attrs);
+        return this;
     }
 
     /**
@@ -1133,13 +1149,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param uri  The element's namespace URI
      * @param localName  The element's local name
+     * @return This class instance
      * @throws SAXException If there is an error writing the start tag, or if a handler further down the filter
      *      chain raises an exception.
      *
      * @see #startElement(String, String, String, Attributes)
      */
-    public void startElement(final String uri, final String localName) throws SAXException {
+    public XmlWriter startElement(final String uri, final String localName) throws SAXException {
         startElement(uri, localName, "", EMPTY_ATTRS);
+        return this;
     }
 
     /**
@@ -1152,13 +1170,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param localName  The element's local name
      * @param attrs  An initial set of attributes for the element.
+     * @return This class instance
      * @throws SAXException If there is an error writing the start tag, or if a handler further down the filter
      *      chain raises an exception.
      *
      * @see #startElement(String, String, String, Attributes)
      */
-    public void startElement(final String localName, final Attributes attrs) throws SAXException {
+    public XmlWriter startElement(final String localName, final Attributes attrs) throws SAXException {
         startElement(XMLConstants.NULL_NS_URI, localName, "", attrs);
+        return this;
     }
 
     /**
@@ -1170,13 +1190,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * corresponding call to {@link #endElement() endElement}.
      *
      * @param localName  The element's local name
+     * @return This class instance
      * @throws SAXException If there is an error writing the start tag, or if a handler further down the filter
      *      chain raises an exception.
      *
      * @see #startElement(String, String, String, Attributes)
      */
-    public void startElement(final String localName) throws SAXException {
+    public XmlWriter startElement(final String localName) throws SAXException {
         startElement(XMLConstants.NULL_NS_URI, localName, "", EMPTY_ATTRS);
+        return this;
     }
 
     /**
@@ -1227,10 +1249,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *      will use the qName as a template for generating a prefix if necessary, but it is not guaranteed to use
      *      the same qName.
      * @param attrs  An initial set of attributes for the element.
+     * @return This class instance
      * @throws SAXException If there is an error writing the tag, or if a handler further down the filter chain
      *      raises an exception.
      */
-    public void emptyElement(final String uri, final String localName, final String qName, final Attributes attrs)
+    public XmlWriter emptyElement(final String uri, final String localName, final String qName, final Attributes attrs)
             throws SAXException {
         final State previousState = handleEvent(Event.START_ELEMENT_EVENT);
 
@@ -1244,6 +1267,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
         }
 
         super.startElement(uri, localName, qName, attrs);
+        return this;
     }
 
     /**
@@ -1259,13 +1283,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param qName  The element's qualified (prefixed) name, or the empty string if none is available. This method
      *      will use the qName as a template for generating a prefix if necessary, but it is not guaranteed to use
      *      the same qName.
+     * @return This class instance
      * @throws SAXException If there is an error writing the start tag, or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #emptyElement(String, String, String, Attributes)
      */
-    public void emptyElement(final String uri, final String localName, final String qName) throws SAXException {
-        emptyElement(uri, localName, qName, EMPTY_ATTRS);
+    public XmlWriter emptyElement(final String uri, final String localName, final String qName) throws SAXException {
+        return emptyElement(uri, localName, qName, EMPTY_ATTRS);
     }
 
     /**
@@ -1280,13 +1305,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param uri  The element's namespace URI
      * @param localName  The element's local name
      * @param attrs  An initial set of attributes for the element.
+     * @return This class instance
      * @throws SAXException If there is an error writing the tag, or if a handler further down the filter chain raises
      *      an exception.
      *
      * @see #emptyElement(String, String, String, Attributes)
      */
-    public void emptyElement(final String uri, final String localName, final Attributes attrs) throws SAXException {
-        emptyElement(uri, localName, "", attrs);
+    public XmlWriter emptyElement(final String uri, final String localName, final Attributes attrs) throws SAXException {
+        return emptyElement(uri, localName, "", attrs);
     }
 
     /**
@@ -1299,12 +1325,13 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param uri  The element's namespace URI
      * @param localName  The element's local name
+     * @return This class instance
      * @throws SAXException If there is an error writing the tag, or ifa handler further down the filter chain raises
      *      an exception.
      * @see #emptyElement(String, String, String, Attributes)
      */
-    public void emptyElement(final String uri, final String localName) throws SAXException {
-        emptyElement(uri, localName, "", EMPTY_ATTRS);
+    public XmlWriter emptyElement(final String uri, final String localName) throws SAXException {
+        return emptyElement(uri, localName, "", EMPTY_ATTRS);
     }
 
     /**
@@ -1318,13 +1345,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param localName  The element's local name
      * @param attrs  An initial set of attributes for the element.
+     * @return This class instance
      * @throws SAXException If there is an error writing the tag, or if a handler further down the filter chain raises
      *      an exception.
      *
      * @see #emptyElement(String, String, String, Attributes)
      */
-    public void emptyElement(final String localName, final Attributes attrs) throws SAXException {
-        emptyElement(XMLConstants.NULL_NS_URI, localName, "", attrs);
+    public XmlWriter emptyElement(final String localName, final Attributes attrs) throws SAXException {
+        return emptyElement(XMLConstants.NULL_NS_URI, localName, "", attrs);
     }
 
     /**
@@ -1337,39 +1365,43 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * closing tags, do not call {@link #endElement() endElement} to close this element.</strong>
      *
      * @param localName  The element's local name
+     * @return This class instance
      * @throws SAXException If there is an error writing the tag, or if a handler further down the filter chain
      *      raises an exception.
      * @see #emptyElement(String, String, String, Attributes)
      */
-    public void emptyElement(final String localName) throws SAXException {
-        emptyElement(XMLConstants.NULL_NS_URI, localName, "", EMPTY_ATTRS);
+    public XmlWriter emptyElement(final String localName) throws SAXException {
+        return emptyElement(XMLConstants.NULL_NS_URI, localName, "", EMPTY_ATTRS);
     }
 
     /**
      * Replaces the attributes already set on the current start tag with the specified attributes.
      *
      * @param attrs  Attributes to set on the current start tag.
+     * @return This class instance
      * @throws SAXException If there is an error writing the attributes or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #addAttributes(Attributes)
      */
-    public void setAttributes(final Attributes attrs) throws SAXException {
+    public XmlWriter setAttributes(final Attributes attrs) throws SAXException {
         handleEvent(Event.ATTRIBUTE_EVENT);
 
         topElement().attrs.setAttributes(attrs);
+        return this;
     }
 
     /**
      * Adds the specified set of attributes to those already set on the current start tag.
      *
      * @param attrs  Attributes to add to the current start tag.
+     * @return This class instance
      * @throws SAXException If there is an error writing the attributes or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #setAttributes(Attributes)
      */
-    public void addAttributes(final Attributes attrs) throws SAXException {
+    public XmlWriter addAttributes(final Attributes attrs) throws SAXException {
         handleEvent(Event.ATTRIBUTE_EVENT);
 
         final Element element = topElement();
@@ -1380,6 +1412,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                                        attrs.getQName(i), attrs.getType(i),
                                        attrs.getValue(i));
         }
+        return this;
     }
 
     /**
@@ -1406,14 +1439,16 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *      <a href="http://www.w3.org/TR/2004/REC-xml-20040204/#AVNormalize">section 3.3.3</a> of the XML 1.0
      *      specification)
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter chain
      *      raises an exception.
      */
-    public void addAttribute(final String uri, final String localName, final String qName, final String type,
-                             final String value) throws SAXException {
+    public XmlWriter addAttribute(final String uri, final String localName, final String qName, final String type,
+                                  final String value) throws SAXException {
         handleEvent(Event.ATTRIBUTE_EVENT);
 
         topElement().attrs.addAttribute(uri, localName, qName, type, value);
+        return this;
     }
 
     /**
@@ -1440,12 +1475,13 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *      <a href="http://www.w3.org/TR/2004/REC-xml-20040204/#AVNormalize"> section 3.3.3</a> of the XML 1.0
      *      specification)
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter chain
      *      raises an exception.
      */
-    public void addAttribute(final String uri, final String localName, final String qName, final String type,
-                             final Object value) throws SAXException {
-        addAttribute(uri, localName, qName, type, value.toString());
+    public XmlWriter addAttribute(final String uri, final String localName, final String qName, final String type,
+                                  final Object value) throws SAXException {
+        return addAttribute(uri, localName, qName, type, value.toString());
     }
 
     /**
@@ -1459,14 +1495,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *      method will use the qName as a template for generating a prefix if necessary, but it is not guaranteed
      *      to use the same qName.
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter
      *      chain raises an exception.
      *
      * @see #addAttribute(String, String, String, String, String)
      */
-    public void addAttribute(final String uri, final String localName, final String qName, final String value)
+    public XmlWriter addAttribute(final String uri, final String localName, final String qName, final String value)
             throws SAXException {
-        addAttribute(uri, localName, qName, CDATA, value);
+        return addAttribute(uri, localName, qName, CDATA, value);
     }
 
     /**
@@ -1480,14 +1517,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *      will use the qName as a template for generating a prefix if necessary, but it is not guaranteed to use the
      *      same qName.
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #addAttribute(String, String, String, String, String)
      */
-    public void addAttribute(final String uri, final String localName, final String qName, final Object value)
+    public XmlWriter addAttribute(final String uri, final String localName, final String qName, final Object value)
             throws SAXException {
-        addAttribute(uri, localName, qName, CDATA, value.toString());
+        return addAttribute(uri, localName, qName, CDATA, value.toString());
     }
 
     /**
@@ -1499,13 +1537,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param uri  The attribute's namespace URI
      * @param localName  The attribute's local name
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #addAttribute(String, String, String, String, String)
      */
-    public void addAttribute(final String uri, final String localName, final String value) throws SAXException {
-        addAttribute(uri, localName, "", CDATA, value);
+    public XmlWriter addAttribute(final String uri, final String localName, final String value) throws SAXException {
+        return addAttribute(uri, localName, "", CDATA, value);
     }
 
     /**
@@ -1517,13 +1556,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param uri  The attribute's namespace URI
      * @param localName  The attribute's local name
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter chain
      *      raises an exception.
      *
      * @see #addAttribute(String, String, String, String, String)
      */
-    public void addAttribute(final String uri, final String localName, final Object value) throws SAXException {
-        addAttribute(uri, localName, "", CDATA, value.toString());
+    public XmlWriter addAttribute(final String uri, final String localName, final Object value) throws SAXException {
+        return addAttribute(uri, localName, "", CDATA, value.toString());
     }
 
     /**
@@ -1534,13 +1574,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param localName  The attribute's local name
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter
      *      chain raises an exception.
      *
      * @see #addAttribute(String, String, String, String, String)
      */
-    public void addAttribute(final String localName, final String value) throws SAXException {
-        addAttribute(XMLConstants.NULL_NS_URI, localName, "", CDATA, value);
+    public XmlWriter addAttribute(final String localName, final String value) throws SAXException {
+        return addAttribute(XMLConstants.NULL_NS_URI, localName, "", CDATA, value);
     }
 
     /**
@@ -1551,12 +1592,13 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      *
      * @param localName  The attribute's local name
      * @param value  The attribute's value
+     * @return This class instance
      * @throws SAXException If there is an error writing the attribute, or if a handler further down the filter chain
      *      raises an exception.
      * @see #addAttribute(String, String, String, String, String)
      */
-    public void addAttribute(final String localName, final Object value) throws SAXException {
-        addAttribute(XMLConstants.NULL_NS_URI, localName, "", CDATA, value.toString());
+    public XmlWriter addAttribute(final String localName, final Object value) throws SAXException {
+        return addAttribute(XMLConstants.NULL_NS_URI, localName, "", CDATA, value.toString());
     }
 
     /**
@@ -1585,23 +1627,27 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * method.
      *
      * @param data  String to write
+     * @return This class instance
      * @throws SAXException If there is a problem writing the data.
      * @see #characters(char[], int, int)
      */
-    public void characters(final String data) throws SAXException {
+    public XmlWriter characters(final String data) throws SAXException {
         characters(data.toCharArray(), 0, data.length());
+        return this;
     }
 
     /**
      * Writes the specified string as unescaped XML data.
      *
      * @param data  String to write
+     * @return This class instance
      * @throws SAXException If there is a problem writing the data.
      */
-    public void data(final String data) throws SAXException {
+    public XmlWriter data(final String data) throws SAXException {
         handleEvent(Event.CHARACTERS_EVENT);
 
         writeRaw(data);
+        return this;
     }
 
     /**
@@ -1632,12 +1678,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Writes a CDATA section that consists of the CDATA start tag, the specified data, and the CDATA end tag.
      *
      * @param data  Data for the CDATA section
+     * @return This class instance
      * @throws SAXException If there is a problem writing the CDATA section.
      */
-    public void cdataSection(final String data) throws SAXException {
+    public XmlWriter cdataSection(final String data) throws SAXException {
         startCDATA();
         characters(data);
         endCDATA();
+        return this;
     }
 
     /**
@@ -1682,10 +1730,12 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * printing. To place a comment on its own line, use the {@link #newline() newline} method.
      *
      * @param info  Comment to write
+     * @return This class instance
      * @throws SAXException  If there is a problem writing the comment.
      */
-    public void comment(final String info) throws SAXException {
+    public XmlWriter comment(final String info) throws SAXException {
         comment(info.toCharArray(), 0, info.length());
+        return this;
     }
 
     /**
@@ -1719,10 +1769,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * actual formatting of entity references depends on the context in which the reference is written.
      *
      * @param entityName  Name of the entity to write as an entity reference
+     * @return This class instance
      * @throws SAXException If there is a problem writing the entity reference.
      */
-    public void entityRef(final String entityName) throws SAXException {
-        entityRef(entityName, FormattingHint.INLINE);
+    public XmlWriter entityRef(final String entityName) throws SAXException {
+        return entityRef(entityName, FormattingHint.INLINE);
     }
 
     /**
@@ -1735,9 +1786,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param entityName  Name of the entity to write as an entity reference
      * @param hint  Hint to indicate if the entity reference should be written inline with element and character
      *      data, or as a standalone block. The hint is ignored when not in pretty printing mode.
+     * @return This class instance
      * @throws SAXException If there is a problem writing the entity reference.
      */
-    public void entityRef(final String entityName, final FormattingHint hint) throws SAXException {
+    public XmlWriter entityRef(final String entityName, final FormattingHint hint) throws SAXException {
         handleEvent((hint == FormattingHint.INLINE) ? Event.INLINE_REF_EVENT : Event.BLOCK_REF_EVENT);
 
         if (this.prettyPrint && hint == FormattingHint.BLOCK) {
@@ -1753,6 +1805,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
             writeNewline();
             writeIndent(1);
         }
+
+        return this;
     }
 
     /**
@@ -1760,29 +1814,35 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * character reference &amp;#97;.
      *
      * @param ch  Character to write as a character reference
+     * @return This class instance
      * @throws SAXException If there is a problem writing the character reference.
      */
-    public void characterRef(final char ch) throws SAXException {
+    public XmlWriter characterRef(final char ch) throws SAXException {
         handleEvent(Event.INLINE_REF_EVENT);
 
         writeRaw("&#");
         writeRaw(Integer.toString(ch));
         writeRaw(';');
+
+        return this;
     }
 
     /**
      * Writes a newline. If pretty printing is enabled and a CDATA section is not open, the new line begins at the
      * current indentation.
      *
+     * @return This class instance
      * @throws SAXException If there is a problem writing the newline.
      */
-    public void newline() throws SAXException {
+    public XmlWriter newline() throws SAXException {
         handleEvent(Event.NEWLINE_EVENT);
 
         writeNewline();
         if (this.prettyPrint && this.currentState != State.IN_CDATA_STATE) {
             writeIndent(1);
         }
+
+        return this;
     }
 
     @Override
