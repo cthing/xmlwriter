@@ -2494,13 +2494,12 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 writeRaw(' ');
             }
 
-            if (XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
-                writeRaw("xmlns=");
-            } else {
-                writeRaw("xmlns:");
+            writeRaw(XMLConstants.XMLNS_ATTRIBUTE);
+            if (!XMLConstants.DEFAULT_NS_PREFIX.equals(prefix)) {
+                writeRaw(':');
                 writeRaw(prefix);
-                writeRaw('=');
             }
+            writeRaw('=');
 
             final String uri = this.nsSupport.getURI(prefix);
             writeQuoted((uri == null) ? XMLConstants.NULL_NS_URI : uri);
