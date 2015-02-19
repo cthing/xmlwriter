@@ -245,9 +245,6 @@
         <!-- Javadoc comments required for all class and interface definitions -->
         <module name="JavadocType"/>
 
-        <!-- Validates JUnit method types -->
-        <module name="JUnitTestCase"/>
-
         <!-- The "{" goes on the end of the line (e.g. "if (exists) {") -->
         <module name="LeftCurly">
             <property name="option" value="eol"/>
@@ -371,12 +368,6 @@
 
         <!-- Flags redundant modifiers (e.g. public on interface methods -->
         <module name="RedundantModifier"/>
-
-        <!-- Flags redundant exceptions in throws clause (e.g. duplicates, or subclasses of another declared exception) -->
-        <module name="RedundantThrows">
-            <property name="allowUnchecked" value="true"/>
-            <property name="suppressLoadErrors" value="true"/>
-        </module>
 
         <!-- Disallow use of hasProperty matcher in unit tests -->
         <module name="RegexpSinglelineJava">
