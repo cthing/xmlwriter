@@ -3,7 +3,7 @@ apply plugin: 'com.cthing.checkstyle-checks'
 apply plugin: 'com.cthing.yalocc'
 
 group = 'com.cthing'
-version.semver = '1.0.0'
+version.semver = '0.1.0'
 
 projectInfo {
     description = 'Classes for writing XML documents.'
@@ -12,14 +12,14 @@ projectInfo {
 
 buildscript {
     dependencies {
-        classpath 'com.cthing:gradle-core-plugins:1.0.0.+'
-        classpath 'com.cthing:gradle-checkstyle-checks-plugin:1.0.0.+'
-        classpath 'com.cthing:gradle-yalocc-plugin:1.0.0.+'
+        classpath 'com.cthing:gradle-core-plugins:0.1.0.+'
+        classpath 'com.cthing:gradle-checkstyle-checks-plugin:0.1.0.+'
+        classpath 'com.cthing:gradle-yalocc-plugin:0.1.0.+'
     }
 }
 
 versions {
-    cthingTest           '1.0.0.+'
+    cthingTest           '0.1.0.+'
     findbugsAnnotations  '1.3.2'
 }
 

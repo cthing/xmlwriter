@@ -1018,11 +1018,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
         writeRaw(name);
 
         if (publicId != null) {
-            writeRaw(" PUBLIC \"" + publicId + "\"");
+            writeRaw(" PUBLIC \"" + publicId + '"');
         } else {
             writeRaw(" SYSTEM");
         }
-        writeRaw(" \"" + systemId + "\"");
+        writeRaw(" \"" + systemId + '"');
     }
 
     /**
