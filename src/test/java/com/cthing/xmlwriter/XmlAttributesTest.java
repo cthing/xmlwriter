@@ -4,7 +4,7 @@
  */
 package com.cthing.xmlwriter;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -29,7 +29,7 @@ public class XmlAttributesTest {
         assertThat(attrs.getValue("attr2"), equalTo("value2"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testBadAttrCtor() {
         new XmlAttributes("attr1", "value1", "attr2");
     }

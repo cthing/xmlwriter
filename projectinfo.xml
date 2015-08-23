@@ -9,13 +9,13 @@
         <internalDependency config="classpath" group="com.cthing" name="gradle-checkstyle-checks-plugin" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-core-plugins" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-yalocc-plugin" version="0.1.0.+" />
-        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201507300745" />
-        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201507310804" />
+        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201508110639" />
+        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201508110632" />
         <internalDependency config="testCompile" group="com.cthing" name="cthing-test" version="0.1.0.+" />
         <internalDependency config="testRuntime" group="com.cthing" name="cthing-test" version="0.1.0.+" />
     </internalDependencies>
     <externalDependencies>
-        <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.4" />
+        <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.3" />
         <externalDependency config="buildnarc" group="org.codenarc" name="CodeNarc" version="0.24" />
         <externalDependency config="checkstyle" group="com.puppycrawl.tools" name="checkstyle" version="6.7" />
         <externalDependency config="compile" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
@@ -25,19 +25,11 @@
         <externalDependency config="jacocoAgent" group="org.jacoco" name="org.jacoco.agent" version="0.7.5.201505241946" />
         <externalDependency config="jacocoAnt" group="org.jacoco" name="org.jacoco.ant" version="0.7.5.201505241946" />
         <externalDependency config="runtime" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
-        <externalDependency config="testCompile" group="com.marvinformatics" name="kiss-matchers" version="0.15" />
+        <externalDependency config="testCompile" group="junit" name="junit" version="4.12" />
         <externalDependency config="testCompile" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
-        <externalDependency config="testCompile" group="org.hamcrest" name="hamcrest-core" version="1.3" />
-        <externalDependency config="testCompile" group="org.hamcrest" name="hamcrest-integration" version="1.3" />
         <externalDependency config="testCompile" group="org.hamcrest" name="hamcrest-library" version="1.3" />
-        <externalDependency config="testCompile" group="org.mockito" name="mockito-core" version="1.10.19" />
-        <externalDependency config="testCompile" group="org.testng" name="testng" version="6.9.4" />
-        <externalDependency config="testRuntime" group="com.marvinformatics" name="kiss-matchers" version="0.15" />
+        <externalDependency config="testRuntime" group="junit" name="junit" version="4.12" />
         <externalDependency config="testRuntime" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
-        <externalDependency config="testRuntime" group="org.hamcrest" name="hamcrest-core" version="1.3" />
-        <externalDependency config="testRuntime" group="org.hamcrest" name="hamcrest-integration" version="1.3" />
         <externalDependency config="testRuntime" group="org.hamcrest" name="hamcrest-library" version="1.3" />
-        <externalDependency config="testRuntime" group="org.mockito" name="mockito-core" version="1.10.19" />
-        <externalDependency config="testRuntime" group="org.testng" name="testng" version="6.9.4" />
     </externalDependencies>
 </project>

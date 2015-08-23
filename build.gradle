@@ -21,10 +21,14 @@ buildscript {
 versions {
     cthingTest           '0.1.0.+'
     findbugsAnnotations  '1.3.2'
+    hamcrest             '1.3'
+    junit                '4.12'
 }
 
 dependencies {
     compile "net.sourceforge.findbugs:annotations:${versions.findbugsAnnotations}"
 
+    testCompile "junit:junit:${versions.junit}"
+    testCompile "org.hamcrest:hamcrest-library:${versions.hamcrest}"
     testCompile "com.cthing:cthing-test:${versions.cthingTest}"
 }
