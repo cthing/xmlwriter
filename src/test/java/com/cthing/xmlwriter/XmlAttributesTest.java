@@ -6,8 +6,7 @@ package com.cthing.xmlwriter;
 
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.*;
 
 
 /**
@@ -18,15 +17,15 @@ public class XmlAttributesTest {
     @Test
     public void testDefaultCtor() {
         final XmlAttributes attrs = new XmlAttributes();
-        assertThat(attrs.getLength(), equalTo(0));
+        assertThat(attrs.getLength()).isEqualTo(0);
     }
 
     @Test
     public void testAttrCtor() {
         final XmlAttributes attrs = new XmlAttributes("attr1", "value1", "attr2", "value2");
-        assertThat(attrs.getLength(), equalTo(2));
-        assertThat(attrs.getValue("attr1"), equalTo("value1"));
-        assertThat(attrs.getValue("attr2"), equalTo("value2"));
+        assertThat(attrs.getLength()).isEqualTo(2);
+        assertThat(attrs.getValue("attr1")).isEqualTo("value1");
+        assertThat(attrs.getValue("attr2")).isEqualTo("value2");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -38,17 +37,17 @@ public class XmlAttributesTest {
     public void testAddString() {
         final XmlAttributes attrs = new XmlAttributes();
         attrs.addAttribute("attr1", "value1").addAttribute("attr2", "value2");
-        assertThat(attrs.getLength(), equalTo(2));
-        assertThat(attrs.getValue("attr1"), equalTo("value1"));
-        assertThat(attrs.getValue("attr2"), equalTo("value2"));
+        assertThat(attrs.getLength()).isEqualTo(2);
+        assertThat(attrs.getValue("attr1")).isEqualTo("value1");
+        assertThat(attrs.getValue("attr2")).isEqualTo("value2");
     }
 
     @Test
     public void testAddIntegers() {
         final XmlAttributes attrs = new XmlAttributes();
         attrs.addAttribute("attr1", 1).addAttribute("attr2", 2);
-        assertThat(attrs.getLength(), equalTo(2));
-        assertThat(attrs.getValue("attr1"), equalTo("1"));
-        assertThat(attrs.getValue("attr2"), equalTo("2"));
+        assertThat(attrs.getLength()).isEqualTo(2);
+        assertThat(attrs.getValue("attr1")).isEqualTo("1");
+        assertThat(attrs.getValue("attr2")).isEqualTo("2");
     }
 }

@@ -24,10 +24,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-
-import static com.cthing.test.matchers.Matchers.*;
+import static org.assertj.core.api.Assertions.*;
 
 
 /**
@@ -43,12 +40,6 @@ public class XmlWriterTest {
     /** Specifies the newline character sequence to use. */
     static final String NEWLINE = System.getProperty("line.separator");
 
-
-    /**
-     * Constructor for the test class.
-     */
-    public XmlWriterTest() {
-    }
 
     /**
      * Displays the specified writer contents on the standard output if the SHOW_OUTPUT flag is true.
@@ -83,21 +74,21 @@ public class XmlWriterTest {
         final String testString = "Hello &<>\" World\u00A9\n";
 
         writeRawString.invoke(xmlWriter, testString);
-        assertThat(writer.toString(), equalTo(testString));
+        assertThat(writer.toString()).isEqualTo(testString);
 
         writer = new StringWriter();
         xmlWriter.setOutput(writer);
 
         writeRawArray.invoke(xmlWriter, testString.toCharArray(), 5, 2);
-        assertThat(writer.toString(), equalTo(testString.substring(5, 7)));
+        assertThat(writer.toString()).isEqualTo(testString.substring(5, 7));
 
         writer = new StringWriter();
         xmlWriter.setOutput(writer);
 
         writeRawChar.invoke(xmlWriter, testString.charAt(2));
         final String s = writer.toString();
-        assertThat(s, hasLength(1));
-        assertThat(s.charAt(0), equalTo(testString.charAt(2)));
+        assertThat(s).hasSize(1);
+        assertThat(s.charAt(0)).isEqualTo(testString.charAt(2));
     }
 
     /**
@@ -120,21 +111,21 @@ public class XmlWriterTest {
         final String testStringOut = "&lt;Hello &amp;&lt;&gt;\" World&#169;ctrl-26\t\n";
 
         writeEscapedArray.invoke(xmlWriter, testStringIn.toCharArray(), 0, testStringIn.length() - 1);
-        assertThat(writer.toString(), equalTo(testStringOut.substring(0, testStringOut.length() - 1)));
+        assertThat(writer.toString()).isEqualTo(testStringOut.substring(0, testStringOut.length() - 1));
 
         writer = new StringWriter();
         xmlWriter.setOutput(writer);
 
         writeEscapedChar.invoke(xmlWriter, '\u00A9');
         String s = writer.toString();
-        assertThat(s, equalTo("&#169;"));
+        assertThat(s).isEqualTo("&#169;");
 
         writer = new StringWriter();
         xmlWriter.setOutput(writer);
 
         writeEscapedChar.invoke(xmlWriter, '\u001A');
         s = writer.toString();
-        assertThat(s, equalTo("ctrl-26"));
+        assertThat(s).isEqualTo("ctrl-26");
 
         /*
          * Turn off escaping and verify that escaping is not performed.
@@ -144,7 +135,7 @@ public class XmlWriterTest {
         xmlWriter.setEscaping(false);
 
         writeEscapedArray.invoke(xmlWriter, testStringIn.toCharArray(), 1, testStringIn.length() - 2);
-        assertThat(writer.toString(), equalTo(testStringIn.substring(1, testStringIn.length() - 1)));
+        assertThat(writer.toString()).isEqualTo(testStringIn.substring(1, testStringIn.length() - 1));
     }
 
     /**
@@ -166,13 +157,13 @@ public class XmlWriterTest {
         final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#169;\"";
 
         writeQuotedString.invoke(xmlWriter, testStringIn);
-        assertThat(writer.toString(), equalTo(testStringOut));
+        assertThat(writer.toString()).isEqualTo(testStringOut);
 
         writer = new StringWriter();
         xmlWriter.setOutput(writer);
 
         writeQuotedArray.invoke(xmlWriter, testStringIn.toCharArray(), 9, 2);
-        assertThat(writer.toString(), equalTo("\"" + testStringOut.substring(20, 32) + "\""));
+        assertThat(writer.toString()).isEqualTo("\"" + testStringOut.substring(20, 32) + "\"");
 
         /*
          * Turn off escaping and verify that escaping is not performed.
@@ -182,7 +173,7 @@ public class XmlWriterTest {
         xmlWriter.setEscaping(false);
 
         writeQuotedString.invoke(xmlWriter, testStringIn);
-        assertThat(writer.toString(), equalTo("\"" + testStringIn + "\""));
+        assertThat(writer.toString()).isEqualTo("\"" + testStringIn + "\"");
     }
 
     /**
@@ -196,7 +187,7 @@ public class XmlWriterTest {
         xmlWriter.startDocument();
         xmlWriter.endDocument();
         showOutput(writer, "startDocument()");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE + NEWLINE);
 
         xmlWriter.reset();
 
@@ -205,7 +196,7 @@ public class XmlWriterTest {
         xmlWriter.startDocument(null, false, false);
         xmlWriter.endDocument();
         showOutput(writer, "startDocument(null, false, false)");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"no\"?>" + NEWLINE + NEWLINE + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"no\"?>" + NEWLINE + NEWLINE + NEWLINE);
 
         xmlWriter.reset();
 
@@ -214,8 +205,8 @@ public class XmlWriterTest {
         xmlWriter.startDocument("UTF-8", false, false);
         xmlWriter.endDocument();
         showOutput(writer, "startDocument(\"UTF-8\", false, false)");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
-                + NEWLINE + NEWLINE + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
+                + NEWLINE + NEWLINE + NEWLINE);
 
         xmlWriter.reset();
 
@@ -224,7 +215,7 @@ public class XmlWriterTest {
         xmlWriter.startDocument("UTF-8", false, true);
         xmlWriter.endDocument();
         showOutput(writer, "startDocument(\"UTF-8\", false, true)");
-        assertThat(writer.toString(), equalTo(NEWLINE));
+        assertThat(writer.toString()).isEqualTo(NEWLINE);
     }
 
     /**
@@ -243,8 +234,8 @@ public class XmlWriterTest {
         xmlWriter.setMinimizeEmpty(true);
 
         showOutput(writer, "simple elements - no pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<elem1></elem1>" + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                + "<elem1></elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -262,8 +253,8 @@ public class XmlWriterTest {
         xmlWriter.setMinimizeEmpty(true);
 
         showOutput(writer, "simple elements - no pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<elem1><elem2/><elem3/><elem4></elem4></elem1>" + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                + "<elem1><elem2/><elem3/><elem4></elem4></elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -286,7 +277,7 @@ public class XmlWriterTest {
         xmlWriter.setPrettyPrint(false);
 
         showOutput(writer, "simple elements - pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem1>" + NEWLINE
                 + "    <elem2/>" + NEWLINE
                 + "    <elem3/>" + NEWLINE
@@ -296,7 +287,7 @@ public class XmlWriterTest {
                 + "        <elem6>" + NEWLINE
                 + "        </elem6>" + NEWLINE
                 + "    </elem5>" + NEWLINE
-                + "</elem1>" + NEWLINE));
+                + "</elem1>" + NEWLINE);
     }
 
     /**
@@ -326,10 +317,10 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "attributes - on same line");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                                             + "<elem1 a1=\"v1\" a2=\"v2\" a3=\"v3\">" + NEWLINE
                                             + "    <elem2 b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE
-                                            + "</elem1>" + NEWLINE));
+                                            + "</elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -343,7 +334,7 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "attributes - one per line");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                                             + "<elem1" + NEWLINE
                                             + "    a1=\"v1\"" + NEWLINE
                                             + "    a2=\"v2\"" + NEWLINE
@@ -352,7 +343,7 @@ public class XmlWriterTest {
                                             + "        b1=\"v10\"" + NEWLINE
                                             + "        b2=\"v20\"" + NEWLINE
                                             + "        b3=\"v30\"" + NEWLINE + "    />" + NEWLINE
-                                            + "</elem1>" + NEWLINE));
+                                            + "</elem1>" + NEWLINE);
 
         xmlWriter.setAttrPerLine(false);
         xmlWriter.reset();
@@ -364,9 +355,9 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "attributes - augmenting");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                                             + "<elem1 a1=\"v1\" a2=\"v2\" a3=\"v3\" z1=\"13\" "
-                                            + "b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE));
+                                            + "b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -378,8 +369,8 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "attributes - replacing");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                            + "<elem1 b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                                            + "<elem1 b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE);
     }
 
     /**
@@ -397,8 +388,8 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "character data - no pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                            + "<elem1>Hello World</elem1>" + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                                            + "<elem1>Hello World</elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -417,13 +408,13 @@ public class XmlWriterTest {
         xmlWriter.setPrettyPrint(false);
 
         showOutput(writer, "character data - pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                                             + "<elem1>" + NEWLINE
                                             + "    <elem2>Hello World</elem2>" + NEWLINE
                                             + "    <elem3>" + NEWLINE
                                             + "        <!-- A comment -->" + NEWLINE
                                             + "    </elem3>" + NEWLINE
-                                            + "</elem1>" + NEWLINE));
+                                            + "</elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -444,11 +435,11 @@ public class XmlWriterTest {
         xmlWriter.setPrettyPrint(false);
 
         showOutput(writer, "character data - pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                                             + "<elem1>Hello World&amp;&#97;<elem2>"
                                             + "<![CDATA[This is a <test>]]>"
                                             + "<!-- First comment --></elem2>" + NEWLINE
-                                            + "</elem1>" + NEWLINE));
+                                            + "</elem1>" + NEWLINE);
     }
 
     /**
@@ -489,7 +480,7 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "entity references - pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                                             + "<elem1>This &amp; that. The letter &#97;<elem2/>" + NEWLINE
                                             + "    <!-- First comment -->" + NEWLINE
                                             + "    &extFile;" + NEWLINE
@@ -500,7 +491,7 @@ public class XmlWriterTest {
                                             + "    &dataFile;" + NEWLINE
                                             + "    <!-- Fifth comment -->" + NEWLINE
                                             + "    <elem6/>" + NEWLINE
-                                            + "</elem1>" + NEWLINE));
+                                            + "</elem1>" + NEWLINE);
     }
 
     /**
@@ -533,7 +524,7 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "comments - pretty print");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem1><!-- A comment 1 -->" + NEWLINE
                 + "    <elem2/>" + NEWLINE
                 + "    <elem3/>" + NEWLINE
@@ -546,7 +537,7 @@ public class XmlWriterTest {
                 + "        <!-- A comment 4 -->" + NEWLINE
                 + "        <elem7/>" + NEWLINE
                 + "    </elem6>" + NEWLINE
-                + "</elem1>" + NEWLINE));
+                + "</elem1>" + NEWLINE);
     }
 
     /**
@@ -562,8 +553,8 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "doctype - no publicId");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<!DOCTYPE elem1 SYSTEM \"/foo/bar.dtd\">" + NEWLINE + NEWLINE + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                + "<!DOCTYPE elem1 SYSTEM \"/foo/bar.dtd\">" + NEWLINE + NEWLINE + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -574,8 +565,8 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "doctype - publicId");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<!DOCTYPE elem1 PUBLIC \"FOO\" \"/foo/bar.dtd\">" + NEWLINE + NEWLINE + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                + "<!DOCTYPE elem1 PUBLIC \"FOO\" \"/foo/bar.dtd\">" + NEWLINE + NEWLINE + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -597,7 +588,7 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "doctype - entities and notations");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<!DOCTYPE elem1 PUBLIC \"FOO\" \"/foo/bar.dtd\" [" + NEWLINE
                 + "    <!ENTITY ent1 \"v1\">" + NEWLINE
                 + "    <!ENTITY ent2 SYSTEM \"bar.xml\">" + NEWLINE
@@ -606,7 +597,7 @@ public class XmlWriterTest {
                 + "    <!NOTATION not1 SYSTEM \"bar.xml\">" + NEWLINE
                 + "    <!NOTATION not2 PUBLIC \"BAR\" \"foo.xml\">" + NEWLINE
                 + "    <!NOTATION not3 PUBLIC \"BAR\">" + NEWLINE
-                + "]>" + NEWLINE + NEWLINE + NEWLINE));
+                + "]>" + NEWLINE + NEWLINE + NEWLINE);
     }
 
     /**
@@ -624,8 +615,8 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "processing instruction");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<?foo bar=\"joe\"?><elem1/>" + NEWLINE));
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                + "<?foo bar=\"joe\"?><elem1/>" + NEWLINE);
     }
 
     /**
@@ -647,13 +638,13 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "namespaces - synthesized prefix");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem0>" + NEWLINE
                 + "    <__NS1:elem1 xmlns:__NS1=\"http://www.adobe.com/test1\"/>" + NEWLINE
                 + "    <__NS1:elem2 xmlns:__NS1=\"http://www.adobe.com/test1\"/>" + NEWLINE
                 + "    <__NS2:elem3 xmlns:__NS2=\"http://www.adobe.com/test2\"/>" + NEWLINE
                 + "    <__NS3:elem4 xmlns:__NS3=\"http://www.adobe.com/test3\"/>" + NEWLINE
-                + "</elem0>" + NEWLINE));
+                + "</elem0>" + NEWLINE);
 
         writer = new StringWriter();
         xmlWriter = new XmlWriter(writer);
@@ -672,13 +663,13 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "namespaces - supplied prefix");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem0>" + NEWLINE
                 + "    <t1:elem1 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
                 + "    <t1:elem2 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
                 + "    <t2:elem3 xmlns:t2=\"http://www.adobe.com/test2\"/>" + NEWLINE
                 + "    <elem4 xmlns=\"http://www.adobe.com/test3\"/>" + NEWLINE
-                + "</elem0>" + NEWLINE));
+                + "</elem0>" + NEWLINE);
 
         writer = new StringWriter();
         xmlWriter = new XmlWriter(writer);
@@ -697,7 +688,7 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "namespaces - root decl");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem0 xmlns=\"http://www.adobe.com/test3\" "
                 + "xmlns:t1=\"http://www.adobe.com/test1\" "
                 + "xmlns:t2=\"http://www.adobe.com/test2\">" + NEWLINE
@@ -705,7 +696,7 @@ public class XmlWriterTest {
                 + "    <t1:elem2/>" + NEWLINE
                 + "    <t2:elem3/>" + NEWLINE
                 + "    <elem4/>" + NEWLINE
-                + "</elem0>" + NEWLINE));
+                + "</elem0>" + NEWLINE);
 
         writer = new StringWriter();
         xmlWriter = new XmlWriter(writer);
@@ -720,12 +711,12 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "namespaces - qualified name template");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem0>" + NEWLINE
                 + "    <t1:elem1 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
                 + "    <t1:elem2 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
                 + "    <__NS1:elem3 xmlns:__NS1=\"http://www.adobe.com/test2\"/>" + NEWLINE
-                + "</elem0>" + NEWLINE));
+                + "</elem0>" + NEWLINE);
 
         writer = new StringWriter();
         xmlWriter = new XmlWriter(writer);
@@ -745,7 +736,7 @@ public class XmlWriterTest {
         xmlWriter.endDocument();
 
         showOutput(writer, "namespaces - qualified name template");
-        assertThat(writer.toString(), equalTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                 + "<elem0>" + NEWLINE
                 + "    <t1:elem2" + NEWLINE
                 + "        a1=\"v1\"" + NEWLINE
@@ -755,7 +746,7 @@ public class XmlWriterTest {
                 + "        xmlns:__NS1=\"http://www.adobe.com/at1\"" + NEWLINE
                 + "        xmlns:t1=\"http://www.adobe.com/test1\"" + NEWLINE
                 + "    />" + NEWLINE
-                + "</elem0>" + NEWLINE));
+                + "</elem0>" + NEWLINE);
     }
 
     /**
@@ -786,7 +777,7 @@ public class XmlWriterTest {
         }
 
         showOutput(writer, "simple filter - no namespaces");
-        assertThat(writer.toString(), equalTo(xml));
+        assertThat(writer.toString()).isEqualTo(xml);
     }
 
     /**
@@ -817,7 +808,7 @@ public class XmlWriterTest {
         }
 
         showOutput(writer, "simple filter - no namespaces");
-        assertThat(writer.toString(), equalTo(xml));
+        assertThat(writer.toString()).isEqualTo(xml);
     }
 
     /**
@@ -861,7 +852,7 @@ public class XmlWriterTest {
         }
 
         showOutput(writer, "filter - DTD validation, namespaces, CDATA, etc.");
-        assertThat(writer.toString(), equalTo(xml));
+        assertThat(writer.toString()).isEqualTo(xml);
     }
 
     /**
@@ -900,7 +891,7 @@ public class XmlWriterTest {
         }
 
         showOutput(writer, "filter - Schema validation, CDATA, etc.");
-        assertThat(writer.toString(), equalTo(xml));
+        assertThat(writer.toString()).isEqualTo(xml);
     }
 
     /**
@@ -940,7 +931,7 @@ public class XmlWriterTest {
         }
 
         showOutput(writer, "filter - Schema validation, CDATA, etc.");
-        assertThat(writer.toString(), equalTo(xml));
+        assertThat(writer.toString()).isEqualTo(xml);
     }
 
     /**

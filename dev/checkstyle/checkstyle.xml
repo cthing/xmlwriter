@@ -112,7 +112,7 @@
 
         <!-- Disallow "*" imports except for certain testing packages -->
         <module name="AvoidStarImport">
-            <property name="excludes" value="org.junit.Assert,org.testng.Assert,org.hamcrest.MatcherAssert,org.hamcrest.Matchers,org.hamcrest.CoreMatchers,com.marvinformatics.kiss.matchers.file.FileMatchers,org.mockito.Mockito,com.cthing.test.matchers.Matchers"/>
+            <property name="excludes" value="org.junit.Assert,org.assertj.core.api.Assertions,org.mockito.Mockito"/>
         </module>
 
         <!-- No more than 10 "&&", "||", "&", "|" and "^" operators in an expression -->

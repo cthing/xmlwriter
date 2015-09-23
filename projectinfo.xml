@@ -10,9 +10,7 @@
         <internalDependency config="classpath" group="com.cthing" name="gradle-core-plugins" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-yalocc-plugin" version="0.1.0.+" />
         <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201509150450" />
-        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201509150536" />
-        <internalDependency config="testCompile" group="com.cthing" name="cthing-test" version="0.1.0.+" />
-        <internalDependency config="testRuntime" group="com.cthing" name="cthing-test" version="0.1.0.+" />
+        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201509220730" />
     </internalDependencies>
     <externalDependencies>
         <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.6" />
@@ -27,9 +25,9 @@
         <externalDependency config="runtime" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
         <externalDependency config="testCompile" group="junit" name="junit" version="4.12" />
         <externalDependency config="testCompile" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
-        <externalDependency config="testCompile" group="org.hamcrest" name="hamcrest-library" version="1.3" />
+        <externalDependency config="testCompile" group="org.assertj" name="assertj-core" version="3.1.0" />
         <externalDependency config="testRuntime" group="junit" name="junit" version="4.12" />
         <externalDependency config="testRuntime" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
-        <externalDependency config="testRuntime" group="org.hamcrest" name="hamcrest-library" version="1.3" />
+        <externalDependency config="testRuntime" group="org.assertj" name="assertj-core" version="3.1.0" />
     </externalDependencies>
 </project>
