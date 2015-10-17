@@ -4,13 +4,16 @@
     <organization>C Thing Software</organization>
     <description>Classes for writing XML documents.</description>
     <projectUrl>https://bitbucket.org/cthing/xmlwriter/</projectUrl>
+    <sourceUrl>git@bitbucket.org:cthing/xmlwriter.git</sourceUrl>
+    <reportsUrl></reportsUrl>
+    <license type="INTERNAL"></license>
     <subprojects />
     <internalDependencies>
         <internalDependency config="classpath" group="com.cthing" name="gradle-checkstyle-checks-plugin" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-core-plugins" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-yalocc-plugin" version="0.1.0.+" />
-        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201509150450" />
-        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201509220730" />
+        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201510041915" />
+        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201510041853" />
     </internalDependencies>
     <externalDependencies>
         <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.6" />
