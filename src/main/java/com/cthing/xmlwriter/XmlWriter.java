@@ -1626,13 +1626,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Writes the specified string as escaped XML data. Invokes the {@link #characters(char[], int, int) characters}
      * method.
      *
-     * @param data  String to write
+     * @param data  String to write. If {@code null} is specified, nothing is written.
      * @return This class instance
      * @throws SAXException If there is a problem writing the data.
      * @see #characters(char[], int, int)
      */
     public XmlWriter characters(final String data) throws SAXException {
-        characters(data.toCharArray(), 0, data.length());
+        if (data != null) {
+            characters(data.toCharArray(), 0, data.length());
+        }
         return this;
     }
 

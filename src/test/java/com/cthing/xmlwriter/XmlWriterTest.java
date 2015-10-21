@@ -389,7 +389,7 @@ public class XmlWriterTest {
 
         showOutput(writer, "character data - no pretty print");
         assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                            + "<elem1>Hello World</elem1>" + NEWLINE);
+                                                        + "<elem1>Hello World</elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -409,12 +409,12 @@ public class XmlWriterTest {
 
         showOutput(writer, "character data - pretty print");
         assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                            + "<elem1>" + NEWLINE
-                                            + "    <elem2>Hello World</elem2>" + NEWLINE
-                                            + "    <elem3>" + NEWLINE
-                                            + "        <!-- A comment -->" + NEWLINE
-                                            + "    </elem3>" + NEWLINE
-                                            + "</elem1>" + NEWLINE);
+                                                        + "<elem1>" + NEWLINE
+                                                        + "    <elem2>Hello World</elem2>" + NEWLINE
+                                                        + "    <elem3>" + NEWLINE
+                                                        + "        <!-- A comment -->" + NEWLINE
+                                                        + "    </elem3>" + NEWLINE
+                                                        + "</elem1>" + NEWLINE);
 
         xmlWriter.reset();
         writer = new StringWriter();
@@ -436,10 +436,38 @@ public class XmlWriterTest {
 
         showOutput(writer, "character data - pretty print");
         assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                            + "<elem1>Hello World&amp;&#97;<elem2>"
-                                            + "<![CDATA[This is a <test>]]>"
-                                            + "<!-- First comment --></elem2>" + NEWLINE
-                                            + "</elem1>" + NEWLINE);
+                                                        + "<elem1>Hello World&amp;&#97;<elem2>"
+                                                        + "<![CDATA[This is a <test>]]>"
+                                                        + "<!-- First comment --></elem2>" + NEWLINE
+                                                        + "</elem1>" + NEWLINE);
+
+        xmlWriter.reset();
+        writer = new StringWriter();
+        xmlWriter.setOutput(writer);
+
+        xmlWriter.startDocument();
+        xmlWriter.startElement("elem1");
+        xmlWriter.characters("");
+        xmlWriter.endElement();
+        xmlWriter.endDocument();
+
+        showOutput(writer, "character data - no pretty print");
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                                                        + "<elem1></elem1>" + NEWLINE);
+
+        xmlWriter.reset();
+        writer = new StringWriter();
+        xmlWriter.setOutput(writer);
+
+        xmlWriter.startDocument();
+        xmlWriter.startElement("elem1");
+        xmlWriter.characters(null);
+        xmlWriter.endElement();
+        xmlWriter.endDocument();
+
+        showOutput(writer, "character data - no pretty print");
+        assertThat(writer.toString()).isEqualTo("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
+                                                        + "<elem1/>" + NEWLINE);
     }
 
     /**
