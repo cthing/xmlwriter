@@ -2,7 +2,6 @@ apply plugin: 'com.cthing.java-project'
 apply plugin: 'com.cthing.checkstyle-checks'
 apply plugin: 'com.cthing.yalocc'
 
-group = 'com.cthing'
 version.semver = '0.1.0'
 
 projectInfo {

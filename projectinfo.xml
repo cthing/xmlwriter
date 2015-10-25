@@ -12,8 +12,8 @@
         <internalDependency config="classpath" group="com.cthing" name="gradle-checkstyle-checks-plugin" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-core-plugins" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-yalocc-plugin" version="0.1.0.+" />
-        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201510170629" />
-        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201510170627" />
+        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201510250419" />
+        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201510250132" />
     </internalDependencies>
     <externalDependencies>
         <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.6" />
