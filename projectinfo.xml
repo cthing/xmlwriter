@@ -13,24 +13,19 @@
         <internalDependency config="classpath" group="com.cthing" name="gradle-core-plugins" version="0.1.0.+" />
         <internalDependency config="classpath" group="com.cthing" name="gradle-yalocc-plugin" version="0.1.0.+" />
         <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201510250419" />
-        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201510250132" />
+        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201510250457" />
     </internalDependencies>
     <externalDependencies>
         <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.6" />
         <externalDependency config="buildnarc" group="org.codenarc" name="CodeNarc" version="0.24.1" />
         <externalDependency config="checkstyle" group="com.puppycrawl.tools" name="checkstyle" version="6.11.2" />
-        <externalDependency config="compile" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
-        <externalDependency config="default" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
         <externalDependency config="findbugs" group="com.google.code.findbugs" name="findbugs" version="3.0.1" />
         <externalDependency config="findbugsPlugins" group="com.mebigfatguy.fb-contrib" name="fb-contrib" version="6.2.3" />
         <externalDependency config="jacocoAgent" group="org.jacoco" name="org.jacoco.agent" version="0.7.5.201505241946" />
         <externalDependency config="jacocoAnt" group="org.jacoco" name="org.jacoco.ant" version="0.7.5.201505241946" />
-        <externalDependency config="runtime" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
         <externalDependency config="testCompile" group="junit" name="junit" version="4.12" />
-        <externalDependency config="testCompile" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
         <externalDependency config="testCompile" group="org.assertj" name="assertj-core" version="3.2.0" />
         <externalDependency config="testRuntime" group="junit" name="junit" version="4.12" />
-        <externalDependency config="testRuntime" group="net.sourceforge.findbugs" name="annotations" version="1.3.2" />
         <externalDependency config="testRuntime" group="org.assertj" name="assertj-core" version="3.2.0" />
     </externalDependencies>
 </project>

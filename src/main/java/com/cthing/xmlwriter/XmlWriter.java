@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EmptyStackException;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -324,6 +324,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
         START_ELEMENT_EVENT
     }
 
+    private static final String EMPTY_STR = "";
     private static final String CDATA = "CDATA";
     private static final String DEF_INDENT = "    ";
     private static final String DEF_OFFSET = "";
@@ -1876,14 +1877,13 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * A stack for elements. An unsynchronized collection is used as the basis to improve performance. In addition,
      * a free list is used to avoid unnecessary creation or Element objects.
      */
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings("SPP_USE_ISEMPTY")
     private static final class ElementStack {
 
         /** Initial capacity of the stack and free list. */
         private static final int INIT_CAP = 20;
 
-        private final List<Element> inUseList = new ArrayList<>(INIT_CAP);
-        private final List<Element> freeList = new ArrayList<>(INIT_CAP);
+        private final Deque<Element> inUseElements = new ArrayDeque<>(INIT_CAP);
+        private final Deque<Element> freeElements = new ArrayDeque<>(INIT_CAP);
 
         private ElementStack() {
         }
@@ -1894,22 +1894,15 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          * @return The top element on the stack
          */
         public Element peek() {
-            final int n = this.inUseList.size();
-            if (n == 0) {
-                throw new EmptyStackException();
-            }
-            return this.inUseList.get(n - 1);
+            return this.inUseElements.getLast();
         }
 
         /**
          * Pops the top element off of this stack.
          */
         public void pop() {
-            final int n = this.inUseList.size();
-            if (n == 0) {
-                throw new EmptyStackException();
-            }
-            this.freeList.add(this.inUseList.remove(n - 1));
+            final Element elem = this.inUseElements.removeLast();
+            this.freeElements.push(elem);
         }
 
         /**
@@ -1925,8 +1918,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          */
         public void push(final String namespaceUri, final String name, final String qualifiedName,
                          final Attributes attributes, final boolean empty, final State state) {
-            final int freeSize = this.freeList.size();
-            final Element element = (freeSize == 0) ? new Element() : this.freeList.remove(freeSize - 1);
+            final Element element = this.freeElements.isEmpty() ? new Element() : this.freeElements.removeLast();
             element.uri = namespaceUri;
             element.localName = name;
             element.qName = qualifiedName;
@@ -1934,7 +1926,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
             element.isEmpty = empty;
             element.containingState = state;
 
-            this.inUseList.add(element);
+            this.inUseElements.add(element);
         }
 
         /**
@@ -1943,14 +1935,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          * @return Depth of the stack.
          */
         public int depth() {
-            return this.inUseList.size();
+            return this.inUseElements.size();
         }
 
         /**
          * Removes all elements from the stack.
          */
         public void clear() {
-            this.inUseList.clear();
+            this.inUseElements.clear();
         }
     }
 
@@ -2443,7 +2435,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 writeName(attrs.getURI(i), attrs.getLocalName(i),
                           attrs.getQName(i), false);
                 writeRaw('=');
-                writeQuoted(attrs.getValue(i));
+                final String attrValue = attrs.getValue(i);
+                writeQuoted((attrValue == null) ? EMPTY_STR : attrValue);
             }
         }
     }
@@ -2544,7 +2537,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     private int writeNSDecls() throws SAXException {
         // Since the iteration order for namespaces is not stable, sort them.
         final List<String> prefixes = Collections.list(this.nsSupport.getDeclaredPrefixes());
-        prefixes.sort((n1, n2) -> n1.compareTo(n2));
+        prefixes.sort(String::compareTo);
 
         int numAttrs = 0;
         for (final String prefix : prefixes) {
