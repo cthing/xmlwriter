@@ -59,7 +59,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * w.endElement();
  * w.endDocument();
  * </pre>
- * <p>The following XML is displpayed on the standard output:</p>
+ * <p>The following XML is displayed on the standard output:</p>
  * <pre>
  * &lt;?xml version="1.0" standalone="yes"?&gt;
  *
