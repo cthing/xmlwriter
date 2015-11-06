@@ -1,28 +1,89 @@
-apply plugin: 'com.cthing.java-project'
-apply plugin: 'com.cthing.checkstyle-checks'
-apply plugin: 'com.cthing.yalocc'
+import java.text.SimpleDateFormat
 
-version.semver = '0.1.0'
+// This project is consumed by infrastructure bootstrap code (e.g. the projectinfo library). Therefore
+// it does not use any C Thing Software Gradle plugins and is in the org.cthing domain so it can be
+// consumed as a third party dependency.
 
-projectInfo {
-    description = 'Classes for writing XML documents.'
-    projectUrl = 'https://bitbucket.org/cthing/xmlwriter/'
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
+
+version = '1.0.0'
+
+dependencies {
+    testCompile "junit:junit:4.12"
+    testCompile "org.assertj:assertj-core:3.2.0"
 }
 
-buildscript {
-    dependencies {
-        classpath 'com.cthing:gradle-core-plugins:0.1.0.+'
-        classpath 'com.cthing:gradle-checkstyle-checks-plugin:0.1.0.+'
-        classpath 'com.cthing:gradle-yalocc-plugin:0.1.0.+'
+compileJava {
+    options.compilerArgs += '-Werror'
+}
+
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                   'Implementation-Vendor': 'C Thing Software',
+                   'Implementation-Version': project.version)
     }
 }
 
-versions {
-    assertJ              '3.2.0'
-    junit                '4.12'
+javadoc {
+    options {
+        breakIterator = true
+        encoding = 'UTF-8'
+        bottom = "Copyright &copy; ${new SimpleDateFormat('yyyy', Locale.ENGLISH).format(new Date())} C Thing Software. All rights reserved."
+        memberLevel = JavadocMemberLevel.PUBLIC
+        outputLevel = JavadocOutputLevel.QUIET
+    }
 }
 
-dependencies {
-    testCompile "junit:junit:${versions.junit}"
-    testCompile "org.assertj:assertj-core:${versions.assertJ}"
+checkstyle {
+    toolVersion = '6.11.2'
+    ignoreFailures = false
+    configFile = project.file('dev/checkstyle/checkstyle.xml')
+    configProperties['config_loc'] = project.file('dev/checkstyle')
+    showViolations = true
+}
+
+findbugs {
+    toolVersion = '3.0.1'
+    ignoreFailures = false
+    effort = 'max'
+    reportLevel = 'medium'
+    excludeFilter = project.file('dev/findbugs/suppressions.xml')
+    sourceSets = [sourceSets.main]
+}
+
+jacoco {
+    toolVersion = '0.7.5.201505241946'
+}
+
+jacocoTestReport {
+    dependsOn 'test'
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+        html.destination new File(buildDir, 'reports/jacoco')
+    }
+}
+
+test {
+    jacoco {
+        append = false
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url project.nexusReleasesUrl
+            credentials {
+                username = project.nexusUser
+                password = project.nexusPassword
+            }
+        }
+    }
 }

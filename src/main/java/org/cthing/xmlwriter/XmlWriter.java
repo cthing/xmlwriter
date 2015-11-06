@@ -1,8 +1,8 @@
 /*
- * Copyright 2014 C Thing Software
+ * Copyright 2015 C Thing Software
  * All rights reserved.
  */
-package com.cthing.xmlwriter;
+package org.cthing.xmlwriter;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

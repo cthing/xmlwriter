@@ -1,9 +1,9 @@
 /*
- * Copyright 2014 C Thing Software
+ * Copyright 2015 C Thing Software
  * All rights reserved.
  */
 
 /**
  * Classes for writing XML.
  */
-package com.cthing.xmlwriter;
+package org.cthing.xmlwriter;
