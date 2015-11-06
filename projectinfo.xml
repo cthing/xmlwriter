@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- AUTO GENERATED FILE - CHECK-IN BUT DO NOT EDIT -->
-<project group="com.cthing" name="xmlwriter" version="0.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.cthing.com/schemas/projectinfo" xsi:schemaLocation="http://www.cthing.com/schemas/projectinfo projectinfo.xsd" schemaVersion="1">
+<project group="org.cthing" name="xmlwriter" version="1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://www.cthing.com/schemas/projectinfo"
+         xsi:schemaLocation="http://www.cthing.com/schemas/projectinfo projectinfo.xsd"
+         schemaVersion="1">
     <organization>C Thing Software</organization>
     <description>Classes for writing XML documents.</description>
     <projectUrl>https://bitbucket.org/cthing/xmlwriter/</projectUrl>
@@ -8,24 +11,9 @@
     <reportsUrl></reportsUrl>
     <license type="INTERNAL"></license>
     <subprojects />
-    <internalDependencies>
-        <internalDependency config="classpath" group="com.cthing" name="gradle-checkstyle-checks-plugin" version="0.1.0.+" />
-        <internalDependency config="classpath" group="com.cthing" name="gradle-core-plugins" version="0.1.0.+" />
-        <internalDependency config="classpath" group="com.cthing" name="gradle-yalocc-plugin" version="0.1.0.+" />
-        <internalDependency config="cthingCheckstyleChecks" group="com.cthing" name="checkstyle-checks" version="0.1.0.201510250419" />
-        <internalDependency config="cthingYalocc" group="com.cthing" name="yalocc-lib" version="0.1.0.201510250457" />
-    </internalDependencies>
-    <externalDependencies>
-        <externalDependency config="antOptionalTaskClasspath" group="org.apache.ant" name="ant-junit" version="1.9.6" />
-        <externalDependency config="buildnarc" group="org.codenarc" name="CodeNarc" version="0.24.1" />
-        <externalDependency config="checkstyle" group="com.puppycrawl.tools" name="checkstyle" version="6.11.2" />
-        <externalDependency config="findbugs" group="com.google.code.findbugs" name="findbugs" version="3.0.1" />
-        <externalDependency config="findbugsPlugins" group="com.mebigfatguy.fb-contrib" name="fb-contrib" version="6.2.3" />
-        <externalDependency config="jacocoAgent" group="org.jacoco" name="org.jacoco.agent" version="0.7.5.201505241946" />
-        <externalDependency config="jacocoAnt" group="org.jacoco" name="org.jacoco.ant" version="0.7.5.201505241946" />
+    <internalDependencies/>
+    <externalDependencies/>
         <externalDependency config="testCompile" group="junit" name="junit" version="4.12" />
         <externalDependency config="testCompile" group="org.assertj" name="assertj-core" version="3.2.0" />
-        <externalDependency config="testRuntime" group="junit" name="junit" version="4.12" />
-        <externalDependency config="testRuntime" group="org.assertj" name="assertj-core" version="3.2.0" />
     </externalDependencies>
 </project>
