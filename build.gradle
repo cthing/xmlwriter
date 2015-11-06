@@ -4,13 +4,18 @@ import java.text.SimpleDateFormat
 // it does not use any C Thing Software Gradle plugins and is in the org.cthing domain so it can be
 // consumed as a third party dependency.
 
+boolean isOnCIServer() {
+    System.getenv('BUILD_NUMBER') && System.getenv('EXECUTOR_NUMBER')
+}
+
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
-version = '1.0.0'
+ext.buildNumber = onCIServer ? new Date().format('yyyyMMddHHmm', TimeZone.getTimeZone('GMT')): '0'
+version = "1.0.0.${buildNumber}"
 group = 'org.cthing'
 
 dependencies {
