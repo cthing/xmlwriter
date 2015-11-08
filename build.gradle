@@ -14,7 +14,7 @@ apply plugin: 'findbugs'
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
-ext.buildNumber = onCIServer ? new Date().format('yyyyMMddHHmm', TimeZone.getTimeZone('GMT')): '0'
+ext.buildNumber = onCIServer ? Long.toString((long)(new Date().time / 1000L)): '0'
 version = "1.0.0.${buildNumber}"
 group = 'org.cthing'
 
