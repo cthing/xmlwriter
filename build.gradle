@@ -1,8 +1,8 @@
 import java.text.SimpleDateFormat
 
-// This project is consumed by infrastructure bootstrap code (e.g. the projectinfo library). Therefore
-// it does not use any C Thing Software Gradle plugins and is in the org.cthing domain so it can be
-// consumed as a third party dependency.
+// This project is consumed by infrastructure bootstrap code. Therefore it does not use any
+// C Thing Software Gradle plugins and is in the org.cthing domain so it can be consumed as
+// a third party dependency.
 
 boolean isOnCIServer() {
     System.getenv('BUILD_NUMBER') && System.getenv('EXECUTOR_NUMBER')
