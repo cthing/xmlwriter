@@ -52,7 +52,7 @@ javadoc {
 }
 
 checkstyle {
-    toolVersion = '6.11.2'
+    toolVersion = '6.13'
     ignoreFailures = false
     configFile = project.file('dev/checkstyle/checkstyle.xml')
     configProperties['config_loc'] = project.file('dev/checkstyle')
