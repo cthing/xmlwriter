@@ -8,19 +8,13 @@ boolean isOnCIServer() {
     System.getenv('BUILD_NUMBER') && System.getenv('EXECUTOR_NUMBER')
 }
 
-int countRevisions(final Project project) {
-    project.rootProject.file('.git').exists() ?
-            Integer.parseInt(new ProcessBuilder('bash', '-c', 'git rev-list HEAD | wc -l')
-                                     .directory(project.rootDir).start().text.trim()) : 0
-}
-
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
-ext.buildNumber = onCIServer ? Integer.toString(countRevisions(project)): '0'
+ext.buildNumber = onCIServer ? Long.toString(System.currentTimeMillis()): '0'
 version = "1.0.0.${buildNumber}"
 group = 'org.cthing'
 
