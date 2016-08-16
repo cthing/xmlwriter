@@ -20,7 +20,7 @@ group = 'org.cthing'
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.5.1'
+    testCompile 'org.assertj:assertj-core:3.5.2'
 }
 
 compileJava {
@@ -46,7 +46,7 @@ javadoc {
 }
 
 checkstyle {
-    toolVersion = '7.0'
+    toolVersion = '7.1'
     ignoreFailures = false
     configFile = project.file('dev/checkstyle/checkstyle.xml')
     configProperties['config_loc'] = project.file('dev/checkstyle')
