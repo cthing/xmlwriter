@@ -283,9 +283,6 @@
         <!-- No space between method/ctor name/call and the left parenthesis (e.g. Foo()) -->
         <module name="MethodParamPad"/>
 
-        <!-- A class must always explicitly define a constructor -->
-        <module name="MissingCtor"/>
-
         <!-- When the Deprecated annotation is used, the @deprecated Javadoc tag must be used and vice versa -->
         <module name="MissingDeprecated"/>
 
