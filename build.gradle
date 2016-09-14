@@ -25,8 +25,8 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.5.2'
 }
 
-compileJava {
-    options.compilerArgs += '-Werror'
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:all' << '-Xlint:-options' << '-Werror'
 }
 
 jar {
