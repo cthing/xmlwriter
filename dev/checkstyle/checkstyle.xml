@@ -95,6 +95,7 @@
 
     <module name="TreeWalker">
         <property name="severity" value="${checkstyle.severity}" default="error"/>
+        <property name="tabWidth" value="4"/>
 
         <!-- Abstract class must start with "Abstract" or end with "Factory" -->
         <module name="AbstractClassName">
