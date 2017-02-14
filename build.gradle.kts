@@ -1,4 +1,3 @@
-import org.gradle.api.Project
 import org.gradle.api.plugins.quality.CheckstyleExtension
 import org.gradle.api.plugins.quality.FindBugsExtension
 import org.gradle.api.publish.PublishingExtension
@@ -50,7 +49,7 @@ apply {
 }
 
 val buildNumber = if (isOnCIServer()) { System.currentTimeMillis().toString() } else { "0" }
-version = "1.0.0.$buildNumber"
+version = "${properties["semanticVersion"]}.$buildNumber"
 group = "org.cthing"
 description = "A simple yet highly configurable XML writing library."
 
