@@ -59,19 +59,19 @@ dependencies {
     testCompile("org.assertj:assertj-core:3.6.2")
 }
 
-tasks.withType(JavaCompile::class.java) {
+tasks.withType<JavaCompile> {
     sourceCompatibility = "1.8"
     targetCompatibility = "1.8"
     options.compilerArgs = listOf("-Xlint:all", "-Xlint:-options", "-Werror")
 }
 
-tasks.withType(Jar::class.java) {
+tasks.withType<Jar> {
     manifest.attributes(mapOf("Implementation-Title" to project.name,
                               "Implementation-Vendor" to "C Thing Software",
                               "Implementation-Version" to project.version))
 }
 
-tasks.withType(Javadoc::class.java) {
+tasks.withType<Javadoc> {
     val opts = options as StandardJavadocDocletOptions
     opts.breakIterator(false)
     opts.encoding("UTF-8")
@@ -94,7 +94,7 @@ configure<FindBugsExtension> {
     effort = "max"
     reportLevel = "medium"
     excludeFilter = project.file("dev/findbugs/suppressions.xml")
-    sourceSets = listOf(convention.getPlugin(JavaPluginConvention::class.java).sourceSets.getByName("main"))
+    sourceSets = listOf(convention.getPlugin<JavaPluginConvention>().sourceSets["main"])
 }
 
 configure<JacocoPluginExtension> {
@@ -114,7 +114,7 @@ configure<JacocoPluginExtension> {
 tasks["test"].extensions.getByType(JacocoTaskExtension::class.java).isAppend = false
 
 task<Jar>("sourceJar") {
-    from(project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.getByName("main").allJava)
+    from(project.convention.getPlugin<JavaPluginConvention>().sourceSets["main"].allJava)
     classifier = "sources"
 }
 
@@ -138,7 +138,7 @@ if (canSign()) {
 
     task<Sign>("signPom")
 
-    tasks.withType(AbstractPublishToMaven::class.java) {
+    tasks.withType<AbstractPublishToMaven> {
         dependsOn("signJar", "signSourceJar", "signJavadocJar", "signPom")
     }
 
@@ -169,7 +169,7 @@ if (canSign()) {
 
 configure<PublishingExtension> {
     publications.create<MavenPublication>("mavenJava") {
-        from(components.getByName("java"))
+        from(components["java"])
 
         artifact(project.tasks["sourceJar"])
         artifact(project.tasks["javadocJar"])
