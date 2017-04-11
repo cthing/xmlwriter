@@ -72,12 +72,13 @@ tasks.withType<Jar> {
 }
 
 tasks.withType<Javadoc> {
-    val opts = options as StandardJavadocDocletOptions
-    opts.breakIterator(false)
-    opts.encoding("UTF-8")
-    opts.bottom("Copyright &copy; ${SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date())} C Thing Software. All rights reserved.")
-    opts.memberLevel = JavadocMemberLevel.PUBLIC
-    opts.outputLevel = JavadocOutputLevel.QUIET
+    with (options as StandardJavadocDocletOptions) {
+        breakIterator(false)
+        encoding("UTF-8")
+        bottom("Copyright &copy; ${SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date())} C Thing Software. All rights reserved.")
+        memberLevel = JavadocMemberLevel.PUBLIC
+        outputLevel = JavadocOutputLevel.QUIET
+    }
 }
 
 configure<CheckstyleExtension> {
