@@ -56,7 +56,7 @@ description = "A simple yet highly configurable XML writing library."
 
 dependencies {
     testCompile("junit:junit:4.12")
-    testCompile("org.assertj:assertj-core:3.6.2")
+    testCompile("org.assertj:assertj-core:3.8.0")
 }
 
 tasks.withType<JavaCompile> {
@@ -82,7 +82,7 @@ tasks.withType<Javadoc> {
 }
 
 configure<CheckstyleExtension> {
-    toolVersion = "7.6.1"
+    toolVersion = "7.8.1"
     isIgnoreFailures = false
     configFile = project.file("dev/checkstyle/checkstyle.xml")
     configProperties.put("config_loc", project.file("dev/checkstyle"))
