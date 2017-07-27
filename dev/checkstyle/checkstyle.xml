@@ -72,23 +72,10 @@
         <property name="message" value="Remove version tag"/>
     </module>
 
-    <!-- Allow suppression of Checkstyle issues using CHECKSTYLE:OFF and CHECKSTYLE:ON comments -->
-    <module name="SuppressionCommentFilter"/>
-
-    <!-- Suppress complaints about @property Javadoc tag -->
-    <module name="SuppressWithNearbyCommentFilter">
-        <property name="commentFormat" value="@property"/>
-        <property name="checkFormat" value="JavadocStyle|JavadocMethod"/>
-        <property name="influenceFormat" value="1"/>
-    </module>
-
     <!-- Read checker suppressions from a file -->
     <module name="SuppressionFilter">
         <property name="file" value="${config_loc}/suppressions.xml"/>
     </module>
-
-    <!-- Allow suppression of Checkstyle issues using trailing SUPPRESS CHECKSTYLE comment -->
-    <module name="SuppressWithNearbyCommentFilter"/>
 
     <!-- Check localization properties files for inconsistencies -->
     <module name="Translation"/>
@@ -389,6 +376,16 @@
 
         <!-- Do not test a boolean to return "true" or "false" -->
         <module name="SimplifyBooleanReturn"/>
+
+        <!-- Allow suppression of Checkstyle issues using CHECKSTYLE:OFF and CHECKSTYLE:ON comments -->
+        <module name="SuppressionCommentFilter"/>
+
+        <!-- Suppress complaints about @property Javadoc tag -->
+        <module name="SuppressWithNearbyCommentFilter">
+            <property name="commentFormat" value="@property"/>
+            <property name="checkFormat" value="JavadocStyle|JavadocMethod"/>
+            <property name="influenceFormat" value="1"/>
+        </module>
 
         <!-- Static variables are camel case starting with a lowercase letter -->
         <module name="StaticVariableName"/>
