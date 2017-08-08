@@ -1,4 +1,3 @@
-import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom
@@ -12,7 +11,6 @@ import org.gradle.model.Mutate
 import org.gradle.model.Path
 import org.gradle.model.RuleSource
 import org.gradle.plugins.signing.Sign
-import org.gradle.plugins.signing.SigningExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import java.text.SimpleDateFormat
@@ -111,12 +109,12 @@ jacoco {
 
 tasks["test"].extensions.getByType(JacocoTaskExtension::class.java).isAppend = false
 
-task<Jar>("sourceJar") {
+val sourceJar by tasks.creating(Jar::class) {
     from(project.convention.getPlugin<JavaPluginConvention>().sourceSets["main"].allJava)
     classifier = "sources"
 }
 
-task<Jar>("javadocJar") {
+val javadocJar by tasks.creating(Jar::class) {
     from("javadoc")
     classifier = "javadoc"
 }
@@ -129,9 +127,7 @@ fun canSign(): Boolean {
 
 if (canSign()) {
     signing {
-        sign(tasks["jar"],
-             tasks["sourceJar"],
-             tasks["javadocJar"])
+        sign(tasks["jar"], sourceJar, javadocJar)
     }
 
     task<Sign>("signPom")
@@ -169,8 +165,8 @@ publishing {
     publications.create<MavenPublication>("mavenJava") {
         from(components["java"])
 
-        artifact(project.tasks["sourceJar"])
-        artifact(project.tasks["javadocJar"])
+        artifact(sourceJar)
+        artifact(javadocJar)
 
         if (canSign()) {
             data class SignedArtifact(val files: Set<File>, val classifier: String?, val extension: String)
