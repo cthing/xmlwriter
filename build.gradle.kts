@@ -1,5 +1,3 @@
-import org.gradle.api.plugins.quality.CheckstyleExtension
-import org.gradle.api.plugins.quality.FindBugsExtension
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
@@ -15,7 +13,6 @@ import org.gradle.model.Path
 import org.gradle.model.RuleSource
 import org.gradle.plugins.signing.Sign
 import org.gradle.plugins.signing.SigningExtension
-import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import java.text.SimpleDateFormat
@@ -81,7 +78,7 @@ tasks.withType<Javadoc> {
     }
 }
 
-configure<CheckstyleExtension> {
+checkstyle {
     toolVersion = "8.1"
     isIgnoreFailures = false
     configFile = project.file("dev/checkstyle/checkstyle.xml")
@@ -89,7 +86,7 @@ configure<CheckstyleExtension> {
     isShowViolations = true
 }
 
-configure<FindBugsExtension> {
+findbugs {
     toolVersion = "3.0.1"
     isIgnoreFailures = false
     effort = "max"
@@ -98,7 +95,7 @@ configure<FindBugsExtension> {
     sourceSets = listOf(convention.getPlugin<JavaPluginConvention>().sourceSets["main"])
 }
 
-configure<JacocoPluginExtension> {
+jacoco {
     toolVersion = "0.7.9"
 }
 
@@ -131,7 +128,7 @@ fun canSign(): Boolean {
 }
 
 if (canSign()) {
-    configure<SigningExtension> {
+    signing {
         sign(tasks["jar"],
              tasks["sourceJar"],
              tasks["javadocJar"])
@@ -168,7 +165,7 @@ if (canSign()) {
     pluginManager.apply(PomSigner::class.java)
 }
 
-configure<PublishingExtension> {
+publishing {
     publications.create<MavenPublication>("mavenJava") {
         from(components["java"])
 
