@@ -1,3 +1,6 @@
+import org.gradle.api.plugins.quality.CheckstyleExtension
+import org.gradle.api.plugins.quality.FindBugsExtension
+import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom
@@ -11,6 +14,8 @@ import org.gradle.model.Mutate
 import org.gradle.model.Path
 import org.gradle.model.RuleSource
 import org.gradle.plugins.signing.Sign
+import org.gradle.plugins.signing.SigningExtension
+import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import java.text.SimpleDateFormat
@@ -76,7 +81,7 @@ tasks.withType<Javadoc> {
     }
 }
 
-checkstyle {
+configure<CheckstyleExtension> {
     toolVersion = "8.1"
     isIgnoreFailures = false
     configFile = project.file("dev/checkstyle/checkstyle.xml")
@@ -84,7 +89,7 @@ checkstyle {
     isShowViolations = true
 }
 
-findbugs {
+configure<FindBugsExtension> {
     toolVersion = "3.0.1"
     isIgnoreFailures = false
     effort = "max"
@@ -93,11 +98,11 @@ findbugs {
     sourceSets = listOf(convention.getPlugin<JavaPluginConvention>().sourceSets["main"])
 }
 
-jacoco {
+configure<JacocoPluginExtension> {
     toolVersion = "0.7.9"
 }
 
-val jacocoTestReport by tasks.getting(JacocoReport::class) {
+(tasks["jacocoTestReport"] as JacocoReport).apply {
     dependsOn("test")
     with (reports) {
         xml.isEnabled = false
@@ -109,12 +114,12 @@ val jacocoTestReport by tasks.getting(JacocoReport::class) {
 
 tasks["test"].extensions.getByType(JacocoTaskExtension::class.java).isAppend = false
 
-val sourceJar by tasks.creating(Jar::class) {
+task<Jar>("sourceJar") {
     from(project.convention.getPlugin<JavaPluginConvention>().sourceSets["main"].allJava)
     classifier = "sources"
 }
 
-val javadocJar by tasks.creating(Jar::class) {
+task<Jar>("javadocJar") {
     from("javadoc")
     classifier = "javadoc"
 }
@@ -126,8 +131,10 @@ fun canSign(): Boolean {
 }
 
 if (canSign()) {
-    signing {
-        sign(tasks["jar"], sourceJar, javadocJar)
+    configure<SigningExtension> {
+        sign(tasks["jar"],
+             tasks["sourceJar"],
+             tasks["javadocJar"])
     }
 
     task<Sign>("signPom")
@@ -136,8 +143,8 @@ if (canSign()) {
         dependsOn("signJar", "signSourceJar", "signJavadocJar", "signPom")
     }
 
-    val pomFile by extra { File(buildDir, "${project.name}-$version.pom") }
-    val pomSigFile by extra { File(buildDir, "${project.name}-$version.pom.asc") }
+    extra["pomFile"] = File(buildDir, "${project.name}-$version.pom")
+    extra["pomSigFile"] = File(buildDir, "${project.name}-$version.pom.asc")
 
 
     class PomSigner : RuleSource() {
@@ -149,6 +156,8 @@ if (canSign()) {
         @Mutate
         fun signPomRule(@Path("tasks.signPom") signPomTask: Sign,
                            @Path("tasks.generatePomFileForMavenJavaPublication") genPomTask: GenerateMavenPom): Unit {
+            val pomFile = signPomTask.project.extra["pomFile"] as File
+            val pomSigFile = signPomTask.project.extra["pomSigFile"] as File
             signPomTask.dependsOn(genPomTask)
             signPomTask.inputs.file(pomFile)
             signPomTask.outputs.file(pomSigFile)
@@ -159,12 +168,12 @@ if (canSign()) {
     pluginManager.apply(PomSigner::class.java)
 }
 
-publishing {
+configure<PublishingExtension> {
     publications.create<MavenPublication>("mavenJava") {
         from(components["java"])
 
-        artifact(sourceJar)
-        artifact(javadocJar)
+        artifact(project.tasks["sourceJar"])
+        artifact(project.tasks["javadocJar"])
 
         if (canSign()) {
             data class SignedArtifact(val files: Set<File>, val classifier: String?, val extension: String)
