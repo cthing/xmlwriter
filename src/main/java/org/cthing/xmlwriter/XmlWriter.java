@@ -2355,7 +2355,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     private void writeStartElement(final boolean isEmpty) throws SAXException {
         final Element element = topElement();
 
-        if (this.prettyPrint && getElementLevel() > 1 && element.containingState != State.AFTER_DATA_STATE) {
+        if (this.prettyPrint && (element.containingState != State.AFTER_DATA_STATE) && (getElementLevel() > 1)) {
             writeNewline();
             writeIndent();
         }

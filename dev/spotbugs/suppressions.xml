@@ -12,6 +12,9 @@
         <Bug pattern="CD_CIRCULAR_DEPENDENCY"/>
     </Match>
     <Match>
+        <Bug pattern="CC_CYCLOMATIC_COMPLEXITY"/>
+    </Match>
+    <Match>
         <Class name="~.*Test(\$.+)?"/>
     </Match>
 </FindBugsFilter>

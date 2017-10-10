@@ -1,3 +1,4 @@
+import com.github.spotbugs.SpotBugsTask
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom
@@ -37,10 +38,10 @@ buildscript {
 plugins {
     id("java")
     id("checkstyle")
-    id("findbugs")
     id("jacoco")
     id("maven-publish")
     id("signing")
+    id("com.github.spotbugs").version("1.4")
 }
 
 val buildNumber = if (isOnCIServer()) System.currentTimeMillis().toString() else "0"
@@ -52,6 +53,8 @@ description = "A simple yet highly configurable XML writing library."
 dependencies {
     testCompile("junit:junit:4.12")
     testCompile("org.assertj:assertj-core:3.8.0")
+
+    spotbugsPlugins("com.mebigfatguy.fb-contrib:fb-contrib:7.0.5.sb")
 }
 
 tasks.withType<JavaCompile> {
@@ -84,13 +87,20 @@ checkstyle {
     isShowViolations = true
 }
 
-findbugs {
-    toolVersion = "3.0.1"
+spotbugs {
+    toolVersion = "3.1.0-RC6"
     isIgnoreFailures = false
     effort = "max"
     reportLevel = "medium"
-    excludeFilter = project.file("dev/findbugs/suppressions.xml")
+    excludeFilter = project.file("dev/spotbugs/suppressions.xml")
     sourceSets = listOf(convention.getPlugin<JavaPluginConvention>().sourceSets["main"])
+}
+
+tasks.withType<SpotBugsTask> {
+    with (reports) {
+        xml.isEnabled = false
+        html.isEnabled = true
+    }
 }
 
 jacoco {
