@@ -6,6 +6,7 @@ package org.cthing.xmlwriter;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
@@ -20,6 +21,7 @@ import java.util.Set;
 import javax.xml.XMLConstants;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
@@ -623,6 +625,17 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      */
     public Writer getOutput() {
         return this.out;
+    }
+
+    /**
+     * Parses an XML document using the writer as a filter.
+     *
+     * @param reader  Provides the XML document
+     * @throws IOException if there was a problem reading the XML document.
+     * @throws SAXException if there was a problem parsing the XML document.
+     */
+    public void parse(final Reader reader) throws IOException, SAXException {
+        parse(new InputSource(reader));
     }
 
     /**
@@ -2629,7 +2642,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param s  String to write
      * @throws SAXException If there is an error writing the string. The SAXException wraps an IOException.
      */
-    private void writeQuoted(final String s) throws SAXException {
+    void writeQuoted(final String s) throws SAXException {
         writeQuoted(s.toCharArray(), 0, s.length());
     }
 
@@ -2642,7 +2655,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param length  Number of characters to write
      * @throws SAXException If there is an error writing the characters. The SAXException wraps an IOException.
      */
-    private void writeQuoted(final char[] carr, final int start, final int length) throws SAXException {
+    void writeQuoted(final char[] carr, final int start, final int length) throws SAXException {
         writeRaw('"');
         if (this.escaping && containsQuotes(carr, start, length)) {
             final int end = start + length;
@@ -2695,7 +2708,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param length  Number of characters to write
      * @throws SAXException If there is an error writing the characters. The SAXException wraps an IOException.
      */
-    private void writeEscaped(final char[] carr, final int start, final int length) throws SAXException {
+    void writeEscaped(final char[] carr, final int start, final int length) throws SAXException {
         if (this.escaping && needsEscaping(carr, start, length)) {
             final int end = start + length;
             for (int i = start; i < end; i++) {
@@ -2714,7 +2727,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param c  Character to write
      * @throws SAXException If there is an error writing the character. The SAXException wraps an IOException.
      */
-    private void writeEscaped(final char c) throws SAXException {
+    void writeEscaped(final char c) throws SAXException {
         switch (c) {
         case '&' :
             writeRaw("&amp;");
@@ -2753,7 +2766,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param s  String to write
      * @throws SAXException  If there is an error writing the string. The SAXException wraps an IOException.
      */
-    private void writeRaw(final String s) throws SAXException {
+    void writeRaw(final String s) throws SAXException {
         try {
             this.out.write(s);
         } catch (final IOException e) {
@@ -2769,7 +2782,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param length  Number of characters to write
      * @throws SAXException If there is an error writing the characters. The SAXException wraps an IOException.
      */
-    private void writeRaw(final char[] carr, final int start, final int length) throws SAXException {
+    void writeRaw(final char[] carr, final int start, final int length) throws SAXException {
         try {
             this.out.write(carr, start, length);
         } catch (final IOException e) {
@@ -2783,7 +2796,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param c  Character to write
      * @throws SAXException  If there is an error writing the character. The SAXException wraps an IOException.
      */
-    private void writeRaw(final char c) throws SAXException {
+    void writeRaw(final char c) throws SAXException {
         try {
             this.out.write(c);
         } catch (final IOException e) {
