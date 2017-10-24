@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.xml.XMLConstants;
 
 import org.xml.sax.Attributes;
@@ -1235,6 +1236,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
         handleEvent(Event.END_ELEMENT_EVENT);
+        super.endElement(uri, localName, qName);
     }
 
     /**
