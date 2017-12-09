@@ -32,7 +32,7 @@ fun isSnapshot(): Boolean = property("buildType") == "snapshot"
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlinx:kotlinx.dom:0.0.10")
-        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.1")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.2")
     }
 }
 
