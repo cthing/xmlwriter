@@ -32,7 +32,6 @@ fun isSnapshot(): Boolean = property("buildType") == "snapshot"
 buildscript {
     dependencies {
         classpath("org.jetbrains.kotlinx:kotlinx.dom:0.0.10")
-        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.3")
     }
 }
 
@@ -42,11 +41,7 @@ plugins {
     id("jacoco")
     id("maven-publish")
     id("signing")
-    id("com.github.spotbugs").version("1.6.0")
-}
-
-apply {
-    plugin("org.junit.platform.gradle.plugin")
+    id("com.github.spotbugs").version("1.6.1")
 }
 
 val buildNumber = if (isOnCIServer()) System.currentTimeMillis().toString() else "0"
@@ -56,11 +51,11 @@ group = "org.cthing"
 description = "A simple yet highly configurable XML writing library."
 
 dependencies {
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.3")
-    testCompile("org.junit.jupiter:junit-jupiter-params:5.0.3")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.3")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0")
+    testCompile("org.junit.jupiter:junit-jupiter-params:5.1.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.0")
     testCompileOnly("org.apiguardian:apiguardian-api:1.0.0")
-    testCompile("org.assertj:assertj-core:3.9.0")
+    testCompile("org.assertj:assertj-core:3.9.1")
 
     spotbugsPlugins("com.mebigfatguy.fb-contrib:fb-contrib:7.2.0.sb")
 }
@@ -88,7 +83,7 @@ tasks.withType<Javadoc> {
 }
 
 checkstyle {
-    toolVersion = "8.7"
+    toolVersion = "8.8"
     isIgnoreFailures = false
     configFile = project.file("dev/checkstyle/checkstyle.xml")
     configDir = project.file("dev/checkstyle")
@@ -96,7 +91,7 @@ checkstyle {
 }
 
 spotbugs {
-    toolVersion = "3.1.1"
+    toolVersion = "3.1.2"
     isIgnoreFailures = false
     effort = "max"
     reportLevel = "medium"
@@ -125,6 +120,9 @@ jacoco {
     }
 }
 
+(tasks["test"] as Test).apply {
+    useJUnitPlatform()
+}
 tasks["test"].extensions.getByType(JacocoTaskExtension::class.java).isAppend = false
 
 val sourceJar by tasks.creating(Jar::class) {
