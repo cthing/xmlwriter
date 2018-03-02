@@ -122,8 +122,9 @@ jacoco {
 
 (tasks["test"] as Test).apply {
     useJUnitPlatform()
+
+    extensions.getByType(JacocoTaskExtension::class.java).isAppend = false
 }
-tasks["test"].extensions.getByType(JacocoTaskExtension::class.java).isAppend = false
 
 val sourceJar by tasks.creating(Jar::class) {
     from(project.convention.getPlugin<JavaPluginConvention>().sourceSets["main"].allJava)
@@ -134,6 +135,28 @@ val javadocJar by tasks.creating(Jar::class) {
     from("javadoc")
     classifier = "javadoc"
 }
+
+
+class PomSigner : RuleSource() {
+    @Mutate
+    fun genPomRule(@Path("tasks.generatePomFileForMavenJavaPublication") genPomTask: GenerateMavenPom) {
+        genPomTask.setDestination(genPomTask.project.extra["pomFile"])
+    }
+
+    @Mutate
+    fun signPomRule(@Path("tasks.signPom") signPomTask: Sign,
+                    @Path("tasks.generatePomFileForMavenJavaPublication") genPomTask: GenerateMavenPom) {
+        val pomFile = signPomTask.project.extra["pomFile"] as File
+        val pomSigFile = signPomTask.project.extra["pomSigFile"] as File
+        signPomTask.dependsOn(genPomTask)
+        signPomTask.inputs.file(pomFile)
+        signPomTask.outputs.file(pomSigFile)
+        signPomTask.sign(pomFile)
+    }
+}
+
+data class SignedArtifact(val files: Set<File>, val classifier: String?, val extension: String)
+
 
 fun canSign(): Boolean {
     return project.hasProperty("signing.keyId")
@@ -155,25 +178,6 @@ if (canSign()) {
     extra["pomFile"] = File(buildDir, "${project.name}-$version.pom")
     extra["pomSigFile"] = File(buildDir, "${project.name}-$version.pom.asc")
 
-
-    class PomSigner : RuleSource() {
-        @Mutate
-        fun genPomRule(@Path("tasks.generatePomFileForMavenJavaPublication") genPomTask: GenerateMavenPom) {
-            genPomTask.setDestination(genPomTask.project.extra["pomFile"])
-        }
-
-        @Mutate
-        fun signPomRule(@Path("tasks.signPom") signPomTask: Sign,
-                           @Path("tasks.generatePomFileForMavenJavaPublication") genPomTask: GenerateMavenPom) {
-            val pomFile = signPomTask.project.extra["pomFile"] as File
-            val pomSigFile = signPomTask.project.extra["pomSigFile"] as File
-            signPomTask.dependsOn(genPomTask)
-            signPomTask.inputs.file(pomFile)
-            signPomTask.outputs.file(pomSigFile)
-            signPomTask.sign(pomFile)
-        }
-    }
-
     pluginManager.apply(PomSigner::class.java)
 }
 
@@ -185,8 +189,6 @@ publishing {
         artifact(javadocJar)
 
         if (canSign()) {
-            data class SignedArtifact(val files: Set<File>, val classifier: String?, val extension: String)
-
             val pomSigFile = project.extra["pomSigFile"] as File
             listOf(SignedArtifact((tasks["signJar"] as Sign).signatureFiles.files, null, "jar.asc"),
                    SignedArtifact((tasks["signSourceJar"] as Sign).signatureFiles.files, "sources", "jar.asc"),
