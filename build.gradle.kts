@@ -51,7 +51,7 @@ tasks.withType<Javadoc> {
     with (options as StandardJavadocDocletOptions) {
         breakIterator(false)
         encoding("UTF-8")
-        bottom("Copyright &copy; ${SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date())} C Thing Software. All rights reserved.")
+        bottom("Copyright &copy; ${SimpleDateFormat("yyyy", Locale.ENGLISH).format(Date())} ${project.property("org.cthing.organization.name")}. All rights reserved.")
         memberLevel = JavadocMemberLevel.PUBLIC
         outputLevel = JavadocOutputLevel.QUIET
     }
