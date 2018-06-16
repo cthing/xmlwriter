@@ -121,45 +121,43 @@ publishing {
         pom {
             name.set(project.name)
             description.set(project.description)
-            url.set("https://bitbucket.org/cthing/xmlwriter")
+            url.set("https://bitbucket.org/cthing/${project.name}")
             licenses {
                 license {
-                    name.set("Apache License, Version 2.0")
-                    url.set("http://www.apache.org/licenses/LICENSE-2")
+                    name.set(property("licenseName") as String)
+                    url.set(property("licenseUrl") as String)
                 }
             }
             developers {
                 developer {
-                    id.set("baron")
-                    name.set("Baron Roberts")
-                    email.set("baron@cthing.com")
-                    organization.set("C Thing Software")
-                    organizationUrl.set("http://www.cthing.com")
+                    id.set(property("developerId") as String)
+                    name.set(property("developerName") as String)
+                    email.set("${property("developerId")}@cthing.com")
+                    organization.set(property("organizationName") as String)
+                    organizationUrl.set(property("organizationUrl") as String)
                 }
             }
             scm {
-                connection.set("scm:git:git://bitbucket.org/cthing/xmwriter.git")
-                developerConnection.set("scm:git:ssh://bitbucket.org:cthing/xmlwriter")
-                url.set("https://bitbucket.org/cthing/xmlwriter/src")
+                connection.set("scm:git:git://bitbucket.org/cthing/${project.name}.git")
+                developerConnection.set("scm:git:ssh://bitbucket.org:cthing/${project.name}")
+                url.set("https://bitbucket.org/cthing/${project.name}/src")
             }
         }
     }
 
-    val repoUrl = if (isSnapshot) project.property("nexusSnapshotsUrl") else project.property("nexusCandidatesUrl")
+    val repoUrl = if (isSnapshot) property("nexusSnapshotsUrl") else property("nexusCandidatesUrl")
     if (repoUrl != null) {
         repositories.maven {
             setUrl(repoUrl)
             credentials {
-                username = project.properties["nexusUser"].toString()
-                password = project.properties["nexusPassword"].toString()
+                username = property("nexusUser") as String
+                password = property("nexusPassword") as String
             }
         }
     }
 }
 
-if (project.hasProperty("signing.keyId")
-        && project.hasProperty("signing.password")
-        && project.hasProperty("signing.secretKeyRingFile")) {
+if (hasProperty("signing.keyId") && hasProperty("signing.password") && hasProperty("signing.secretKeyRingFile")) {
     signing {
         sign(publishing.publications["mavenJava"])
     }
