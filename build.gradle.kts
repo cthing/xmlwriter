@@ -17,13 +17,13 @@ plugins {
 }
 
 val isCIServer = System.getenv("CTHING_CI") != null
-val isSnapshot = property("buildType") == "snapshot"
+val isSnapshot = property("org.cthing.build.type") == "snapshot"
 
 val buildNumber = if (isCIServer) System.currentTimeMillis().toString() else "0"
-val semver = property("semanticVersion")
+val semver = property("org.cthing.version")
 version = if (isSnapshot) "$semver-$buildNumber" else this.semver!!
-group = "org.cthing"
-description = "A simple yet highly configurable XML writing library."
+group = property("org.cthing.group") as String
+description = property("org.cthing.description") as String
 
 dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
@@ -43,7 +43,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Jar> {
     manifest.attributes(mapOf("Implementation-Title" to project.name,
-                              "Implementation-Vendor" to "C Thing Software",
+                              "Implementation-Vendor" to project.property("org.cthing.organization.name"),
                               "Implementation-Version" to project.version))
 }
 
@@ -124,17 +124,17 @@ publishing {
             url.set("https://bitbucket.org/cthing/${project.name}")
             licenses {
                 license {
-                    name.set(property("licenseName") as String)
-                    url.set(property("licenseUrl") as String)
+                    name.set(property("org.cthing.license.name") as String)
+                    url.set(property("org.cthing.license.url") as String)
                 }
             }
             developers {
                 developer {
-                    id.set(property("developerId") as String)
-                    name.set(property("developerName") as String)
-                    email.set("${property("developerId")}@cthing.com")
-                    organization.set(property("organizationName") as String)
-                    organizationUrl.set(property("organizationUrl") as String)
+                    id.set(property("org.cthing.developer.id") as String)
+                    name.set(property("org.cthing.developer.name") as String)
+                    email.set("${property("org.cthing.developer.id")}@cthing.com")
+                    organization.set(property("org.cthing.organization.name") as String)
+                    organizationUrl.set(property("org.cthing.organization.url") as String)
                 }
             }
             scm {
