@@ -27,9 +27,9 @@ description = property("org.cthing.description") as String
 dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.2.0")
     testCompile("org.junit.jupiter:junit-jupiter-params:5.2.0")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")
-    testCompileOnly("org.apiguardian:apiguardian-api:1.0.0")
     testCompile("org.assertj:assertj-core:3.10.0")
+    testCompileOnly("org.apiguardian:apiguardian-api:1.0.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.2.0")
 
     spotbugsPlugins("com.mebigfatguy.fb-contrib:fb-contrib:7.4.2.sb")
 }
@@ -37,8 +37,8 @@ dependencies {
 checkstyle {
     toolVersion = "8.10.1"
     isIgnoreFailures = false
-    configFile = project.file("dev/checkstyle/checkstyle.xml")
-    configDir = project.file("dev/checkstyle")
+    configFile = file("dev/checkstyle/checkstyle.xml")
+    configDir = file("dev/checkstyle")
     isShowViolations = true
 }
 
@@ -47,7 +47,7 @@ spotbugs {
     isIgnoreFailures = false
     effort = "max"
     reportLevel = "medium"
-    excludeFilter = project.file("dev/spotbugs/suppressions.xml")
+    excludeFilter = file("dev/spotbugs/suppressions.xml")
     sourceSets = listOf(java.sourceSets["main"])
 }
 
@@ -115,46 +115,48 @@ val javadocJar by tasks.creating(Jar::class) {
 }
 
 publishing {
-    publications.create<MavenPublication>("mavenJava") {
-        from(components["java"])
+    (publications) {
+        "mavenJava"(MavenPublication::class) {
+            from(components["java"])
 
-        artifact(sourceJar)
-        artifact(javadocJar)
+            artifact(sourceJar)
+            artifact(javadocJar)
 
-        pom {
-            name.set(project.name)
-            description.set(project.description)
-            url.set("https://bitbucket.org/cthing/${project.name}")
-            licenses {
-                license {
-                    name.set(property("org.cthing.license.name") as String)
-                    url.set(property("org.cthing.license.url") as String)
+            pom {
+                name.set(project.name)
+                description.set(project.description)
+                url.set("https://bitbucket.org/cthing/${project.name}")
+                licenses {
+                    license {
+                        name.set(property("org.cthing.license.name") as String)
+                        url.set(property("org.cthing.license.url") as String)
+                    }
                 }
-            }
-            developers {
-                developer {
-                    id.set(property("org.cthing.developer.id") as String)
-                    name.set(property("org.cthing.developer.name") as String)
-                    email.set("${property("org.cthing.developer.id")}@cthing.com")
-                    organization.set(property("org.cthing.organization.name") as String)
-                    organizationUrl.set(property("org.cthing.organization.url") as String)
+                developers {
+                    developer {
+                        id.set(property("org.cthing.developer.id") as String)
+                        name.set(property("org.cthing.developer.name") as String)
+                        email.set("${property("org.cthing.developer.id")}@cthing.com")
+                        organization.set(property("org.cthing.organization.name") as String)
+                        organizationUrl.set(property("org.cthing.organization.url") as String)
+                    }
                 }
-            }
-            scm {
-                connection.set("scm:git:git://bitbucket.org/cthing/${project.name}.git")
-                developerConnection.set("scm:git:ssh://bitbucket.org:cthing/${project.name}")
-                url.set("https://bitbucket.org/cthing/${project.name}/src")
+                scm {
+                    connection.set("scm:git:git://bitbucket.org/cthing/${project.name}.git")
+                    developerConnection.set("scm:git:ssh://bitbucket.org:cthing/${project.name}")
+                    url.set("https://bitbucket.org/cthing/${project.name}/src")
+                }
             }
         }
-    }
 
-    val repoUrl = if (isSnapshot) property("nexusSnapshotsUrl") else property("nexusCandidatesUrl")
-    if (repoUrl != null) {
-        repositories.maven {
-            setUrl(repoUrl)
-            credentials {
-                username = property("nexusUser") as String
-                password = property("nexusPassword") as String
+        val repoUrl = if (isSnapshot) property("nexusSnapshotsUrl") else property("nexusCandidatesUrl")
+        if (repoUrl != null) {
+            repositories.maven {
+                setUrl(repoUrl)
+                credentials {
+                    username = property("nexusUser") as String
+                    password = property("nexusPassword") as String
+                }
             }
         }
     }
