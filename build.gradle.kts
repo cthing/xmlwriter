@@ -148,10 +148,12 @@ publishing {
                 }
             }
         }
+    }
 
-        val repoUrl = if (isSnapshot) property("nexusSnapshotsUrl") else property("nexusCandidatesUrl")
-        if (repoUrl != null) {
-            repositories.maven {
+    val repoUrl = if (isSnapshot) property("nexusSnapshotsUrl") else property("nexusCandidatesUrl")
+    if (repoUrl != null) {
+        repositories {
+            maven {
                 setUrl(repoUrl)
                 credentials {
                     username = property("nexusUser") as String
