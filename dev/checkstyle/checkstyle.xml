@@ -99,9 +99,7 @@
         <module name="ArrayTypeStyle"/>
 
         <!-- Disallow "*" imports except for certain testing packages -->
-        <module name="AvoidStarImport">
-            <property name="excludes" value="org.junit.Assert,org.assertj.core.api.Assertions,org.mockito.Mockito"/>
-        </module>
+        <module name="AvoidStarImport"/>
 
         <!-- No more than 10 "&&", "||", "&", "|" and "^" operators in an expression -->
         <module name="BooleanExpressionComplexity">
