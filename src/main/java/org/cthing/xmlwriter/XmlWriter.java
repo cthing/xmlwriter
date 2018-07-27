@@ -592,7 +592,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Flushes the output. This method is especially useful for ensuring that the entire document has been output
      * without having to close the writer.
      *
-     * This method is invoked automatically by the {@link #endDocument endDocument} method.
+     * <p>This method is invoked automatically by the {@link #endDocument endDocument} method.
      *
      * @throws SAXException  If a problem occurred while flushing the writer an IOException wrapped in a SAXException
      *      is thrown.
@@ -601,8 +601,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     public void flush() throws SAXException {
         try {
             this.out.flush();
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        } catch (final IOException ex) {
+            throw new SAXException(ex);
         }
     }
 
@@ -643,7 +643,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Adds the specified prefix for the specified namespace URI. For more information refer to the discussion
      * of namespace support in the class overview documentation.
      *
-     * Note that this method does not force the namespace to be declared on the root element. To do that use the
+     * <p>Note that this method does not force the namespace to be declared on the root element. To do that use the
      * {@link #addNSRootDecl(String) addNSRootDecl} method.
      *
      * @param prefix  Prefix for the namespace URI. Use an empty string ("") to specify the default namespace.
@@ -665,11 +665,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Forces the specified namespace to be declared on the root element.
      *
-     * By default, the XmlWriter will declare namespaces on elements as needed. This may result in clutter as the
+     * <p>By default, the XmlWriter will declare namespaces on elements as needed. This may result in clutter as the
      * same namespace is declared on multiple elements. To avoid this, use this method to force a namespace declaration
      * on the root element.
      *
-     * For more information refer to the discussion of namespace support in the class overview documentation.
+     * <p>For more information refer to the discussion of namespace support in the class overview documentation.
      *
      * @param uri  The namespace URI to declare on the root element.
      * @return This class instance
@@ -687,11 +687,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * element. This method combines the operations performed by the {@link #addNSPrefix(String, String) addNSPrefix}
      * method and the {@link #addNSRootDecl(String) addNSRootDecl} method.
      *
-     * By default, the XmlWriter will declare namespaces on elements as needed. This may result in clutter as the same
+     * <p>By default, the XmlWriter will declare namespaces on elements as needed. This may result in clutter as the same
      * namespace is declared on multiple elements. To avoid this, use this method to force a namespace declaration
      * on the root element.
      *
-     * For more information refer to the discussion of namespace support in the class overview documentation.
+     * <p>For more information refer to the discussion of namespace support in the class overview documentation.
      *
      * @param prefix  Prefix for the namespace URI. Use an empty string ("") to specify the default namespace.
      * @param uri  The namespace URI to declare on the root element.
@@ -729,8 +729,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Enables or disables XML escaping of attribute values and character data. In addition, enables or disables
      * escaping of embedded quotes in attribute values. By default escaping is enabled.
-     * <p>
-     * <strong>WARNING:</strong> Under normal operating conditions, escaping should always be enabled. If the
+     *
+     * <p><strong>WARNING:</strong> Under normal operating conditions, escaping should always be enabled. If the
      * character data to be written is known to not require escaping, disabling escaping will improve performance.
      * Use this feature at your own risk.
      *
@@ -1058,20 +1058,18 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Begins an entity declaration.
      *
      * @param name  Name of the entity
-     * @throws SAXException If there is an error writing the entity.
      */
     @Override
-    public void startEntity(final String name) throws SAXException {
+    public void startEntity(final String name) {
     }
 
     /**
      * Ends an entity declaration.
      *
      * @param name  Name of the entity
-     * @throws SAXException If there is an error writing the entity.
      */
     @Override
-    public void endEntity(final String name) throws SAXException {
+    public void endEntity(final String name) {
     }
 
     /**
@@ -2587,8 +2585,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     private void writeNewline() throws SAXException {
         try {
             this.out.write(NEWLINE);
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        } catch (final IOException ex) {
+            throw new SAXException(ex);
         }
     }
 
@@ -2771,8 +2769,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     void writeRaw(final String s) throws SAXException {
         try {
             this.out.write(s);
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        } catch (final IOException ex) {
+            throw new SAXException(ex);
         }
     }
 
@@ -2787,8 +2785,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     void writeRaw(final char[] carr, final int start, final int length) throws SAXException {
         try {
             this.out.write(carr, start, length);
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        } catch (final IOException ex) {
+            throw new SAXException(ex);
         }
     }
 
@@ -2801,8 +2799,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     void writeRaw(final char c) throws SAXException {
         try {
             this.out.write(c);
-        } catch (final IOException e) {
-            throw new SAXException(e);
+        } catch (final IOException ex) {
+            throw new SAXException(ex);
         }
     }
 }
