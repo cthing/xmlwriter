@@ -25,11 +25,11 @@ group = property("cthing.group") as String
 description = property("cthing.description") as String
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.2.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.2.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.3.0")
     testImplementation("org.assertj:assertj-core:3.11.0")
     testCompileOnly("org.apiguardian:apiguardian-api:1.0.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.0")
 
     spotbugsPlugins("com.mebigfatguy.fb-contrib:fb-contrib:7.4.3.sb")
 }
