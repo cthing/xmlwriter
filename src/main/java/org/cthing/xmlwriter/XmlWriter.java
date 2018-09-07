@@ -2059,8 +2059,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 writeStartElement(false);
                 this.currentState = State.IN_START_TAG_STATE;
                 break;
-            case END_ELEMENT_EVENT:
-            {
+            case END_ELEMENT_EVENT: {
                 final Element element = topElement();
                 writeStartElement(this.minimize);
                 if (element.isEmpty || !this.minimize) {
