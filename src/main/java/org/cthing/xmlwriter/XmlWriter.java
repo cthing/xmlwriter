@@ -1999,13 +1999,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
 
         switch (this.currentState) {
         case BEFORE_DOC_STATE:
-            switch (event) {
-            case START_DOCUMENT_EVENT:
+            if (event == Event.START_DOCUMENT_EVENT) {
                 this.currentState = State.BEFORE_ROOT_STATE;
-                break;
-            default:
+            } else {
                 invalidEvent = true;
-                break;
             }
             break;
         case BEFORE_ROOT_STATE:
