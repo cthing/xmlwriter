@@ -3,7 +3,7 @@
 <!-- General entities -->
 <!ENTITY Copyr "Copyright 2006 C Thing Software">
 
-<!-- Paramter entities -->
+<!-- Parameter entities -->
 <!ENTITY % Entity1
    "foo (F|T) 'F'"
 >

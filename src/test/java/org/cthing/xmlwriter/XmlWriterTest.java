@@ -4,7 +4,6 @@
  */
 package org.cthing.xmlwriter;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URL;
@@ -724,7 +723,7 @@ class XmlWriterTest {
 
     @Test
     @DisplayName("Use as parsing filter without namespaces")
-    void testFilterWithoutNamspaces() throws Exception {
+    void testFilterWithoutNamespaces() throws Exception {
         final String xml = "<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
                          + "<elem1 version=\"1\">" + NEWLINE
                          + "    <elem2 src=\"foo\">This is a test document</elem2>" + NEWLINE
@@ -783,8 +782,7 @@ class XmlWriterTest {
         xmlWriterFilter.setEntityResolver(new EntityResolver() {
             @Override
             public InputSource resolveEntity(final String publicId,
-                                             final String systemId)
-            throws SAXException, IOException {
+                                             final String systemId) {
                 return new InputSource(getClass().getResourceAsStream("/XmlWriterTest.dtd"));
             }
         });
