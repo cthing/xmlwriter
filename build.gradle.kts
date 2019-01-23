@@ -62,7 +62,7 @@ tasks {
         options.compilerArgs.addAll(listOf("--release", "8", "-Xlint:all", "-Xlint:-options", "-Werror"))
     }
 
-    withType<Jar> {
+    withType<Jar>().configureEach {
         manifest.attributes(mapOf("Implementation-Title" to project.name,
                                   "Implementation-Vendor" to project.property("cthing.organization.name"),
                                   "Implementation-Version" to project.version))
