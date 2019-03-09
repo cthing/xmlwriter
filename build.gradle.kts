@@ -163,6 +163,6 @@ publishing {
 
 if (hasProperty("signing.keyId") && hasProperty("signing.password") && hasProperty("signing.secretKeyRingFile")) {
     signing {
-        sign(publishing.publications["mavenJava"])
+        sign(publishing.publications["jar"])
     }
 }
