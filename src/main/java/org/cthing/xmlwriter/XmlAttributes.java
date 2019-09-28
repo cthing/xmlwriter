@@ -23,7 +23,7 @@ public class XmlAttributes extends AttributesImpl {
     /**
      * Creates the attributes list with an initial attribute.
      *
-     * @param args  Name followed by value for each attribute to be added.
+     * @param args Name followed by value for each attribute to be added.
      */
     public XmlAttributes(final String... args) {
         if ((args.length % 2) != 0) {
@@ -42,7 +42,7 @@ public class XmlAttributes extends AttributesImpl {
      * Adds an attribute to the list of attributes.
      *
      * @param name  Name for the attribute
-     * @param value  Value for the attribute
+     * @param value Value for the attribute
      * @return This class instance.
      */
     @Nonnull
@@ -55,7 +55,7 @@ public class XmlAttributes extends AttributesImpl {
      * Adds an integer attribute to the list of attributes.
      *
      * @param name  Name for the attribute
-     * @param value  Value for the attribute
+     * @param value Value for the attribute
      * @return This class instance.
      */
     @Nonnull
