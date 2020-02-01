@@ -19,7 +19,7 @@
     </xs:element>
     <xs:element name="elem3">
         <xs:complexType>
-			<xs:attribute name="isGood" type="xs:boolean" default="true"/>
+            <xs:attribute name="isGood" type="xs:boolean" default="true"/>
             <xs:attribute name="dst" use="required" type="xs:NCName"/>
         </xs:complexType>
     </xs:element>

@@ -11,15 +11,15 @@
 <!-- DTD body -->
 <!ELEMENT elem1 (elem2,t1:elem3,elem4)>
 <!ATTLIST elem1
-	version NMTOKEN #REQUIRED
-	xmlns CDATA #REQUIRED
+    version NMTOKEN #REQUIRED
+    xmlns CDATA #REQUIRED
 >
 <!ELEMENT elem2 (#PCDATA)>
 <!ATTLIST elem2 src NMTOKEN #REQUIRED>
 <!ELEMENT elem4 (#PCDATA)>
 <!ELEMENT t1:elem3 EMPTY>
 <!ATTLIST t1:elem3
-	isGood (true|false) 'true'
-	dst NMTOKEN #REQUIRED
-	xmlns:t1 CDATA #REQUIRED
+    isGood (true|false) 'true'
+    dst NMTOKEN #REQUIRED
+    xmlns:t1 CDATA #REQUIRED
 >

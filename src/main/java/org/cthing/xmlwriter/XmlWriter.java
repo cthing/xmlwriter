@@ -280,6 +280,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @see org.xml.sax.XMLReader
  * @see <a href="http://www.saxproject.org/">SAX</a>
  */
+@SuppressWarnings("UnusedReturnValue")
 @ParametersAreNonnullByDefault
 public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
 

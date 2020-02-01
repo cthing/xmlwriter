@@ -110,7 +110,7 @@ class XmlWriterTest {
     @Test
     @DisplayName("Write a string adding quotes")
     void testWriteQuotedString() throws Exception {
-        final String testStringIn = "Hello &<>\"\' World\u00A9";
+        final String testStringIn = "Hello &<>\"' World\u00A9";
         final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#169;\"";
 
         this.xmlWriter.writeQuoted(testStringIn);
@@ -121,7 +121,7 @@ class XmlWriterTest {
     @Test
     @DisplayName("Write an array adding quotes")
     void testWriteQuotedArray() throws Exception {
-        final String testStringIn = "Hello &<>\"\' World\u00A9";
+        final String testStringIn = "Hello &<>\"' World\u00A9";
         final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#169;\"";
 
         this.xmlWriter.writeQuoted(testStringIn.toCharArray(), 0, testStringIn.length());
@@ -132,7 +132,7 @@ class XmlWriterTest {
     @Test
     @DisplayName("Write string adding quotes with escaping disabled")
     void testWriteQuotedNoEscaping() throws Exception {
-        final String testStringIn = "Hello &<>\"\' World\u00A9";
+        final String testStringIn = "Hello &<>\"' World\u00A9";
         this.xmlWriter.setEscaping(false);
 
         this.xmlWriter.writeQuoted(testStringIn);
