@@ -118,14 +118,14 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * example:
  * </p>
  * <pre>
- * &lt;ns1:elem1 xmlns:ns1="http://www.cthing.com/foo"&gt;
+ * &lt;ns1:elem1 xmlns:ns1="https://www.cthing.com/foo"&gt;
  * </pre>
  * <p>In the above example, the element's qualified name is {@code ns1:elem1} consisting of the namespace prefix
  * {@code ns1} and the local name {@code elem1}. The element is associated with the namespace URI
- * {@code http://www.cthing.com/foo} using the namespace declaration attribute. An element belongs to the default
+ * {@code https://www.cthing.com/foo} using the namespace declaration attribute. An element belongs to the default
  * namespace when the prefix is not specified:</p>
  * <pre>
- * &lt;elem1 xmlns="http://www.cthing.com/foo"&gt;
+ * &lt;elem1 xmlns="https://www.cthing.com/foo"&gt;
  * </pre>
  * <p>The XmlWriter provides many overloaded methods for writing elements and attributes with various combinations
  * of namespace components: namespace URI, local name, and qualified name. The namespace URI is used to look up a
@@ -139,12 +139,12 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *    &lt;elem1&gt;
  * </pre>
  * <pre>
- *    startElement("http://www.cthing.com/foo", "elem1");
- *    &lt;__NS1:elem1 xmlns:__NS1="http://www.cthing.com/foo"&gt;
+ *    startElement("https://www.cthing.com/foo", "elem1");
+ *    &lt;__NS1:elem1 xmlns:__NS1="https://www.cthing.com/foo"&gt;
  * </pre>
  * <pre>
- *    startElement("http://www.cthing.com/foo", "elem1", "n1:elem1");
- *    &lt;n1:elem1 xmlns:n1="http://www.cthing.com/foo"&gt;
+ *    startElement("https://www.cthing.com/foo", "elem1", "n1:elem1");
+ *    &lt;n1:elem1 xmlns:n1="https://www.cthing.com/foo"&gt;
  * </pre>
  *
  * <p>As described above, the XmlWriter will generate a namespace prefix if one cannot be found. A namespace prefix
@@ -153,26 +153,26 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * Without prefix mapping the following code produces XML that uses a synthesized prefix.</p>
  * <pre>
  *    startElement("elem1");
- *    emptyElement("http://www.cthing.com/foo", "elem2");
- *    emptyElement("http://www.cthing.com/foo", "elem3");
+ *    emptyElement("https://www.cthing.com/foo", "elem2");
+ *    emptyElement("https://www.cthing.com/foo", "elem3");
  *    endElement();
  *
  *    &lt;elem1&gt;
- *        &lt;__NS1:elem2 xmlns:__NS1="http://www.cthing.com/foo"/&gt;
- *        &lt;__NS1:elem3 xmlns:__NS1="http://www.cthing.com/foo"/&gt;
+ *        &lt;__NS1:elem2 xmlns:__NS1="https://www.cthing.com/foo"/&gt;
+ *        &lt;__NS1:elem3 xmlns:__NS1="https://www.cthing.com/foo"/&gt;
  *    &lt;/elem1&gt;
  * </pre>
  * <p>A more appropriate prefix can be specified using the {@link #addNSPrefix(String, String) addNSPrefix} method</p>
  * <pre>
- *    addNSPrefix("n1", "http://www.cthing.com/foo");
+ *    addNSPrefix("n1", "https://www.cthing.com/foo");
  *    startElement("elem1");
- *    emptyElement("http://www.cthing.com/foo", "elem2");
- *    emptyElement("http://www.cthing.com/foo", "elem3");
+ *    emptyElement("https://www.cthing.com/foo", "elem2");
+ *    emptyElement("https://www.cthing.com/foo", "elem3");
  *    endElement();
  *
  *    &lt;elem1&gt;
- *        &lt;n1:elem2 xmlns:n1="http://www.cthing.com/foo"/&gt;
- *        &lt;n1:elem3 xmlns:n1="http://www.cthing.com/foo"/&gt;
+ *        &lt;n1:elem2 xmlns:n1="https://www.cthing.com/foo"/&gt;
+ *        &lt;n1:elem3 xmlns:n1="https://www.cthing.com/foo"/&gt;
  *    &lt;/elem1&gt;
  * </pre>
  * <p>The addNSPrefix method specifies namespace prefixes, but as shown in the above example, the namespaces
@@ -182,13 +182,13 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * be pre-declared on the root element and a prefix to be defined for that namespace in one method call as
  * shown in the following example:</p>
  * <pre>
- *    addNSRootDecl("ns1", "http://www.cthing.com/foo");
+ *    addNSRootDecl("ns1", "https://www.cthing.com/foo");
  *    startElement("elem1");
- *    emptyElement("http://www.cthing.com/foo", "elem2");
- *    emptyElement("http://www.cthing.com/foo", "elem3");
+ *    emptyElement("https://www.cthing.com/foo", "elem2");
+ *    emptyElement("https://www.cthing.com/foo", "elem3");
  *    endElement();
  *
- *    &lt;elem1 xmlns:ns1="http://www.cthing.com/foo"&gt;
+ *    &lt;elem1 xmlns:ns1="https://www.cthing.com/foo"&gt;
  *        &lt;ns1:elem2/&gt;
  *        &lt;ns1:elem3/&gt;
  *    &lt;/elem1&gt;
@@ -196,13 +196,13 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * <p>The default namespace can be specified by calling the addNSPrefix or addNSRootDecl method with an empty string
  * ("") for the prefix as shown in the following example:</p>
  * <pre>
- *    addNSRootDecl("", "http://www.cthing.com/foo");
+ *    addNSRootDecl("", "https://www.cthing.com/foo");
  *    startElement("elem1");
- *    emptyElement("http://www.cthing.com/foo", "elem2");
- *    emptyElement("http://www.cthing.com/foo", "elem3");
+ *    emptyElement("https://www.cthing.com/foo", "elem2");
+ *    emptyElement("https://www.cthing.com/foo", "elem3");
  *    endElement();
  *
- *    &lt;elem1 xmlns="http://www.cthing.com/foo"&gt;
+ *    &lt;elem1 xmlns="https://www.cthing.com/foo"&gt;
  *        &lt;elem2/&gt;
  *        &lt;elem3/&gt;
  *    &lt;/elem1&gt;
@@ -2102,7 +2102,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     case COMMENT_EVENT:
                     case NEWLINE_EVENT:
                     case PI_EVENT:
-                        this.currentState = State.BEFORE_ROOT_STATE;
                         break;
                     case START_ELEMENT_EVENT:
                         this.currentState = State.IN_START_TAG_STATE;
@@ -2121,7 +2120,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
             case IN_START_TAG_STATE:
                 switch (event) {
                     case ATTRIBUTE_EVENT:
-                        this.currentState = State.IN_START_TAG_STATE;
                         break;
                     case INLINE_REF_EVENT:
                     case CHARACTERS_EVENT:
@@ -2171,7 +2169,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     case CHARACTERS_EVENT:
                     case COMMENT_EVENT:
                     case NEWLINE_EVENT:
-                        this.currentState = State.IN_CDATA_STATE;
                         break;
                     case END_CDATA_EVENT:
                         this.currentState = State.AFTER_DATA_STATE;
@@ -2186,7 +2183,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     case CHARACTERS_EVENT:
                     case COMMENT_EVENT:
                     case NEWLINE_EVENT:
-                        this.currentState = State.IN_DTD_STATE;
                         break;
                     case END_DTD_EVENT:
                         this.currentState = State.BEFORE_ROOT_STATE;
@@ -2206,7 +2202,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     case COMMENT_EVENT:
                     case NEWLINE_EVENT:
                     case PI_EVENT:
-                        this.currentState = State.AFTER_TAG_STATE;
                         break;
                     case START_CDATA_EVENT:
                         this.currentState = State.IN_CDATA_STATE;
@@ -2231,7 +2226,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     case COMMENT_EVENT:
                     case NEWLINE_EVENT:
                     case PI_EVENT:
-                        this.currentState = State.AFTER_DATA_STATE;
                         break;
                     case START_CDATA_EVENT:
                         this.currentState = State.IN_CDATA_STATE;
@@ -2256,7 +2250,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     case COMMENT_EVENT:
                     case NEWLINE_EVENT:
                     case PI_EVENT:
-                        this.currentState = State.AFTER_ROOT_STATE;
                         break;
                     case END_DOCUMENT_EVENT:
                         this.currentState = State.AFTER_DOC_STATE;
