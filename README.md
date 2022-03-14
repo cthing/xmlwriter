@@ -60,7 +60,8 @@ on the API. See the [State Machine document](dev/docs/StateMachine.md) for detai
 heart of the `XmlWriter` class.
 
 ### Building
-The libray generates Java 11 bytecode. Therefore, a Java 11 or higher compiler must be used to build the library.
+The libray is compiled for Java 11.
+
 Gradle is used to build the library:
 ```
 ./gradlew build
