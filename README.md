@@ -58,3 +58,10 @@ xmlWriter.parse(new InputSource(new FileReader("Foo.xml")));
 See the [Javadoc in the XmlWriter](src/main/java/org/cthing/xmlwriter/XmlWriter.java) class for additional details
 on the API. See the [State Machine document](dev/docs/StateMachine.md) for details on the state machine at the
 heart of the `XmlWriter` class.
+
+### Building
+The libray generates Java 11 bytecode. Therefore, a Java 11 or higher compiler must be used to build the library.
+Gradle is used to build the library:
+```
+./gradlew build
+```
