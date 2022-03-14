@@ -56,5 +56,5 @@ xmlWriter.parse(new InputSource(new FileReader("Foo.xml")));
 
 ### Additional Details
 See the [Javadoc in the XmlWriter](src/main/java/org/cthing/xmlwriter/XmlWriter.java) class for additional details
-on the API. See the [State Machine document](dev/docs/StateMachine.html) for details on the state machine at the
+on the API. See the [State Machine document](dev/docs/StateMachine.md) for details on the state machine at the
 heart of the `XmlWriter` class.
