@@ -6,12 +6,12 @@ as-is or pretty printed. The library has no dependencies on Java XML serializati
 The XmlWriter class can be used standalone in applications that need to write XML. For standalone usage:
 * Create an XmlWriter specifying the output destination
 * As needed, configure the writer output properties (e.g. enable pretty printing)
-* Begin the XML output by calling one of the {@link #startDocument() startDocument} methods. One 
+* Begin the XML output by calling one of the `startDocument` methods. One 
   of these methods must be called before any other output methods.</li>
-* Call XML output methods as needed (e.g. {@link #startElement(String) startElement}).
-* Complete the XML output by calling the {@link #endDocument endDocument} method to properly terminate the
+* Call XML output methods as needed (e.g. `startElement`).
+* Complete the XML output by calling the `endDocument` method to properly terminate the
   XML document. No XML output methods can be called following the call to endDocument.
-* Optionally, reuse the XmlWriter instance by calling the {@link #reset reset} method.
+* Optionally, reuse the XmlWriter instance by calling the `reset` method.
 
 The following is an example of using a standalone XmlWriter to write a simple XML document to the standard output:
 ```
