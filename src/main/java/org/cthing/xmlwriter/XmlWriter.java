@@ -49,7 +49,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * This class writes XML either as a SAX2 event filter or as a standalone XML writer. XML can be written
  * as-is or pretty printed.
  *
- * <h3>Standalone Usage</h3>
+ * <h2>Standalone Usage</h2>
  *
  * <p>The XmlWriter class can be used standalone in applications that need to write XML. For standalone usage:</p>
  * <ol>
@@ -80,7 +80,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * &lt;elem1&gt;Hello World&lt;/elem1&gt;
  * </pre>
  *
- * <h3>SAX Filter Usage</h3>
+ * <h2>SAX Filter Usage</h2>
  * <p>The XmlWriter can be used as a SAX2 stream filter. The class receives SAX events from the downstream XMLReader,
  * outputs the appropriate XML, and forwards the event to the upstream filter. For usage as a SAX filter:</p>
  * <ol>
@@ -116,7 +116,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * {@link #setStandalone(boolean) setStandalone} methods for more information. In addition, internal DTD subsets are
  * not output.</p>
  *
- * <h3>Namespace Support</h3>
+ * <h2>Namespace Support</h2>
  *
  * <p>The XmlWriter fully supports XML namespaces including namespace prefix management and writing {@code xmlns}
  * attributes.</p>
@@ -216,7 +216,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *    &lt;/elem1&gt;
  * </pre>
  *
- * <h3>Pretty Printing</h3>
+ * <h2>Pretty Printing</h2>
  * <p>The XmlWriter can format the XML output and provides a number of options for controlling the appearance of the
  * output.</p>
  *
@@ -264,7 +264,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * with one attribute per line while elements with only a few attributes can be output all on the same line as the
  * element name.</p>
  *
- * <h3>Default Attribute Handling</h3>
+ * <h2>Default Attribute Handling</h2>
  *
  * <p>Certain element attributes exist only because a default value for them is specified in a DTD or schema.
  * By default, the XmlWriter does not output these attributes. To write these attribute values call the
@@ -276,7 +276,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * attribute has been explicitly specified. SAX2 extensions are supported when the
  * {@code http://xml.org/sax/features/use-attributes2} flag is {@code true}.</p>
  *
- * <h3>Acknowledgments</h3>
+ * <h2>Acknowledgments</h2>
  *
  * <p>The ability to use an XML writer in a SAX filter stream was demonstrated by
  * <a href="mailto:david@megginson.com">David Megginson</a> in his
@@ -288,7 +288,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @see org.xml.sax.XMLReader
  * @see <a href="http://www.saxproject.org/">SAX</a>
  */
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings({ "UnusedReturnValue", "JavadocLinkAsPlainText" })
 public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
 
     /**
@@ -308,7 +308,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Represents the state of the writer.
      */
-    public enum State {
+    private enum State {
         BEFORE_DOC_STATE,
         BEFORE_ROOT_STATE,
         IN_START_TAG_STATE,
@@ -324,7 +324,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Represents a state transition event.
      */
-    public enum Event {
+    private enum Event {
         ATTRIBUTE_EVENT,
         INLINE_REF_EVENT,
         BLOCK_REF_EVENT,
@@ -385,22 +385,22 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     private State currentState;
 
     /** Stack of open elements. */
-    private ElementStack elementStack;
+    private final ElementStack elementStack;
 
     /** Namespace management. */
-    private NamespaceSupport nsSupport;
+    private final NamespaceSupport nsSupport;
 
     /** Used in creating a namespace prefix. */
     private int nsPrefixCounter;
 
     /** Maps namespace URI to a prefix. */
-    private Map<String, String> nsPrefixMap;
+    private final Map<String, String> nsPrefixMap;
 
     /** Prefix to namespace URI mapping. */
-    private Map<String, String> nsDeclMap;
+    private final Map<String, String> nsDeclMap;
 
     /** Sets of namespace URIs to declare on the root element. */
-    private Set<String> nsRootDeclSet;
+    private final Set<String> nsRootDeclSet;
 
 
     /**
@@ -497,52 +497,12 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Represents an XML notation. A collection of instances of this class can be passed to the
      * {@link XmlWriter#doctype(String, String, String, Collection, Collection) doctype} method
      * to declare the notations using an internal DTD subset.
+     *
+     * @param name Specifies the name for the notation
+     * @param publicId Specifies the public ID for the notation or {@code null} if a public ID is not available.
+     * @param systemId Specifies the system ID for the notation or {@code null} if a system ID is not available.
      */
-    public static class Notation {
-
-        private final String name;
-        private final String publicId;
-        private final String systemId;
-
-        /**
-         * Defines a notation.
-         *
-         * @param name Specifies the name for the notation
-         * @param publicId Specifies the public ID for the notation or {@code null} if a public ID is not available.
-         * @param systemId Specifies the system ID for the notation or {@code null} if a system ID is not available.
-         */
-        public Notation(final String name, final String publicId, final String systemId) {
-            this.name = name;
-            this.publicId = publicId;
-            this.systemId = systemId;
-        }
-
-        /**
-         * Provides the notation name.
-         *
-         * @return Returns the notation name.
-         */
-        public String getName() {
-            return this.name;
-        }
-
-        /**
-         * Provides the public identifier for the notation.
-         *
-         * @return Returns the public identifier.
-         */
-        public String getPublicId() {
-            return this.publicId;
-        }
-
-        /**
-         * Provides the system identifier for the notation.
-         *
-         * @return Returns the system identifier.
-         */
-        public String getSystemId() {
-            return this.systemId;
-        }
+    public record Notation(String name, String publicId, String systemId) {
     }
 
 
@@ -550,7 +510,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Creates an XML writer that writes to the standard output.
      */
     public XmlWriter() {
-        init(null);
+        this(null, null);
     }
 
     /**
@@ -559,7 +519,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param writer Output destination or {@code null} to use the standard output.
      */
     public XmlWriter(final Writer writer) {
-        init(writer);
+        this(null, writer);
     }
 
     /**
@@ -581,15 +541,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      */
     public XmlWriter(final XMLReader reader, final Writer writer) {
         super(reader);
-        init(writer);
-    }
 
-    /**
-     * Called by all constructors to initialize the class.
-     *
-     * @param writer Output destination. If {@code null}, the standard output is used.
-     */
-    private void init(final Writer writer) {
         this.elementStack = new ElementStack();
         this.nsSupport = new NamespaceSupport();
         this.nsPrefixMap = new HashMap<>();
@@ -614,7 +566,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Resets the XML writer to its initial state so that it can be reused. After {@link #endDocument() endDocument},
      * the reset method must be called before the XmlWriter can be reused for output.
      */
-    public void reset() {
+    public final void reset() {
         this.elementStack.clear();
         this.nsSupport.reset();
         this.nsPrefixCounter = 0;
@@ -647,7 +599,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @return The newly set writer.
      */
     @SuppressWarnings({ "resource", "IOResourceOpenedButNotSafelyClosed" })
-    public Writer setOutput(final Writer writer) {
+    public final Writer setOutput(final Writer writer) {
         this.out = (writer == null) ? new OutputStreamWriter(System.out, StandardCharsets.UTF_8) : writer;
         return this.out;
     }
@@ -1896,6 +1848,21 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
 
 
     /**
+     * Internal representation of an element.
+     *
+     * @param uri Namespace URI for the element
+     * @param localName Local name for the element
+     * @param qName Qualified name for the element
+     * @param attrs Element attributes
+     * @param isEmpty Indicates if the element can contain content
+     * @param containingState Writer state in which this element is being written
+     */
+    private record Element(String uri, String localName, String qName, Attributes2Impl attrs, boolean isEmpty,
+                           State containingState) {
+    }
+
+
+    /**
      * A stack for elements. An unsynchronized collection is used as the basis to improve performance. In addition,
      * a free list is used to avoid unnecessary creation or Element objects.
      */
@@ -1907,7 +1874,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
         private static final int INIT_CAP = 20;
 
         private final Deque<Element> inUseElements = new ArrayDeque<>(INIT_CAP);
-        private final Deque<Element> freeElements = new ArrayDeque<>(INIT_CAP);
 
         private ElementStack() {
         }
@@ -1925,8 +1891,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          * Pops the top element off of this stack.
          */
         public void pop() {
-            final Element elem = this.inUseElements.removeLast();
-            this.freeElements.push(elem);
+            this.inUseElements.removeLast();
         }
 
         /**
@@ -1942,14 +1907,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          */
         public void push(final String namespaceUri, final String name, final String qualifiedName,
                          final Attributes attributes, final boolean empty, final State state) {
-            final Element element = this.freeElements.isEmpty() ? new Element() : this.freeElements.removeLast();
-            element.uri = namespaceUri;
-            element.localName = name;
-            element.qName = qualifiedName;
-            element.attrs = new Attributes2Impl(attributes);
-            element.isEmpty = empty;
-            element.containingState = state;
-
+            final Attributes2Impl attrs = new Attributes2Impl(attributes);
+            final Element element = new Element(namespaceUri, name, qualifiedName, attrs, empty, state);
             this.inUseElements.add(element);
         }
 
@@ -1967,43 +1926,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          */
         public void clear() {
             this.inUseElements.clear();
-        }
-    }
-
-
-    /**
-     * Internal representation of an element.
-     */
-    private static final class Element {
-        /**
-         * Namespace URI for the element.
-         */
-        public String uri;
-        /**
-         * Local name for the element.
-         */
-        public String localName;
-        /**
-         * Qualified name for the element.
-         */
-        public String qName;
-        /**
-         * Element attributes.
-         */
-        public Attributes2Impl attrs;
-        /**
-         * Indicates if the element can contain content.
-         */
-        public boolean isEmpty;
-        /**
-         * Writer state in which this element is being written.
-         */
-        public State containingState;
-
-        /**
-         * Constructor for the class.
-         */
-        private Element() {
         }
     }
 
@@ -2030,12 +1952,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 break;
             case BEFORE_ROOT_STATE:
                 switch (event) {
-                    case INLINE_REF_EVENT:
-                    case BLOCK_REF_EVENT:
-                    case CHARACTERS_EVENT:
-                    case COMMENT_EVENT:
-                    case NEWLINE_EVENT:
-                    case PI_EVENT:
+                    case INLINE_REF_EVENT, BLOCK_REF_EVENT, CHARACTERS_EVENT, COMMENT_EVENT, NEWLINE_EVENT, PI_EVENT:
                         break;
                     case START_ELEMENT_EVENT:
                         this.currentState = State.IN_START_TAG_STATE;
@@ -2055,15 +1972,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 switch (event) {
                     case ATTRIBUTE_EVENT:
                         break;
-                    case INLINE_REF_EVENT:
-                    case CHARACTERS_EVENT:
+                    case INLINE_REF_EVENT, CHARACTERS_EVENT:
                         writeStartElement(false);
                         this.currentState = State.AFTER_DATA_STATE;
                         break;
-                    case NEWLINE_EVENT:
-                    case PI_EVENT:
-                    case BLOCK_REF_EVENT:
-                    case COMMENT_EVENT:
+                    case NEWLINE_EVENT, PI_EVENT, BLOCK_REF_EVENT, COMMENT_EVENT:
                         writeStartElement(false);
                         this.currentState = State.AFTER_TAG_STATE;
                         break;
@@ -2098,11 +2011,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 break;
             case IN_CDATA_STATE:
                 switch (event) {
-                    case INLINE_REF_EVENT:
-                    case BLOCK_REF_EVENT:
-                    case CHARACTERS_EVENT:
-                    case COMMENT_EVENT:
-                    case NEWLINE_EVENT:
+                    case INLINE_REF_EVENT, BLOCK_REF_EVENT, CHARACTERS_EVENT, COMMENT_EVENT, NEWLINE_EVENT:
                         break;
                     case END_CDATA_EVENT:
                         this.currentState = State.AFTER_DATA_STATE;
@@ -2114,9 +2023,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 break;
             case IN_DTD_STATE:
                 switch (event) {
-                    case CHARACTERS_EVENT:
-                    case COMMENT_EVENT:
-                    case NEWLINE_EVENT:
+                    case CHARACTERS_EVENT, COMMENT_EVENT, NEWLINE_EVENT:
                         break;
                     case END_DTD_EVENT:
                         this.currentState = State.BEFORE_ROOT_STATE;
@@ -2128,14 +2035,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 break;
             case AFTER_TAG_STATE:
                 switch (event) {
-                    case INLINE_REF_EVENT:
-                    case CHARACTERS_EVENT:
+                    case INLINE_REF_EVENT, CHARACTERS_EVENT:
                         this.currentState = State.AFTER_DATA_STATE;
                         break;
-                    case BLOCK_REF_EVENT:
-                    case COMMENT_EVENT:
-                    case NEWLINE_EVENT:
-                    case PI_EVENT:
+                    case BLOCK_REF_EVENT, COMMENT_EVENT, NEWLINE_EVENT, PI_EVENT:
                         break;
                     case START_CDATA_EVENT:
                         this.currentState = State.IN_CDATA_STATE;
@@ -2154,12 +2057,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 break;
             case AFTER_DATA_STATE:
                 switch (event) {
-                    case INLINE_REF_EVENT:
-                    case BLOCK_REF_EVENT:
-                    case CHARACTERS_EVENT:
-                    case COMMENT_EVENT:
-                    case NEWLINE_EVENT:
-                    case PI_EVENT:
+                    case INLINE_REF_EVENT, BLOCK_REF_EVENT, CHARACTERS_EVENT, COMMENT_EVENT, NEWLINE_EVENT, PI_EVENT:
                         break;
                     case START_CDATA_EVENT:
                         this.currentState = State.IN_CDATA_STATE;
@@ -2178,12 +2076,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                 break;
             case AFTER_ROOT_STATE:
                 switch (event) {
-                    case INLINE_REF_EVENT:
-                    case BLOCK_REF_EVENT:
-                    case CHARACTERS_EVENT:
-                    case COMMENT_EVENT:
-                    case NEWLINE_EVENT:
-                    case PI_EVENT:
+                    case INLINE_REF_EVENT, BLOCK_REF_EVENT, CHARACTERS_EVENT, COMMENT_EVENT, NEWLINE_EVENT, PI_EVENT:
                         break;
                     case END_DOCUMENT_EVENT:
                         this.currentState = State.AFTER_DOC_STATE;
@@ -2237,8 +2130,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @return The prefix for the specified namespace. The method will never return null.
      */
     private String findNSPrefix(final String uri, final String qName, final boolean isElement) {
-        final String defaultNS =
-                this.nsSupport.getURI(XMLConstants.DEFAULT_NS_PREFIX);
+        final String defaultNS = this.nsSupport.getURI(XMLConstants.DEFAULT_NS_PREFIX);
         final boolean haveDefaultNS = (defaultNS != null);
         final boolean isAttribute = !isElement;
 
@@ -2733,23 +2625,12 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      */
     void writeEscaped(final char c) throws SAXException {
         switch (c) {
-            case '&':
-                writeRaw("&amp;");
-                break;
-            case '<':
-                writeRaw("&lt;");
-                break;
-            case '>':
-                writeRaw("&gt;");
-                break;
-            case '\n':
-                writeNewline();
-                break;
-            case '\t':
-            case '\r':
-                writeRaw(c);
-                break;
-            default:
+            case '&' -> writeRaw("&amp;");
+            case '<' -> writeRaw("&lt;");
+            case '>' -> writeRaw("&gt;");
+            case '\n' -> writeNewline();
+            case '\t', '\r' -> writeRaw(c);
+            default -> {
                 if (c > '\u001F' && c < '\u007F') {
                     writeRaw(c);
                 } else if ((c >= '\u007F' && c <= '\uD7FF') || (c >= '\uE000' && c <= '\uFFFD')) {
@@ -2760,7 +2641,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     writeRaw("ctrl-");
                     writeRaw(Integer.toString(c));
                 }
-                break;
+            }
         }
     }
 

@@ -43,6 +43,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+@SuppressWarnings("HttpUrlsUsage")
 class XmlWriterTest {
 
     /** Specifies the newline character sequence to use. */
@@ -180,12 +181,21 @@ class XmlWriterTest {
 
     private static Stream<Arguments> minimalDocumentProvider() {
         return Stream.of(
-                Arguments.of(null, true, false,
-                             "<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE + NEWLINE),
-                Arguments.of(null, false, false,
-                             "<?xml version=\"1.0\" standalone=\"no\"?>" + NEWLINE + NEWLINE + NEWLINE),
-                Arguments.of("UTF-8", false, false,
-                             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + NEWLINE + NEWLINE + NEWLINE),
+                Arguments.of(null, true, false, """
+                <?xml version="1.0" standalone="yes"?>
+
+
+                """),
+                Arguments.of(null, false, false, """
+                <?xml version="1.0" standalone="no"?>
+
+
+                """),
+                Arguments.of("UTF-8", false, false, """
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+
+                """),
                 Arguments.of("UTF-8", false, true, NEWLINE)
         );
     }
@@ -200,8 +210,11 @@ class XmlWriterTest {
         this.xmlWriter.endDocument();
         this.xmlWriter.setMinimizeEmpty(true);
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1></elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1></elem1>
+                                                        """);
     }
 
     @Test
@@ -218,8 +231,11 @@ class XmlWriterTest {
         this.xmlWriter.endDocument();
         this.xmlWriter.setMinimizeEmpty(true);
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1><elem2/><elem3/><elem4></elem4></elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1><elem2/><elem3/><elem4></elem4></elem1>
+                                                        """);
     }
 
     @Test
@@ -241,17 +257,20 @@ class XmlWriterTest {
         this.xmlWriter.setMinimizeEmpty(true);
         this.xmlWriter.setPrettyPrint(false);
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1>" + NEWLINE
-                                                        + "    <elem2/>" + NEWLINE
-                                                        + "    <elem3/>" + NEWLINE
-                                                        + "    <elem4>" + NEWLINE
-                                                        + "    </elem4>" + NEWLINE
-                                                        + "    <elem5>" + NEWLINE
-                                                        + "        <elem6>" + NEWLINE
-                                                        + "        </elem6>" + NEWLINE
-                                                        + "    </elem5>" + NEWLINE
-                                                        + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                     <?xml version="1.0" standalone="yes"?>
+
+                                                     <elem1>
+                                                         <elem2/>
+                                                         <elem3/>
+                                                         <elem4>
+                                                         </elem4>
+                                                         <elem5>
+                                                             <elem6>
+                                                             </elem6>
+                                                         </elem5>
+                                                     </elem1>
+                                                     """);
     }
 
     @Test
@@ -276,10 +295,13 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1 a1=\"v1\" a2=\"v2\" a3=\"v3\">" + NEWLINE
-                                                        + "    <elem2 b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE
-                                                        + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1 a1="v1" a2="v2" a3="v3">
+                                                            <elem2 b1="v10" b2="v20" b3="v30"/>
+                                                        </elem1>
+                                                        """);
     }
 
     @Test
@@ -304,16 +326,21 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1" + NEWLINE
-                                                        + "    a1=\"v1\"" + NEWLINE
-                                                        + "    a2=\"v2\"" + NEWLINE
-                                                        + "    a3=\"v3\"" + NEWLINE + ">" + NEWLINE
-                                                        + "    <elem2" + NEWLINE
-                                                        + "        b1=\"v10\"" + NEWLINE
-                                                        + "        b2=\"v20\"" + NEWLINE
-                                                        + "        b3=\"v30\"" + NEWLINE + "    />" + NEWLINE
-                                                        + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1
+                                                            a1="v1"
+                                                            a2="v2"
+                                                            a3="v3"
+                                                        >
+                                                            <elem2
+                                                                b1="v10"
+                                                                b2="v20"
+                                                                b3="v30"
+                                                            />
+                                                        </elem1>
+                                                        """);
     }
 
     @Test
@@ -335,9 +362,11 @@ class XmlWriterTest {
         this.xmlWriter.emptyElement("elem1", attrs1).addAttribute("z1", 13).addAttributes(attrs2);
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1 a1=\"v1\" a2=\"v2\" a3=\"v3\" z1=\"13\" "
-                                                        + "b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1 a1="v1" a2="v2" a3="v3" z1="13" b1="v10" b2="v20" b3="v30"/>
+                                                        """);
     }
 
     @Test
@@ -360,8 +389,11 @@ class XmlWriterTest {
         this.xmlWriter.setAttributes(attrs2);
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1 b1=\"v10\" b2=\"v20\" b3=\"v30\"/>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1 b1="v10" b2="v20" b3="v30"/>
+                                                        """);
     }
 
     @Test
@@ -373,8 +405,11 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1>Hello World</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1>Hello World</elem1>
+                                                        """);
     }
 
     @Test
@@ -393,13 +428,16 @@ class XmlWriterTest {
         this.xmlWriter.endDocument();
         this.xmlWriter.setPrettyPrint(false);
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1>" + NEWLINE
-                                                        + "    <elem2>Hello World</elem2>" + NEWLINE
-                                                        + "    <elem3>" + NEWLINE
-                                                        + "        <!-- A comment -->" + NEWLINE
-                                                        + "    </elem3>" + NEWLINE
-                                                        + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1>
+                                                            <elem2>Hello World</elem2>
+                                                            <elem3>
+                                                                <!-- A comment -->
+                                                            </elem3>
+                                                        </elem1>
+                                                        """);
     }
 
     @Test
@@ -420,11 +458,12 @@ class XmlWriterTest {
         this.xmlWriter.endDocument();
         this.xmlWriter.setPrettyPrint(false);
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1>Hello World&amp;&#97;<elem2>"
-                                                        + "<![CDATA[This is a <test>]]>"
-                                                        + "<!-- First comment --></elem2>" + NEWLINE
-                                                        + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1>Hello World&amp;&#97;<elem2><![CDATA[This is a <test>]]><!-- First comment --></elem2>
+                                                        </elem1>
+                                                        """);
     }
 
     @Test
@@ -436,8 +475,11 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                                   + "<elem1></elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                                   <?xml version="1.0" standalone="yes"?>
+
+                                                                   <elem1></elem1>
+                                                                   """);
     }
 
     @Test
@@ -449,8 +491,11 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem1/>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem1/>
+                                                        """);
     }
 
     @Test
@@ -483,18 +528,21 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                            + "<elem1>This &amp; that. The letter &#97;<elem2/>" + NEWLINE
-                                            + "    <!-- First comment -->" + NEWLINE
-                                            + "    &extFile;" + NEWLINE
-                                            + "    <elem3/>" + NEWLINE
-                                            + "    <elem4/>" + NEWLINE
-                                            + "    <!-- Second comment -->&charFile;<!-- Third comment --><elem5/>" + NEWLINE
-                                            + "    <!-- Fourth comment -->" + NEWLINE
-                                            + "    &dataFile;" + NEWLINE
-                                            + "    <!-- Fifth comment -->" + NEWLINE
-                                            + "    <elem6/>" + NEWLINE
-                                            + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                            <?xml version="1.0" standalone="yes"?>
+
+                                            <elem1>This &amp; that. The letter &#97;<elem2/>
+                                                <!-- First comment -->
+                                                &extFile;
+                                                <elem3/>
+                                                <elem4/>
+                                                <!-- Second comment -->&charFile;<!-- Third comment --><elem5/>
+                                                <!-- Fourth comment -->
+                                                &dataFile;
+                                                <!-- Fifth comment -->
+                                                <elem6/>
+                                            </elem1>
+                                            """);
     }
 
     @Test
@@ -515,27 +563,28 @@ class XmlWriterTest {
         this.xmlWriter.newline();
         this.xmlWriter.comment(" A comment 3 ");
         this.xmlWriter.newline();
-        this.xmlWriter.newline();
         this.xmlWriter.comment(" A comment 4 ");
         this.xmlWriter.emptyElement("elem7");
         this.xmlWriter.endElement();
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<elem1><!-- A comment 1 -->" + NEWLINE
-                + "    <elem2/>" + NEWLINE
-                + "    <elem3/>" + NEWLINE
-                + "    <elem4/>" + NEWLINE
-                + "    <elem5/>" + NEWLINE
-                + "    <elem6>" + NEWLINE
-                + "        <!-- A comment 2 -->" + NEWLINE
-                + "        <!-- A comment 3 -->" + NEWLINE
-                + "        " + NEWLINE
-                + "        <!-- A comment 4 -->" + NEWLINE
-                + "        <elem7/>" + NEWLINE
-                + "    </elem6>" + NEWLINE
-                + "</elem1>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                <?xml version="1.0" standalone="yes"?>
+
+                <elem1><!-- A comment 1 -->
+                    <elem2/>
+                    <elem3/>
+                    <elem4/>
+                    <elem5/>
+                    <elem6>
+                        <!-- A comment 2 -->
+                        <!-- A comment 3 -->
+                        <!-- A comment 4 -->
+                        <elem7/>
+                    </elem6>
+                </elem1>
+                """);
     }
 
     @Test
@@ -545,8 +594,13 @@ class XmlWriterTest {
         this.xmlWriter.doctype("elem1", null, "/foo/bar.dtd");
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<!DOCTYPE elem1 SYSTEM \"/foo/bar.dtd\">" + NEWLINE + NEWLINE + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                <?xml version="1.0" standalone="yes"?>
+
+                <!DOCTYPE elem1 SYSTEM "/foo/bar.dtd">
+
+
+                """);
     }
 
     @Test
@@ -556,8 +610,13 @@ class XmlWriterTest {
         this.xmlWriter.doctype("elem1", "FOO", "/foo/bar.dtd");
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<!DOCTYPE elem1 PUBLIC \"FOO\" \"/foo/bar.dtd\">" + NEWLINE + NEWLINE + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <!DOCTYPE elem1 PUBLIC "FOO" "/foo/bar.dtd">
+
+
+                                                        """);
     }
 
     @Test
@@ -578,16 +637,21 @@ class XmlWriterTest {
         this.xmlWriter.doctype("elem1", "FOO", "/foo/bar.dtd", entities, notations);
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<!DOCTYPE elem1 PUBLIC \"FOO\" \"/foo/bar.dtd\" [" + NEWLINE
-                                                        + "    <!ENTITY ent1 \"v1\">" + NEWLINE
-                                                        + "    <!ENTITY ent2 SYSTEM \"bar.xml\">" + NEWLINE
-                                                        + "    <!ENTITY ent3 PUBLIC \"BAR\" \"foo.xml\">" + NEWLINE
-                                                        + "    <!ENTITY ent4 SYSTEM \"joe.txt\" NDATA Txt>" + NEWLINE
-                                                        + "    <!NOTATION not1 SYSTEM \"bar.xml\">" + NEWLINE
-                                                        + "    <!NOTATION not2 PUBLIC \"BAR\" \"foo.xml\">" + NEWLINE
-                                                        + "    <!NOTATION not3 PUBLIC \"BAR\">" + NEWLINE
-                                                        + "]>" + NEWLINE + NEWLINE + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <!DOCTYPE elem1 PUBLIC "FOO" "/foo/bar.dtd" [
+                                                            <!ENTITY ent1 "v1">
+                                                            <!ENTITY ent2 SYSTEM "bar.xml">
+                                                            <!ENTITY ent3 PUBLIC "BAR" "foo.xml">
+                                                            <!ENTITY ent4 SYSTEM "joe.txt" NDATA Txt>
+                                                            <!NOTATION not1 SYSTEM "bar.xml">
+                                                            <!NOTATION not2 PUBLIC "BAR" "foo.xml">
+                                                            <!NOTATION not3 PUBLIC "BAR">
+                                                        ]>
+
+
+                                                        """);
     }
 
     @Test
@@ -599,8 +663,11 @@ class XmlWriterTest {
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                + "<?foo bar=\"joe\"?><elem1/>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                <?xml version="1.0" standalone="yes"?>
+
+                <?foo bar="joe"?><elem1/>
+                """);
     }
 
     @Test
@@ -610,20 +677,23 @@ class XmlWriterTest {
 
         this.xmlWriter.startDocument();
         this.xmlWriter.startElement("elem0");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem1");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem2");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test2", "elem3");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test3", "elem4");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem1");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem2");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test2", "elem3");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test3", "elem4");
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem0>" + NEWLINE
-                                                        + "    <__NS1:elem1 xmlns:__NS1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                                                        + "    <__NS1:elem2 xmlns:__NS1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                                                        + "    <__NS2:elem3 xmlns:__NS2=\"http://www.adobe.com/test2\"/>" + NEWLINE
-                                                        + "    <__NS3:elem4 xmlns:__NS3=\"http://www.adobe.com/test3\"/>" + NEWLINE
-                                                        + "</elem0>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem0>
+                                                            <__NS1:elem1 xmlns:__NS1="https://www.adobe.com/test1"/>
+                                                            <__NS1:elem2 xmlns:__NS1="https://www.adobe.com/test1"/>
+                                                            <__NS2:elem3 xmlns:__NS2="https://www.adobe.com/test2"/>
+                                                            <__NS3:elem4 xmlns:__NS3="https://www.adobe.com/test3"/>
+                                                        </elem0>
+                                                        """);
     }
 
     @Test
@@ -631,25 +701,28 @@ class XmlWriterTest {
     void testElementNamespacePrefix() throws Exception {
         this.xmlWriter.setPrettyPrint(true);
 
-        this.xmlWriter.addNSPrefix("t1", "http://www.adobe.com/test1");
-        this.xmlWriter.addNSPrefix("t2", "http://www.adobe.com/test2");
-        this.xmlWriter.addNSPrefix("", "http://www.adobe.com/test3");
+        this.xmlWriter.addNSPrefix("t1", "https://www.adobe.com/test1");
+        this.xmlWriter.addNSPrefix("t2", "https://www.adobe.com/test2");
+        this.xmlWriter.addNSPrefix("", "https://www.adobe.com/test3");
         this.xmlWriter.startDocument();
         this.xmlWriter.startElement("elem0");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem1");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem2");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test2", "elem3");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test3", "elem4");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem1");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem2");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test2", "elem3");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test3", "elem4");
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem0>" + NEWLINE
-                                                        + "    <t1:elem1 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                                                        + "    <t1:elem2 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                                                        + "    <t2:elem3 xmlns:t2=\"http://www.adobe.com/test2\"/>" + NEWLINE
-                                                        + "    <elem4 xmlns=\"http://www.adobe.com/test3\"/>" + NEWLINE
-                                                        + "</elem0>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem0>
+                                                            <t1:elem1 xmlns:t1="https://www.adobe.com/test1"/>
+                                                            <t1:elem2 xmlns:t1="https://www.adobe.com/test1"/>
+                                                            <t2:elem3 xmlns:t2="https://www.adobe.com/test2"/>
+                                                            <elem4 xmlns="https://www.adobe.com/test3"/>
+                                                        </elem0>
+                                                        """);
     }
 
     @Test
@@ -659,18 +732,21 @@ class XmlWriterTest {
 
         this.xmlWriter.startDocument();
         this.xmlWriter.startElement("elem0");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem1", "t1:elem1");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem2");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test2", "elem3");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem1", "t1:elem1");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem2");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test2", "elem3");
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem0>" + NEWLINE
-                                                        + "    <t1:elem1 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                                                        + "    <t1:elem2 xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                                                        + "    <__NS1:elem3 xmlns:__NS1=\"http://www.adobe.com/test2\"/>" + NEWLINE
-                                                        + "</elem0>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem0>
+                                                            <t1:elem1 xmlns:t1="https://www.adobe.com/test1"/>
+                                                            <t1:elem2 xmlns:t1="https://www.adobe.com/test1"/>
+                                                            <__NS1:elem3 xmlns:__NS1="https://www.adobe.com/test2"/>
+                                                        </elem0>
+                                                        """);
     }
 
     @Test
@@ -678,27 +754,28 @@ class XmlWriterTest {
     void testElementNamespaceRootDecls() throws Exception {
         this.xmlWriter.setPrettyPrint(true);
 
-        this.xmlWriter.addNSRootDecl("t1", "http://www.adobe.com/test1");
-        this.xmlWriter.addNSRootDecl("t2", "http://www.adobe.com/test2");
-        this.xmlWriter.addNSRootDecl("", "http://www.adobe.com/test3");
+        this.xmlWriter.addNSRootDecl("t1", "https://www.adobe.com/test1");
+        this.xmlWriter.addNSRootDecl("t2", "https://www.adobe.com/test2");
+        this.xmlWriter.addNSRootDecl("", "https://www.adobe.com/test3");
         this.xmlWriter.startDocument();
         this.xmlWriter.startElement("elem0");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem1");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem2");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test2", "elem3");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test3", "elem4");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem1");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem2");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test2", "elem3");
+        this.xmlWriter.emptyElement("https://www.adobe.com/test3", "elem4");
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem0 xmlns=\"http://www.adobe.com/test3\" "
-                                                        + "xmlns:t1=\"http://www.adobe.com/test1\" "
-                                                        + "xmlns:t2=\"http://www.adobe.com/test2\">" + NEWLINE
-                                                        + "    <t1:elem1/>" + NEWLINE
-                                                        + "    <t1:elem2/>" + NEWLINE
-                                                        + "    <t2:elem3/>" + NEWLINE
-                                                        + "    <elem4/>" + NEWLINE
-                                                        + "</elem0>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+            <?xml version="1.0" standalone="yes"?>
+
+            <elem0 xmlns="https://www.adobe.com/test3" xmlns:t1="https://www.adobe.com/test1" xmlns:t2="https://www.adobe.com/test2">
+                <t1:elem1/>
+                <t1:elem2/>
+                <t2:elem3/>
+                <elem4/>
+            </elem0>
+            """);
     }
 
     @Test
@@ -709,38 +786,44 @@ class XmlWriterTest {
 
         final AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", "a1", "", "CDATA", "v1");
-        attrs.addAttribute("http://www.adobe.com/at1", "a2", "", "CDATA", "v2");
-        attrs.addAttribute("http://www.adobe.com/at3", "a3", "A3:a3", "CDATA", "v3");
+        attrs.addAttribute("https://www.adobe.com/at1", "a2", "", "CDATA", "v2");
+        attrs.addAttribute("https://www.adobe.com/at3", "a3", "A3:a3", "CDATA", "v3");
 
-        this.xmlWriter.addNSPrefix("t1", "http://www.adobe.com/test1");
+        this.xmlWriter.addNSPrefix("t1", "https://www.adobe.com/test1");
         this.xmlWriter.startDocument();
         this.xmlWriter.startElement("elem0");
-        this.xmlWriter.emptyElement("http://www.adobe.com/test1", "elem2", attrs);
+        this.xmlWriter.emptyElement("https://www.adobe.com/test1", "elem2", attrs);
         this.xmlWriter.endElement();
         this.xmlWriter.endDocument();
 
-        assertThat(this.stringWriter).hasToString("<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                                                        + "<elem0>" + NEWLINE
-                                                        + "    <t1:elem2" + NEWLINE
-                                                        + "        a1=\"v1\"" + NEWLINE
-                                                        + "        __NS1:a2=\"v2\"" + NEWLINE
-                                                        + "        A3:a3=\"v3\"" + NEWLINE
-                                                        + "        xmlns:A3=\"http://www.adobe.com/at3\"" + NEWLINE
-                                                        + "        xmlns:__NS1=\"http://www.adobe.com/at1\"" + NEWLINE
-                                                        + "        xmlns:t1=\"http://www.adobe.com/test1\"" + NEWLINE
-                                                        + "    />" + NEWLINE
-                                                        + "</elem0>" + NEWLINE);
+        assertThat(this.stringWriter).hasToString("""
+                                                        <?xml version="1.0" standalone="yes"?>
+
+                                                        <elem0>
+                                                            <t1:elem2
+                                                                a1="v1"
+                                                                __NS1:a2="v2"
+                                                                A3:a3="v3"
+                                                                xmlns:A3="https://www.adobe.com/at3"
+                                                                xmlns:__NS1="https://www.adobe.com/at1"
+                                                                xmlns:t1="https://www.adobe.com/test1"
+                                                            />
+                                                        </elem0>
+                                                        """);
     }
 
     @Test
     @DisplayName("Use as parsing filter without namespaces")
     void testFilterWithoutNamespaces() throws Exception {
-        final String xml = "<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                         + "<elem1 version=\"1\">" + NEWLINE
-                         + "    <elem2 src=\"foo\">This is a test document</elem2>" + NEWLINE
-                         + "    <elem3 dst=\"bar\"/>" + NEWLINE
-                         + "    <elem4/>" + NEWLINE
-                         + "</elem1>" + NEWLINE;
+        final String xml = """
+                         <?xml version="1.0" standalone="yes"?>
+
+                         <elem1 version="1">
+                             <elem2 src="foo">This is a test document</elem2>
+                             <elem3 dst="bar"/>
+                             <elem4/>
+                         </elem1>
+                         """;
 
         final XMLReader xmlReader = newXmlReader(false, false, false, false);
         final StringWriter writer = new StringWriter();
@@ -755,12 +838,15 @@ class XmlWriterTest {
     @Test
     @DisplayName("Use as parsing filter with namespaces")
     void testFilterWithNamespaces() throws Exception {
-        final String xml = "<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                         + "<elem1 version=\"1\" xmlns=\"http://www.adobe.com/test\">" + NEWLINE
-                         + "    <elem2 src=\"foo\">This is a test document</elem2>" + NEWLINE
-                         + "    <t1:elem3 dst=\"bar\" xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                         + "    <elem4/>" + NEWLINE
-                         + "</elem1>" + NEWLINE;
+        final String xml = """
+                         <?xml version="1.0" standalone="yes"?>
+
+                         <elem1 version="1" xmlns="https://www.adobe.com/test">
+                             <elem2 src="foo">This is a test document</elem2>
+                             <t1:elem3 dst="bar" xmlns:t1="https://www.adobe.com/test1"/>
+                             <elem4/>
+                         </elem1>
+                         """;
 
         final XMLReader xmlReader = newXmlReader(true, false, false, false);
         final StringWriter writer = new StringWriter();
@@ -775,14 +861,18 @@ class XmlWriterTest {
     @Test
     @DisplayName("Use as parsing filter with namespaces, DTD validation, CDATA, and comments")
     void testFilterComplexDocument() throws Exception {
-        final String xml = "<?xml version=\"1.0\" standalone=\"no\"?>" + NEWLINE + NEWLINE
-                         + "<!DOCTYPE elem1 SYSTEM \"XmlWriterTest.dtd\">" + NEWLINE + NEWLINE
-                         + "<elem1 version=\"1\" xmlns=\"http://www.adobe.com/test\">" + NEWLINE
-                         + "    <elem2 src=\"foo\">This is a test document</elem2>" + NEWLINE
-                         + "    <t1:elem3 dst=\"bar\" xmlns:t1=\"http://www.adobe.com/test1\"/>" + NEWLINE
-                         + "    <!-- Next comes a CDATA section -->" + NEWLINE
-                         + "    <elem4><![CDATA[final boolean v = a < 3;]]></elem4>" + NEWLINE
-                         + "</elem1>" + NEWLINE;
+        final String xml = """
+                         <?xml version="1.0" standalone="no"?>
+
+                         <!DOCTYPE elem1 SYSTEM "XmlWriterTest.dtd">
+
+                         <elem1 version="1" xmlns="https://www.adobe.com/test">
+                             <elem2 src="foo">This is a test document</elem2>
+                             <t1:elem3 dst="bar" xmlns:t1="https://www.adobe.com/test1"/>
+                             <!-- Next comes a CDATA section -->
+                             <elem4><![CDATA[final boolean v = a < 3;]]></elem4>
+                         </elem1>
+                         """;
 
         final XMLReader xmlReader = newXmlReader(true, true, false, false);
         final StringWriter writer = new StringWriter();
@@ -806,13 +896,16 @@ class XmlWriterTest {
     @Test
     @DisplayName("Use as parsing filter with schema validation")
     void testFilterSchemaValidation() throws Exception {
-        final String xml = "<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                         + "<elem1 version=\"1\">" + NEWLINE
-                         + "    <elem2 src=\"foo\">This is a test document</elem2>" + NEWLINE
-                         + "    <elem3 dst=\"bar\"/>" + NEWLINE
-                         + "    <!-- Next comes a CDATA section -->" + NEWLINE
-                         + "    <elem4><![CDATA[final boolean v = a < 3;]]></elem4>" + NEWLINE
-                         + "</elem1>" + NEWLINE;
+        final String xml = """
+                         <?xml version="1.0" standalone="yes"?>
+
+                         <elem1 version="1">
+                             <elem2 src="foo">This is a test document</elem2>
+                             <elem3 dst="bar"/>
+                             <!-- Next comes a CDATA section -->
+                             <elem4><![CDATA[final boolean v = a < 3;]]></elem4>
+                         </elem1>
+                         """;
 
         final XMLReader xmlReader = newXmlReader(true, false, false, true);
         final StringWriter writer = new StringWriter();
@@ -828,13 +921,16 @@ class XmlWriterTest {
     @Test
     @DisplayName("Use as parsing filter with default attributes")
     void testFilterWithDefaultAttributes() throws Exception {
-        final String xml = "<?xml version=\"1.0\" standalone=\"yes\"?>" + NEWLINE + NEWLINE
-                         + "<elem1 version=\"1\">" + NEWLINE
-                         + "    <elem2 src=\"foo\">This is a test document</elem2>" + NEWLINE
-                         + "    <elem3 dst=\"bar\" isGood=\"true\"/>" + NEWLINE
-                         + "    <!-- Next comes a CDATA section -->" + NEWLINE
-                         + "    <elem4><![CDATA[final boolean v = a < 3;]]></elem4>" + NEWLINE
-                         + "</elem1>" + NEWLINE;
+        final String xml = """
+                         <?xml version="1.0" standalone="yes"?>
+
+                         <elem1 version="1">
+                             <elem2 src="foo">This is a test document</elem2>
+                             <elem3 dst="bar" isGood="true"/>
+                             <!-- Next comes a CDATA section -->
+                             <elem4><![CDATA[final boolean v = a < 3;]]></elem4>
+                         </elem1>
+                         """;
 
         final XMLReader xmlReader = newXmlReader(true, false, false, true);
         final StringWriter writer = new StringWriter();
