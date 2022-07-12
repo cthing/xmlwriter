@@ -1863,17 +1863,16 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
 
 
     /**
-     * A stack for elements. An unsynchronized collection is used as the basis to improve performance. In addition,
-     * a free list is used to avoid unnecessary creation or Element objects.
+     * A stack for elements. An unsynchronized collection is used as the basis to improve performance.
      */
     private static final class ElementStack {
 
         /**
-         * Initial capacity of the stack and free list.
+         * Initial capacity of the stack.
          */
         private static final int INIT_CAP = 20;
 
-        private final Deque<Element> inUseElements = new ArrayDeque<>(INIT_CAP);
+        private final Deque<Element> elements = new ArrayDeque<>(INIT_CAP);
 
         private ElementStack() {
         }
@@ -1884,14 +1883,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          * @return The top element on the stack
          */
         public Element peek() {
-            return this.inUseElements.getLast();
+            return this.elements.getLast();
         }
 
         /**
          * Pops the top element off of this stack.
          */
         public void pop() {
-            this.inUseElements.removeLast();
+            this.elements.removeLast();
         }
 
         /**
@@ -1909,7 +1908,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                          final Attributes attributes, final boolean empty, final State state) {
             final Attributes2Impl attrs = new Attributes2Impl(attributes);
             final Element element = new Element(namespaceUri, name, qualifiedName, attrs, empty, state);
-            this.inUseElements.add(element);
+            this.elements.add(element);
         }
 
         /**
@@ -1918,14 +1917,14 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
          * @return Depth of the stack.
          */
         public int depth() {
-            return this.inUseElements.size();
+            return this.elements.size();
         }
 
         /**
          * Removes all elements from the stack.
          */
         public void clear() {
-            this.inUseElements.clear();
+            this.elements.clear();
         }
     }
 
