@@ -60,8 +60,7 @@ on the API. See the [State Machine document](dev/docs/StateMachine.md) for detai
 heart of the `XmlWriter` class.
 
 ### Building
-The libray is compiled for Java 17. Set the `JAVA_HOME` environment variable or the `org.gradle.java.home` property
-to point to a JDK 17 installation.
+The libray is compiled for Java 17. If a Java 17 toolchain is not available, one will be downloaded.
 
 Gradle is used to build the library:
 ```
