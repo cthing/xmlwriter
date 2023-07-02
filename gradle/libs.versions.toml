@@ -15,5 +15,6 @@ assertJ = "org.assertj:assertj-core:3.24.2"
 jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
 junitApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junitLauncher = "org.junit.platform:junit-platform-launcher:1.9.3"
 junitParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 spotbugsContrib = "com.mebigfatguy.sb-contrib:sb-contrib:7.4.7"
