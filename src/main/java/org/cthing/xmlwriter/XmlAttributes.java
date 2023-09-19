@@ -15,6 +15,7 @@
  */
 package org.cthing.xmlwriter;
 
+import javax.annotation.Nonnull;
 import javax.xml.XMLConstants;
 
 import org.xml.sax.helpers.AttributesImpl;
@@ -53,6 +54,7 @@ public class XmlAttributes extends AttributesImpl {
      * @param value Value for the attribute
      * @return This class instance.
      */
+    @Nonnull
     public XmlAttributes addAttribute(final String name, final String value) {
         addAttribute(XMLConstants.DEFAULT_NS_PREFIX, EMPTY, name, "CDATA", value);
         return this;
@@ -65,6 +67,7 @@ public class XmlAttributes extends AttributesImpl {
      * @param value Value for the attribute
      * @return This class instance.
      */
+    @Nonnull
     public XmlAttributes addAttribute(final String name, final int value) {
         return addAttribute(name, Integer.toString(value));
     }

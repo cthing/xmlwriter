@@ -43,7 +43,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@SuppressWarnings("HttpUrlsUsage")
+@SuppressWarnings({ "HttpUrlsUsage", "UnnecessaryUnicodeEscape" })
 class XmlWriterTest {
 
     /** Specifies the newline character sequence to use. */
@@ -184,16 +184,13 @@ class XmlWriterTest {
                 Arguments.of(null, true, false, """
                 <?xml version="1.0" standalone="yes"?>
 
-
                 """),
                 Arguments.of(null, false, false, """
                 <?xml version="1.0" standalone="no"?>
 
-
                 """),
                 Arguments.of("UTF-8", false, false, """
                 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
 
                 """),
                 Arguments.of("UTF-8", false, true, NEWLINE)
@@ -212,7 +209,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1></elem1>
                                                         """);
     }
@@ -233,7 +229,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1><elem2/><elem3/><elem4></elem4></elem1>
                                                         """);
     }
@@ -259,7 +254,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                      <?xml version="1.0" standalone="yes"?>
-
                                                      <elem1>
                                                          <elem2/>
                                                          <elem3/>
@@ -297,7 +291,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1 a1="v1" a2="v2" a3="v3">
                                                             <elem2 b1="v10" b2="v20" b3="v30"/>
                                                         </elem1>
@@ -328,7 +321,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1
                                                             a1="v1"
                                                             a2="v2"
@@ -364,7 +356,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1 a1="v1" a2="v2" a3="v3" z1="13" b1="v10" b2="v20" b3="v30"/>
                                                         """);
     }
@@ -391,7 +382,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1 b1="v10" b2="v20" b3="v30"/>
                                                         """);
     }
@@ -407,7 +397,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1>Hello World</elem1>
                                                         """);
     }
@@ -430,7 +419,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1>
                                                             <elem2>Hello World</elem2>
                                                             <elem3>
@@ -460,7 +448,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1>Hello World&amp;&#97;<elem2><![CDATA[This is a <test>]]><!-- First comment --></elem2>
                                                         </elem1>
                                                         """);
@@ -477,7 +464,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                                    <?xml version="1.0" standalone="yes"?>
-
                                                                    <elem1></elem1>
                                                                    """);
     }
@@ -493,7 +479,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem1/>
                                                         """);
     }
@@ -530,7 +515,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                             <?xml version="1.0" standalone="yes"?>
-
                                             <elem1>This &amp; that. The letter &#97;<elem2/>
                                                 <!-- First comment -->
                                                 &extFile;
@@ -571,7 +555,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                 <?xml version="1.0" standalone="yes"?>
-
                 <elem1><!-- A comment 1 -->
                     <elem2/>
                     <elem3/>
@@ -596,7 +579,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                 <?xml version="1.0" standalone="yes"?>
-
                 <!DOCTYPE elem1 SYSTEM "/foo/bar.dtd">
 
 
@@ -612,7 +594,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <!DOCTYPE elem1 PUBLIC "FOO" "/foo/bar.dtd">
 
 
@@ -639,7 +620,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <!DOCTYPE elem1 PUBLIC "FOO" "/foo/bar.dtd" [
                                                             <!ENTITY ent1 "v1">
                                                             <!ENTITY ent2 SYSTEM "bar.xml">
@@ -665,7 +645,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                 <?xml version="1.0" standalone="yes"?>
-
                 <?foo bar="joe"?><elem1/>
                 """);
     }
@@ -686,7 +665,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem0>
                                                             <__NS1:elem1 xmlns:__NS1="https://www.adobe.com/test1"/>
                                                             <__NS1:elem2 xmlns:__NS1="https://www.adobe.com/test1"/>
@@ -715,7 +693,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem0>
                                                             <t1:elem1 xmlns:t1="https://www.adobe.com/test1"/>
                                                             <t1:elem2 xmlns:t1="https://www.adobe.com/test1"/>
@@ -740,7 +717,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem0>
                                                             <t1:elem1 xmlns:t1="https://www.adobe.com/test1"/>
                                                             <t1:elem2 xmlns:t1="https://www.adobe.com/test1"/>
@@ -768,7 +744,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
             <?xml version="1.0" standalone="yes"?>
-
             <elem0 xmlns="https://www.adobe.com/test3" xmlns:t1="https://www.adobe.com/test1" xmlns:t2="https://www.adobe.com/test2">
                 <t1:elem1/>
                 <t1:elem2/>
@@ -798,7 +773,6 @@ class XmlWriterTest {
 
         assertThat(this.stringWriter).hasToString("""
                                                         <?xml version="1.0" standalone="yes"?>
-
                                                         <elem0>
                                                             <t1:elem2
                                                                 a1="v1"
@@ -817,7 +791,6 @@ class XmlWriterTest {
     void testFilterWithoutNamespaces() throws Exception {
         final String xml = """
                          <?xml version="1.0" standalone="yes"?>
-
                          <elem1 version="1">
                              <elem2 src="foo">This is a test document</elem2>
                              <elem3 dst="bar"/>
@@ -840,7 +813,6 @@ class XmlWriterTest {
     void testFilterWithNamespaces() throws Exception {
         final String xml = """
                          <?xml version="1.0" standalone="yes"?>
-
                          <elem1 version="1" xmlns="https://www.adobe.com/test">
                              <elem2 src="foo">This is a test document</elem2>
                              <t1:elem3 dst="bar" xmlns:t1="https://www.adobe.com/test1"/>
@@ -863,7 +835,6 @@ class XmlWriterTest {
     void testFilterComplexDocument() throws Exception {
         final String xml = """
                          <?xml version="1.0" standalone="no"?>
-
                          <!DOCTYPE elem1 SYSTEM "XmlWriterTest.dtd">
 
                          <elem1 version="1" xmlns="https://www.adobe.com/test">
@@ -898,7 +869,6 @@ class XmlWriterTest {
     void testFilterSchemaValidation() throws Exception {
         final String xml = """
                          <?xml version="1.0" standalone="yes"?>
-
                          <elem1 version="1">
                              <elem2 src="foo">This is a test document</elem2>
                              <elem3 dst="bar"/>
@@ -923,7 +893,6 @@ class XmlWriterTest {
     void testFilterWithDefaultAttributes() throws Exception {
         final String xml = """
                          <?xml version="1.0" standalone="yes"?>
-
                          <elem1 version="1">
                              <elem2 src="foo">This is a test document</elem2>
                              <elem3 dst="bar" isGood="true"/>
