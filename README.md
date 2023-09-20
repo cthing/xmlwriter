@@ -1,9 +1,24 @@
 # ![C Thing Software](https://www.cthing.com/branding/CThingSoftware-57x60.png "C Thing Software") xmlwriter
 
 [![CI](https://github.com/cthing/xmlwriter/actions/workflows/ci.yml/badge.svg)](https://github.com/cthing/xmlwriter/actions/workflows/ci.yml)
+[![javadoc](https://javadoc.io/badge2/org.cthing/xmlwriter/javadoc.svg)](https://javadoc.io/doc/org.cthing/xmlwriter)
 
 This library writes XML either as a SAX2 event filter or as a standalone XML writer. XML can be written
 as-is or pretty printed. The library has no dependencies on Java XML serialization or JAXB.
+
+## Usage
+The library is available from [Maven Central](https://repo.maven.apache.org/maven2/org/cthing/xmlwriter/) using the following Maven dependency:
+```xml
+<dependency>
+  <groupId>org.cthing</groupId>
+  <artifactId>xmlwriter</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+or the following Gradle dependency:
+```kotlin
+implementation("org.cthing:xmlwriter:2.0.0")
+```
 
 ### Standalone Usage
 The XmlWriter class can be used standalone in applications that need to write XML. For standalone usage:
@@ -56,10 +71,10 @@ xmlWriter.setProperty("http://xml.org/sax/properties/lexical-handler", xmlWriter
 xmlWriter.parse(new InputSource(new FileReader("Foo.xml")));
 ```
 
-### Additional Details
-See the [Javadoc in the XmlWriter](src/main/java/org/cthing/xmlwriter/XmlWriter.java) class for additional details
-on the API. See the [State Machine document](dev/docs/StateMachine.md) for details on the formatter state machine at the
-heart of the `XmlWriter` class.
+### Detailed Usage and Design
+See the [Javadoc in the XmlWriter](https://javadoc.io/doc/org.cthing/xmlwriter/latest/org/cthing/xmlwriter/XmlWriter.html) class for detailed
+usage and configuration information. See the [State Machine document](dev/docs/StateMachine.md) for details on the formatter state machine
+at the heart of the `XmlWriter` class.
 
 ### Building
 The libray is compiled for Java 17. If a Java 17 toolchain is not available, one will be downloaded.
