@@ -19,7 +19,7 @@ plugins {
 }
 
 val baseVersion = "2.0.0"
-val isSnapshot = true
+val isSnapshot = false
 
 val isCIServer = System.getenv("CTHING_CI") != null
 val buildNumber = if (isCIServer) System.currentTimeMillis().toString() else "0"
@@ -174,12 +174,12 @@ publishing {
                     }
                 }
                 scm {
-                    connection = "scm:git:git://github.com/cthing/${project.name}.git"
-                    developerConnection = "scm:git:ssh://github.com:cthing/${project.name}"
-                    url = "https://github.com/cthing/${project.name}/src"
+                    connection = "scm:git:https://github.com/cthing/${project.name}.git"
+                    developerConnection = "scm:git:git@github.com:cthing/${project.name}.git"
+                    url = "https://github.com/cthing/${project.name}"
                 }
                 issueManagement {
-                    system = "GitHub"
+                    system = "GitHub Issues"
                     url = "https://github.com/cthing/${project.name}/issues"
                 }
             }
