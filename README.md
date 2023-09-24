@@ -1,6 +1,7 @@
 # ![C Thing Software](https://www.cthing.com/branding/CThingSoftware-57x60.png "C Thing Software") xmlwriter
 
 [![CI](https://github.com/cthing/xmlwriter/actions/workflows/ci.yml/badge.svg)](https://github.com/cthing/xmlwriter/actions/workflows/ci.yml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cthing/xmlwriter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.cthing/xmlwriter)
 [![javadoc](https://javadoc.io/badge2/org.cthing/xmlwriter/javadoc.svg)](https://javadoc.io/doc/org.cthing/xmlwriter)
 
 This library writes XML either as a SAX2 event filter or as a standalone XML writer. XML can be written
