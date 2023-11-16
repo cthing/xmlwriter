@@ -15,6 +15,10 @@
         <Bug pattern="CC_CYCLOMATIC_COMPLEXITY"/>
     </Match>
     <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+        <Class name="~.*XmlAttributes"/>
+    </Match>
+    <Match>
         <Class name="~.*Test(\$.+)?"/>
     </Match>
 </FindBugsFilter>
