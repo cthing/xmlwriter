@@ -78,7 +78,7 @@ usage and configuration information. See the [State Machine document](dev/docs/S
 at the heart of the `XmlWriter` class.
 
 ### Building
-The libray is compiled for Java 17. If a Java 17 toolchain is not available, one will be downloaded.
+The library is compiled for Java 17. If a Java 17 toolchain is not available, one will be downloaded.
 
 Gradle is used to build the library:
 ```
