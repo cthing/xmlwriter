@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [2.0.1] - 2023-12-23
+
 ### Added
 
-- CHANGELOG.md file
+- Improved `null` checking and readability using the [cthing-annotations](https://github.com/cthing/cthing-annotations) library.
 
 ## [2.0.0] - 2023-09-19
 
@@ -23,5 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First source code release
 
-[unreleased]: https://github.com/cthing/xmlwriter/compare/2.0.0...HEAD
+[unreleased]: https://github.com/cthing/xmlwriter/compare/2.0.1...HEAD
+[2.0.1]: https://github.com/cthing/xmlwriter/releases/tag/2.0.1
 [2.0.0]: https://github.com/cthing/xmlwriter/releases/tag/2.0.0

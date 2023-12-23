@@ -13,12 +13,12 @@ The library is available from [Maven Central](https://repo.maven.apache.org/mave
 <dependency>
   <groupId>org.cthing</groupId>
   <artifactId>xmlwriter</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 or the following Gradle dependency:
 ```kotlin
-implementation("org.cthing:xmlwriter:2.0.0")
+implementation("org.cthing:xmlwriter:2.0.1")
 ```
 
 ### Standalone Usage
