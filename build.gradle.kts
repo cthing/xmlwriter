@@ -1,8 +1,7 @@
-import com.github.spotbugs.snom.Effort
 import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 repositories {
     mavenCentral()
@@ -34,6 +33,7 @@ java {
 }
 
 dependencies {
+    implementation(libs.cthingAnnots)
     implementation(libs.jsr305)
 
     testImplementation(libs.junitApi)
@@ -93,6 +93,7 @@ tasks {
             breakIterator(false)
             encoding("UTF-8")
             bottom("Copyright &copy; $year C Thing Software")
+            addStringOption("Werror", "-quiet")
             memberLevel = JavadocMemberLevel.PUBLIC
             outputLevel = JavadocOutputLevel.QUIET
         }

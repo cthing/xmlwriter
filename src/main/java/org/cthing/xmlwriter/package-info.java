@@ -17,7 +17,7 @@
 /**
  * Classes for writing XML.
  */
-@ParametersAreNonnullByDefault
+@PackageNonnullByDefault
 package org.cthing.xmlwriter;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.cthing.annotations.PackageNonnullByDefault;

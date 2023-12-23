@@ -19,6 +19,10 @@
         <Class name="~.*XmlAttributes"/>
     </Match>
     <Match>
+        <Bug pattern="SPP_CONVERSION_OF_STRING_LITERAL"/>
+        <Class name="~.*XmlWriter"/>
+    </Match>
+    <Match>
         <Class name="~.*Test(\$.+)?"/>
     </Match>
 </FindBugsFilter>
