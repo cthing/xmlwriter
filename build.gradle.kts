@@ -13,6 +13,7 @@ plugins {
     jacoco
     `maven-publish`
     signing
+    alias(libs.plugins.dependencyAnalysis)
     alias(libs.plugins.spotbugs)
     alias(libs.plugins.versions)
 }
@@ -33,8 +34,9 @@ java {
 }
 
 dependencies {
+    api(libs.jsr305)
+
     implementation(libs.cthingAnnots)
-    implementation(libs.jsr305)
 
     testImplementation(libs.junitApi)
     testImplementation(libs.junitParams)
@@ -68,6 +70,16 @@ jacoco {
     toolVersion = libs.versions.jacoco.get()
 }
 
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
+}
+
 fun isNonStable(version: String): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
@@ -97,6 +109,10 @@ tasks {
             memberLevel = JavadocMemberLevel.PUBLIC
             outputLevel = JavadocOutputLevel.QUIET
         }
+    }
+
+    check {
+        dependsOn(buildHealth)
     }
 
     spotbugsMain {

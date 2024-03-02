@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Added
+
+- [Dependency analysis Gradle plugin](https://github.com/autonomousapps/dependency-analysis-gradle-plugin)
+- The `check` task now depends on the `buildHealth` task and will fail the build on health violations
+
+### Changed
+
+- Changed JSR-305 dependency from `implementation` to `api`
+
 ## [2.0.1] - 2023-12-23
 
 ### Added
