@@ -114,7 +114,7 @@ class XmlWriterTest {
     @DisplayName("Write an array with escaping")
     void testWriteEscapedArray() throws Exception {
         final String testStringIn = "<Hello &<>\" World\u00A9\u001A\uFFFE\uD83D\uDE03\t\n";
-        final String testStringOut = "&lt;Hello &amp;&lt;&gt;\" World&#xA9;ctrl-0x1Actrl-0xFFFE&#x1F603;\t\n";
+        final String testStringOut = "&lt;Hello &amp;&lt;&gt;\" World&#xA9;unicode-0x1Aunicode-0xFFFE&#x1F603;\t\n";
 
         this.xmlWriter.writeEscaped(testStringIn.toCharArray(), 0, testStringIn.length());
 
@@ -133,9 +133,9 @@ class XmlWriterTest {
                 arguments('\n', "\n"),
                 arguments('\t', "\t"),
                 arguments('\r', "\r"),
-                arguments(0x0, "ctrl-0x0"),
-                arguments(0x1F, "ctrl-0x1F"),
-                arguments(0xFFFF, "ctrl-0xFFFF"),
+                arguments(0x0, "unicode-0x0"),
+                arguments(0x1F, "unicode-0x1F"),
+                arguments(0xFFFF, "unicode-0xFFFF"),
                 arguments(0x7F, "&#x7F;"),
                 arguments(0xD7FF, "&#xD7FF;"),
                 arguments(0xE000, "&#xE000;"),

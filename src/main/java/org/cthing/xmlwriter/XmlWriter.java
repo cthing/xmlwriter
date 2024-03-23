@@ -2657,7 +2657,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Writes the specified character to the output escaping the '&amp;', '&lt;', and '&gt;' characters using the
      * standard XML escape sequences. Control characters and characters outside the ASCII range are escaped using a
-     * numeric character reference. Invalid XML control characters are written as {code ctrl-0xN} where {@code N}
+     * numeric character reference. Invalid XML control characters are written as {code unicode-0xN} where {@code N}
      * is the hexidecimal value of the invalid character.
      *
      * @param c Character to write
@@ -2681,7 +2681,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
                     writeRaw(Integer.toHexString(c).toUpperCase());
                     writeRaw(';');
                 } else {
-                    writeRaw("ctrl-0x");
+                    writeRaw("unicode-0x");
                     writeRaw(Integer.toHexString(c).toUpperCase());
                 }
             }

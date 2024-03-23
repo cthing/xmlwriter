@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Numeric character entities are now written in hexidecimal (e.g. `&#xA9;`) rather than decimal
-- Invalid XML characters are now written in hexidecimal  (e.g. `ctrl-0xFFFE`) rather than decimal
+- Invalid XML characters are now written using the prefix `unicode-`  (e.g. `unicode-0xFFFE`) rather
+  than `ctrl-` and using hexidecimal  (e.g. `unicode-0xFFFE`) rather than decimal for the character code
 - Changed JSR-305 dependency from `implementation` to `api`
 
 ## [2.0.1] - 2023-12-23
