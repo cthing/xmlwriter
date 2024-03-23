@@ -353,7 +353,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     private static final String DEF_INDENT = "    ";
     private static final String DEF_OFFSET = "";
     private static final String SYNTH_NS_PREFIX = "__NS";
-    private static final String NEWLINE = System.lineSeparator();
     private static final AttributesImpl EMPTY_ATTRS = new AttributesImpl();
 
     /** All output is written to this writer. */
@@ -2514,7 +2513,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      */
     private void writeNewline() throws SAXException {
         try {
-            this.out.write(NEWLINE);
+            this.out.write(System.lineSeparator());
         } catch (final IOException ex) {
             throw new SAXException(ex);
         }
@@ -2613,7 +2612,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * @param length Number of characters to test
      * @return {@code true} if the specified character array requires escaping.
      */
-    private static boolean needsEscaping(final char[] carr, final int start, final int length) {
+    @AccessForTesting
+    static boolean needsEscaping(final char[] carr, final int start, final int length) {
         int end = start + length;
         while (--end >= start) {
             final char c = carr[end];
@@ -2643,8 +2643,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     void writeEscaped(final char[] carr, final int start, final int length) throws SAXException {
         if (this.escaping && needsEscaping(carr, start, length)) {
             final int end = start + length;
-            for (int i = start; i < end; i++) {
-                writeEscaped(carr[i]);
+            int i = start;
+            while (i < end) {
+                final int codePoint = Character.codePointAt(carr, i);
+                writeEscaped(codePoint);
+                i += Character.charCount(codePoint);
             }
         } else {
             writeRaw(carr, start, length);
@@ -2654,29 +2657,32 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Writes the specified character to the output escaping the '&amp;', '&lt;', and '&gt;' characters using the
      * standard XML escape sequences. Control characters and characters outside the ASCII range are escaped using a
-     * numeric character reference. Invalid XML control characters are written as "ctrl-nnn".
+     * numeric character reference. Invalid XML control characters are written as {code ctrl-0xN} where {@code N}
+     * is the hexidecimal value of the invalid character.
      *
      * @param c Character to write
      * @throws SAXException If there is an error writing the character. The SAXException wraps an IOException.
      */
     @AccessForTesting
-    void writeEscaped(final char c) throws SAXException {
+    void writeEscaped(final int c) throws SAXException {
         switch (c) {
             case '&' -> writeRaw("&amp;");
             case '<' -> writeRaw("&lt;");
             case '>' -> writeRaw("&gt;");
             case '\n' -> writeNewline();
-            case '\t', '\r' -> writeRaw(c);
+            case '\t', '\r' -> writeRaw((char)c);
             default -> {
                 if (c > '\u001F' && c < '\u007F') {
-                    writeRaw(c);
-                } else if ((c >= '\u007F' && c <= '\uD7FF') || (c >= '\uE000' && c <= '\uFFFD')) {
-                    writeRaw("&#");
-                    writeRaw(Integer.toString(c));
+                    writeRaw((char)c);
+                } else if ((c >= '\u007F' && c <= '\uD7FF')
+                        || (c >= '\uE000' && c <= '\uFFFD')
+                        || (c >= 0x10000 && c <= 0x10FFFF)) {
+                    writeRaw("&#x");
+                    writeRaw(Integer.toHexString(c).toUpperCase());
                     writeRaw(';');
                 } else {
-                    writeRaw("ctrl-");
-                    writeRaw(Integer.toString(c));
+                    writeRaw("ctrl-0x");
+                    writeRaw(Integer.toHexString(c).toUpperCase());
                 }
             }
         }

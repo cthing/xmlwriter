@@ -9,11 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- XML characters outside the [Unicode Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode))
+  (i.e. 0x10000-0x10FFFF) are now supported and escaped
 - [Dependency analysis Gradle plugin](https://github.com/autonomousapps/dependency-analysis-gradle-plugin)
-- The `check` task now depends on the `buildHealth` task and will fail the build on health violations
+- The `check` task now depends on the `buildHealth` task and will fail the build on health violations such as
+  unused dependencies
 
 ### Changed
 
+- Numeric character entities are now written in hexidecimal (e.g. `&#xA9;`) rather than decimal
+- Invalid XML characters are now written in hexidecimal  (e.g. `ctrl-0xFFFE`) rather than decimal
 - Changed JSR-305 dependency from `implementation` to `api`
 
 ## [2.0.1] - 2023-12-23

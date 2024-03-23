@@ -41,13 +41,11 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 
 @SuppressWarnings({ "HttpUrlsUsage", "UnnecessaryUnicodeEscape" })
 class XmlWriterTest {
-
-    /** Specifies the newline character sequence to use. */
-    private static final String NEWLINE = System.getProperty("line.separator");
 
     private StringWriter stringWriter;
     private XmlWriter xmlWriter;
@@ -89,23 +87,69 @@ class XmlWriterTest {
         assertThat(this.stringWriter).hasToString(testString);
     }
 
+    public static Stream<Arguments> needsEscapingProvider() {
+        return Stream.of(
+                arguments("", false),
+                arguments("abc", false),
+                arguments("<abc", true),
+                arguments("abc>", true),
+                arguments("a&bc", true),
+                arguments("a\nbc", true),
+                arguments("a\tbc", false),
+                arguments("a\rbc", false),
+                arguments("a\u008Abc", true),
+                arguments("a\uE08Abc", true),
+                arguments("a\uD83D\uDE03bc", true)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("needsEscapingProvider")
+    @DisplayName("Determine whether an array requires escaping")
+    void testNeedsEscaping(final String str, final boolean needsEscaping) {
+        assertThat(XmlWriter.needsEscaping(str.toCharArray(), 0, str.length())).isEqualTo(needsEscaping);
+    }
+
     @Test
     @DisplayName("Write an array with escaping")
     void testWriteEscapedArray() throws Exception {
-        final String testStringIn = "<Hello &<>\" World\u00A9\u001A\t\n";
-        final String testStringOut = "&lt;Hello &amp;&lt;&gt;\" World&#169;ctrl-26\t\n";
+        final String testStringIn = "<Hello &<>\" World\u00A9\u001A\uFFFE\uD83D\uDE03\t\n";
+        final String testStringOut = "&lt;Hello &amp;&lt;&gt;\" World&#xA9;ctrl-0x1Actrl-0xFFFE&#x1F603;\t\n";
 
         this.xmlWriter.writeEscaped(testStringIn.toCharArray(), 0, testStringIn.length());
 
         assertThat(this.stringWriter).hasToString(testStringOut);
     }
 
-    @Test
-    @DisplayName("Write a character with escaping")
-    void testWriteEscapedChar() throws Exception {
-        this.xmlWriter.writeEscaped('\u00A9');
+    public static Stream<Arguments> writeEscapedProvider() {
+        return Stream.of(
+                arguments(' ', " "),
+                arguments('a', "a"),
+                arguments('Z', "Z"),
+                arguments('~', "~"),
+                arguments('&', "&amp;"),
+                arguments('<', "&lt;"),
+                arguments('>', "&gt;"),
+                arguments('\n', "\n"),
+                arguments('\t', "\t"),
+                arguments('\r', "\r"),
+                arguments(0x0, "ctrl-0x0"),
+                arguments(0x1F, "ctrl-0x1F"),
+                arguments(0xFFFF, "ctrl-0xFFFF"),
+                arguments(0x7F, "&#x7F;"),
+                arguments(0xD7FF, "&#xD7FF;"),
+                arguments(0xE000, "&#xE000;"),
+                arguments(0xFFFD, "&#xFFFD;"),
+                arguments(0x1F603, "&#x1F603;")
+        );
+    }
 
-        assertThat(this.stringWriter).hasToString("&#169;");
+    @ParameterizedTest
+    @MethodSource("writeEscapedProvider")
+    @DisplayName("Write a character with escaping")
+    void testWriteEscapedChar(final int ch, final String expected) throws Exception {
+        this.xmlWriter.writeEscaped(ch);
+        assertThat(this.stringWriter).hasToString(expected);
     }
 
     @Test
@@ -123,7 +167,7 @@ class XmlWriterTest {
     @DisplayName("Write a string adding quotes")
     void testWriteQuotedString() throws Exception {
         final String testStringIn = "Hello &<>\"' World\u00A9";
-        final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#169;\"";
+        final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#xA9;\"";
 
         this.xmlWriter.writeQuoted(testStringIn);
 
@@ -134,7 +178,7 @@ class XmlWriterTest {
     @DisplayName("Write an array adding quotes")
     void testWriteQuotedArray() throws Exception {
         final String testStringIn = "Hello &<>\"' World\u00A9";
-        final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#169;\"";
+        final String testStringOut = "\"Hello &amp;&lt;&gt;&quot;&apos; World&#xA9;\"";
 
         this.xmlWriter.writeQuoted(testStringIn.toCharArray(), 0, testStringIn.length());
 
@@ -193,7 +237,7 @@ class XmlWriterTest {
                 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
                 """),
-                Arguments.of("UTF-8", false, true, NEWLINE)
+                Arguments.of("UTF-8", false, true, System.lineSeparator())
         );
     }
 
