@@ -87,29 +87,6 @@ class XmlWriterTest {
         assertThat(this.stringWriter).hasToString(testString);
     }
 
-    public static Stream<Arguments> needsEscapingProvider() {
-        return Stream.of(
-                arguments("", false),
-                arguments("abc", false),
-                arguments("<abc", true),
-                arguments("abc>", true),
-                arguments("a&bc", true),
-                arguments("a\nbc", true),
-                arguments("a\tbc", false),
-                arguments("a\rbc", false),
-                arguments("a\u008Abc", true),
-                arguments("a\uE08Abc", true),
-                arguments("a\uD83D\uDE03bc", true)
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("needsEscapingProvider")
-    @DisplayName("Determine whether an array requires escaping")
-    void testNeedsEscaping(final String str, final boolean needsEscaping) {
-        assertThat(XmlWriter.needsEscaping(str.toCharArray(), 0, str.length())).isEqualTo(needsEscaping);
-    }
-
     @Test
     @DisplayName("Write an array with escaping")
     void testWriteEscapedArray() throws Exception {

@@ -2605,31 +2605,6 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     }
 
     /**
-     * Determines whether the specified portion of the character array requires escaping.
-     *
-     * @param carr Character array to test
-     * @param start Starting index in the array
-     * @param length Number of characters to test
-     * @return {@code true} if the specified character array requires escaping.
-     */
-    @AccessForTesting
-    static boolean needsEscaping(final char[] carr, final int start, final int length) {
-        int end = start + length;
-        while (--end >= start) {
-            final char c = carr[end];
-
-            if (c == '<' || c == '>' || c == '&' || c == '\n') {
-                return true;
-            }
-            if ((c <= '\u001F' || c >= '\u007F') && c != '\t' && c != '\r') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Writes the specified character array to the output escaping the '&amp;', '&lt;', and '&gt;' characters using
      * the standard XML escape sequences and escaping any character above the ASCII range using a numeric character
      * reference.
@@ -2641,7 +2616,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      */
     @AccessForTesting
     void writeEscaped(final char[] carr, final int start, final int length) throws SAXException {
-        if (this.escaping && needsEscaping(carr, start, length)) {
+        if (this.escaping) {
             final int end = start + length;
             int i = start;
             while (i < end) {
@@ -2671,10 +2646,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
             case '\n' -> writeNewline();
             case '\t', '\r' -> writeRaw((char)c);
             default -> {
-                if (c > '\u001F' && c < '\u007F') {
+                if (c > 0x001F && c < 0x007F) {
                     writeRaw((char)c);
-                } else if ((c >= '\u007F' && c <= '\uD7FF')
-                        || (c >= '\uE000' && c <= '\uFFFD')
+                } else if ((c >= 0x007F && c <= 0xD7FF)
+                        || (c >= 0xE000 && c <= 0xFFFD)
                         || (c >= 0x10000 && c <= 0x10FFFF)) {
                     writeRaw("&#x");
                     writeRaw(Integer.toHexString(c).toUpperCase());
