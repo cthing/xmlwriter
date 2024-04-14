@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [3.0.0] - 2024-04-14
+
 ### Added
 
 - XML characters outside the [Unicode Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode))
@@ -49,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First source code release
 
-[unreleased]: https://github.com/cthing/xmlwriter/compare/2.0.1...HEAD
+[unreleased]: https://github.com/cthing/xmlwriter/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/cthing/xmlwriter/releases/tag/3.0.0
 [2.0.1]: https://github.com/cthing/xmlwriter/releases/tag/2.0.1
 [2.0.0]: https://github.com/cthing/xmlwriter/releases/tag/2.0.0
