@@ -18,8 +18,8 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-val baseVersion = "2.1.0"
-val isSnapshot = true
+val baseVersion = "3.0.0"
+val isSnapshot = false
 
 val isCIServer = System.getenv("CTHING_CI") != null
 val buildNumber = if (isCIServer) System.currentTimeMillis().toString() else "0"
@@ -37,6 +37,7 @@ dependencies {
     api(libs.jsr305)
 
     implementation(libs.cthingAnnots)
+    implementation(libs.escapers)
 
     testImplementation(libs.junitApi)
     testImplementation(libs.junitParams)

@@ -24,6 +24,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,7 @@ import javax.annotation.WillNotClose;
 import javax.xml.XMLConstants;
 
 import org.cthing.annotations.AccessForTesting;
+import org.cthing.escapers.XmlEscaper;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -361,8 +363,8 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /** Should output be formatted. */
     private boolean prettyPrint;
 
-    /** Should characters be escaped. */
-    private boolean escaping;
+    /** Options controlling the escaping behavior. */
+    private final Set<XmlEscaper.Option> escapeOptions;
 
     /** Indent string. */
     private String indentStr;
@@ -563,7 +565,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
         this.nsDeclMap = new HashMap<>();
         this.nsRootDeclSet = new HashSet<>();
         this.prettyPrint = false;
-        this.escaping = true;
+        this.escapeOptions = EnumSet.noneOf(XmlEscaper.Option.class);
         this.minimize = true;
         this.indentStr = DEF_INDENT;
         this.offsetStr = DEF_OFFSET;
@@ -720,26 +722,50 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     }
 
     /**
-     * Enables or disables XML escaping of attribute values and character data. In addition, enables or disables
-     * escaping of embedded quotes in attribute values. By default, escaping is enabled.
+     * Escape characters above the ASCII range (i.e. ch &gt; 0x7F). By default, only ASCII control characters
+     * and markup-significant ASCII characters are escaped. Specifying this option causes all ISO Latin-1,
+     * Unicode BMP and surrogate pair characters to be escaped.
      *
-     * <p><strong>WARNING:</strong> Under normal operating conditions, escaping should always be enabled. If the
-     * character data to be written is known to not require escaping, disabling escaping will improve performance.
-     * Use this feature at your own risk.
-     *
-     * @param enable {@code true} to enable escaping (the default).
+     * @param enable {@code true} to escape characters outside the ASCII range using numerical entity references
      */
-    public void setEscaping(final boolean enable) {
-        this.escaping = enable;
+    public void setEscapeNonAscii(final boolean enable) {
+        if (enable) {
+            this.escapeOptions.add(XmlEscaper.Option.ESCAPE_NON_ASCII);
+        } else {
+            this.escapeOptions.remove(XmlEscaper.Option.ESCAPE_NON_ASCII);
+        }
     }
 
     /**
-     * Indicates whether XML escaping is enabled.
+     * Indicates whether characters above the ASCII range (i.e. ch &gt; 0x7F) are escaped.
      *
-     * @return Whether XML escaping is enabled or disabled.
+     * @return {@code true} if characters outside the ASCII range are being escaped.
      */
-    public boolean getEscaping() {
-        return this.escaping;
+    public boolean getEscapeNonAscii() {
+        return this.escapeOptions.contains(XmlEscaper.Option.ESCAPE_NON_ASCII);
+    }
+
+    /**
+     * Use decimal for numerical character entities (i.e. &amp;#DDDD;). By default, this library uses hexadecimal
+     * (i.e. &amp;#xHHH;) for numerical character entities.
+     *
+     * @param enable {@code true} to use decimal rather than hexadecimal for numerical character entities
+     */
+    public void setUseDecimal(final boolean enable) {
+        if (enable) {
+            this.escapeOptions.add(XmlEscaper.Option.USE_DECIMAL);
+        } else {
+            this.escapeOptions.remove(XmlEscaper.Option.USE_DECIMAL);
+        }
+    }
+
+    /**
+     * Indicates whether decimal is being used for numerical character entities rather than hexadecimal.
+     *
+     * @return {@code true} if decimal is being used for numerical character entities.
+     */
+    public boolean getUseDecimal() {
+        return this.escapeOptions.contains(XmlEscaper.Option.USE_DECIMAL);
     }
 
     /**
@@ -2586,21 +2612,7 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     @AccessForTesting
     void writeQuoted(final char[] carr, final int start, final int length) throws SAXException {
         writeRaw('"');
-        if (this.escaping && containsQuotes(carr, start, length)) {
-            final int end = start + length;
-            for (int i = start; i < end; i++) {
-                final char c = carr[i];
-                if (c == '"') {
-                    writeRaw("&quot;");
-                } else if (c == '\'') {
-                    writeRaw("&apos;");
-                } else {
-                    writeEscaped(c);
-                }
-            }
-        } else {
-            writeEscaped(carr, start, length);
-        }
+        writeEscaped(carr, start, length);
         writeRaw('"');
     }
 
@@ -2616,46 +2628,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      */
     @AccessForTesting
     void writeEscaped(final char[] carr, final int start, final int length) throws SAXException {
-        if (this.escaping) {
-            final int end = start + length;
-            int i = start;
-            while (i < end) {
-                final int codePoint = Character.codePointAt(carr, i);
-                writeEscaped(codePoint);
-                i += Character.charCount(codePoint);
-            }
-        } else {
-            writeRaw(carr, start, length);
-        }
-    }
-
-    /**
-     * Writes the specified character to the output escaping the '&amp;', '&lt;', and '&gt;' characters using the
-     * standard XML escape sequences. Control characters and characters outside the ASCII range are escaped using a
-     * numeric character reference. Invalid XML characters are not written.
-     *
-     * @param c Character to write
-     * @throws SAXException If there is an error writing the character. The SAXException wraps an IOException.
-     */
-    @AccessForTesting
-    void writeEscaped(final int c) throws SAXException {
-        switch (c) {
-            case '&' -> writeRaw("&amp;");
-            case '<' -> writeRaw("&lt;");
-            case '>' -> writeRaw("&gt;");
-            case '\n' -> writeNewline();
-            case '\t', '\r' -> writeRaw((char)c);
-            default -> {
-                if (c > 0x001F && c < 0x007F) {
-                    writeRaw((char)c);
-                } else if ((c >= 0x007F && c <= 0xD7FF)
-                        || (c >= 0xE000 && c <= 0xFFFD)
-                        || (c >= 0x10000 && c <= 0x10FFFF)) {
-                    writeRaw("&#x");
-                    writeRaw(Integer.toHexString(c).toUpperCase());
-                    writeRaw(';');
-                }
-            }
+        try {
+            XmlEscaper.escape(carr, start, length, this.out, this.escapeOptions);
+        } catch (final IOException ex) {
+            throw new SAXException(ex);
         }
     }
 

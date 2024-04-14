@@ -11,16 +11,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - XML characters outside the [Unicode Basic Multilingual Plane](https://en.wikipedia.org/wiki/Plane_(Unicode))
   (i.e. 0x10000-0x10FFFF) are now supported and escaped
+- The `setEscapeNonAscii` and `setUseDecimal` methods have been added to control escaping behavior
 - [Dependency analysis Gradle plugin](https://github.com/autonomousapps/dependency-analysis-gradle-plugin)
 - The `check` task now depends on the `buildHealth` task and will fail the build on health violations such as
   unused dependencies
+- New dependency on the [escapers](https://central.sonatype.com/artifact/org.cthing/escapers) library
 
 ### Changed
 
-- Numeric character entities are now written in hexidecimal (e.g. `&#xA9;`) rather than decimal
+- The escape behavior has changed. By default, characters outside the ASCII range are no longer escaped. To
+  escape these characters, call `setEscapeNonAscii(true)`.
+- By default, numeric character entities are now written in hexidecimal (e.g. `&#xA9;`) rather than decimal.
+  To write numeric entities in decimal, call `setUseDecimal(true)`.
 - Invalid XML characters are no longer written. In previous versions, they were written in decimal with the prefix
   "ctrl-".
 - Changed JSR-305 dependency from `implementation` to `api`
+
+### Removed
+
+- The `setEscaping` method has been removed. Use the `setEscapeNonAscii` and `setUseDecimal` methods.
 
 ## [2.0.1] - 2023-12-23
 
