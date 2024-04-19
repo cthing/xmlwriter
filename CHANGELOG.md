@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The escape behavior has changed. By default, characters outside the ASCII range are no longer escaped. To
   escape these characters, call `setEscapeNonAscii(true)`.
-- By default, numeric character entities are now written in hexidecimal (e.g. `&#xA9;`) rather than decimal.
+- By default, numeric character entities are now written in hexadecimal (e.g. `&#xA9;`) rather than decimal.
   To write numeric entities in decimal, call `setUseDecimal(true)`.
 - Invalid XML characters are no longer written. In previous versions, they were written in decimal with the prefix
   "ctrl-".
