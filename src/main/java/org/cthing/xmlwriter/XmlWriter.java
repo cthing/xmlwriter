@@ -20,12 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-import javax.annotation.WillNotClose;
 import javax.xml.XMLConstants;
 
 import org.cthing.annotations.AccessForTesting;
 import org.cthing.escapers.XmlEscaper;
+import org.jspecify.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -522,9 +521,9 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Creates an XML writer that writes to the specified writer.
      *
-     * @param writer Output destination or {@code null} to use the standard output.
+     * @param writer Output destination or {@code null} to use the standard output. The writer will not be closed.
      */
-    public XmlWriter(@Nullable @WillNotClose final Writer writer) {
+    public XmlWriter(@Nullable final Writer writer) {
         this(null, writer);
     }
 
@@ -532,9 +531,9 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Creates an XML writer in a filter chain with the specified reader as
      * the parent.
      *
-     * @param reader Parent in the filter chain or {@code null} if there is no chain.
+     * @param reader Parent in the filter chain or {@code null} if there is no chain. The reader will not be closed.
      */
-    public XmlWriter(@Nullable @WillNotClose final XMLReader reader) {
+    public XmlWriter(@Nullable final XMLReader reader) {
         this(reader, null);
     }
 
@@ -542,10 +541,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Creates an XML writer in a filter chain with the specified reader as the parent and the specified
      * writer as the output destination.
      *
-     * @param reader Parent in the filter chain or {@code null} if there is no chain.
-     * @param writer Output destination of {@code null} to use the standard output.
+     * @param reader Parent in the filter chain or {@code null} if there is no chain. The reader will not be closed.
+     * @param writer Output destination of {@code null} to use the standard output. The writer will not be closed.
      */
-    public XmlWriter(@Nullable @WillNotClose final XMLReader reader, @Nullable @WillNotClose final Writer writer) {
+    public XmlWriter(@Nullable final XMLReader reader, @Nullable final Writer writer) {
         super(reader);
 
         this.elementStack = new ElementStack();
@@ -601,10 +600,10 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
      * Sets a new output destination for the writer.
      *
      * @param writer New output writer to set. If the value of this parameter is {@code null}, the standard
-     *         output is used.
+     *         output is used. The writer will not be closed.
      * @return The newly set writer.
      */
-    public final Writer setOutput(@Nullable @WillNotClose final Writer writer) {
+    public final Writer setOutput(@Nullable final Writer writer) {
         this.out = (writer == null) ? new OutputStreamWriter(System.out, StandardCharsets.UTF_8) : writer;
         return this.out;
     }
@@ -621,11 +620,11 @@ public class XmlWriter extends XMLFilterImpl implements LexicalHandler {
     /**
      * Parses an XML document using the writer as a filter.
      *
-     * @param reader Provides the XML document
+     * @param reader Provides the XML document. The reader will not be closed.
      * @throws IOException if there was a problem reading the XML document.
      * @throws SAXException if there was a problem parsing the XML document.
      */
-    public void parse(@WillNotClose final Reader reader) throws IOException, SAXException {
+    public void parse(final Reader reader) throws IOException, SAXException {
         parse(new InputSource(reader));
     }
 

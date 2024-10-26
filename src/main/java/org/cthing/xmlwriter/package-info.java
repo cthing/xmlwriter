@@ -6,7 +6,7 @@
 /**
  * Classes for writing XML.
  */
-@PackageNonnullByDefault
+@NullMarked
 package org.cthing.xmlwriter;
 
-import org.cthing.annotations.PackageNonnullByDefault;
+import org.jspecify.annotations.NullMarked;

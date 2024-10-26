@@ -28,7 +28,7 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-version = ProjectVersion("3.0.1", BuildType.snapshot)
+version = ProjectVersion("4.0.0", BuildType.snapshot)
 group = "org.cthing"
 description = "A simple yet highly configurable XML writing library."
 
@@ -39,10 +39,11 @@ java {
 }
 
 dependencies {
-    api(libs.jsr305)
+    api(libs.jspecify)
 
-    implementation(libs.cthingAnnots)
     implementation(libs.escapers)
+
+    compileOnly(libs.cthingAnnots)
 
     testImplementation(libs.junitApi)
     testImplementation(libs.junitParams)

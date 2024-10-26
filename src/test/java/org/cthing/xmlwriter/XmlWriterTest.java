@@ -780,7 +780,7 @@ class XmlWriterTest {
                          </elem1>
                          """;
 
-        final XMLReader xmlReader = newXmlReader(false, false, false, false);
+        final XMLReader xmlReader = newXmlReader(false, false, false);
         final StringWriter writer = new StringWriter();
         final StringReader reader = new StringReader(xml);
         final XmlWriter xmlWriterFilter = new XmlWriter(xmlReader, writer);
@@ -802,7 +802,7 @@ class XmlWriterTest {
                          </elem1>
                          """;
 
-        final XMLReader xmlReader = newXmlReader(true, false, false, false);
+        final XMLReader xmlReader = newXmlReader(true, false, false);
         final StringWriter writer = new StringWriter();
         final StringReader reader = new StringReader(xml);
         final XmlWriter xmlWriterFilter = new XmlWriter(xmlReader, writer);
@@ -827,7 +827,7 @@ class XmlWriterTest {
                          </elem1>
                          """;
 
-        final XMLReader xmlReader = newXmlReader(true, true, false, false);
+        final XMLReader xmlReader = newXmlReader(true, true, false);
         final StringWriter writer = new StringWriter();
         final StringReader reader = new StringReader(xml);
         final XmlWriter xmlWriterFilter = new XmlWriter(xmlReader, writer);
@@ -859,7 +859,7 @@ class XmlWriterTest {
                          </elem1>
                          """;
 
-        final XMLReader xmlReader = newXmlReader(true, false, false, true);
+        final XMLReader xmlReader = newXmlReader(true, false, true);
         final StringWriter writer = new StringWriter();
         final StringReader reader = new StringReader(xml);
         final XmlWriter xmlWriterFilter = new XmlWriter(xmlReader, writer);
@@ -883,7 +883,7 @@ class XmlWriterTest {
                          </elem1>
                          """;
 
-        final XMLReader xmlReader = newXmlReader(true, false, false, true);
+        final XMLReader xmlReader = newXmlReader(true, false, true);
         final StringWriter writer = new StringWriter();
         final StringReader reader = new StringReader(xml);
         final XmlWriter xmlWriterFilter = new XmlWriter(xmlReader, writer);
@@ -895,12 +895,12 @@ class XmlWriterTest {
         assertThat(writer).hasToString(xml);
     }
 
-    private XMLReader newXmlReader(final boolean namespaceAware, final boolean validating, final boolean xincludeAware,
-                                   final boolean useSchema) throws SAXException, ParserConfigurationException {
+    private XMLReader newXmlReader(final boolean namespaceAware, final boolean validating, final boolean useSchema)
+            throws SAXException, ParserConfigurationException {
         final SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(namespaceAware);
         factory.setValidating(validating);
-        factory.setXIncludeAware(xincludeAware);
+        factory.setXIncludeAware(false);
 
         if (useSchema) {
             final SchemaFactory schemaFactory =
