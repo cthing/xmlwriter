@@ -28,7 +28,7 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-version = ProjectVersion("4.0.0", BuildType.release)
+version = ProjectVersion("4.0.1", BuildType.snapshot)
 group = "org.cthing"
 description = "A simple yet highly configurable XML writing library."
 
