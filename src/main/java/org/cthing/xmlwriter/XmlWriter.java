@@ -55,6 +55,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *          terminate the XML document. No XML output methods can be called following the call to endDocument.</li>
  *      <li>Optionally, reuse the XmlWriter instance by calling the {@link #reset reset} method.</li>
  * </ol>
+ *
  * <p>The following is an example of using a standalone XmlWriter to write a simple XML document to the standard
  * output:</p>
  * <pre>
@@ -66,6 +67,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * w.endElement();
  * w.endDocument();
  * </pre>
+ *
  * <p>The following XML is displayed on the standard output:</p>
  * <pre>
  * &lt;?xml version="1.0" standalone="yes"?&gt;
@@ -74,6 +76,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * </pre>
  *
  * <h2>SAX Filter Usage</h2>
+ *
  * <p>The XmlWriter can be used as a SAX2 stream filter. The class receives SAX events from the downstream XMLReader,
  * outputs the appropriate XML, and forwards the event to the upstream filter. For usage as a SAX filter:</p>
  * <ol>
@@ -83,6 +86,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *          method must be called on the outermost object in the filter chain.</li>
  *      <li>When used as part of a filter chain, the XmlWriter is not reused.</li>
  * </ol>
+ *
  * <p>In the following example, the XmlWriter is used to output XML that is being parsed by an
  * {@link org.xml.sax.XMLReader XMLReader} and written to the standard output.</p>
  * <pre>
@@ -98,6 +102,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * xmlWriter.setProperty("http://xml.org/sax/properties/lexical-handler", xmlWriter);
  * xmlWriter.parse(new InputSource(new FileReader("Foo.xml")));
  * </pre>
+ *
  * <p>An XmlWriter can process more SAX events than those specified in the
  * {@link org.xml.sax.helpers.XMLFilterImpl XMLFilterImpl} base class. Specifically, the XmlWriter can process
  * the DTD, CDATA and comment events reported by the {@link org.xml.sax.ext.LexicalHandler LexicalHandler}
@@ -105,7 +110,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * setProperty} in the above example, allows the XmlWriter to receive these additional events.</p>
  *
  * <p><strong>Note:</strong> When an XmlWriter is used in a SAX filter chain, the input XML header is not output.
- * Instead a generic XML header is generated. See the {@link #startDocument() startDocument} and
+ * Instead, a generic XML header is generated. See the {@link #startDocument() startDocument} and
  * {@link #setStandalone(boolean) setStandalone} methods for more information. In addition, internal DTD subsets are
  * not output.</p>
  *
@@ -121,6 +126,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * <pre>
  * &lt;ns1:elem1 xmlns:ns1="https://www.cthing.com/foo"&gt;
  * </pre>
+ *
  * <p>In the above example, the element's qualified name is {@code ns1:elem1} consisting of the namespace prefix
  * {@code ns1} and the local name {@code elem1}. The element is associated with the namespace URI
  * {@code https://www.cthing.com/foo} using the namespace declaration attribute. An element belongs to the default
@@ -128,6 +134,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * <pre>
  * &lt;elem1 xmlns="https://www.cthing.com/foo"&gt;
  * </pre>
+ *
  * <p>The XmlWriter provides many overloaded methods for writing elements and attributes with various combinations
  * of namespace components: namespace URI, local name, and qualified name. The namespace URI is used to look up a
  * prefix for the element. If a prefix cannot be found, but there is a prefix on the qualified name, that prefix is
@@ -163,6 +170,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *        &lt;__NS1:elem3 xmlns:__NS1="https://www.cthing.com/foo"/&gt;
  *    &lt;/elem1&gt;
  * </pre>
+ *
  * <p>A more appropriate prefix can be specified using the {@link #addNSPrefix(String, String) addNSPrefix} method</p>
  * <pre>
  *    addNSPrefix("n1", "https://www.cthing.com/foo");
@@ -176,6 +184,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *        &lt;n1:elem3 xmlns:n1="https://www.cthing.com/foo"/&gt;
  *    &lt;/elem1&gt;
  * </pre>
+ *
  * <p>The addNSPrefix method specifies namespace prefixes, but as shown in the above example, the namespaces
  * declarations appear on every element leading to nearly unreadable verbose XML. Typically, namespaces are declared
  * once on the root element. To achieve this using the XmlWriter, call one of the
@@ -194,6 +203,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *        &lt;ns1:elem3/&gt;
  *    &lt;/elem1&gt;
  * </pre>
+ *
  * <p>The default namespace can be specified by calling the addNSPrefix or addNSRootDecl method with an empty string
  * ("") for the prefix as shown in the following example:</p>
  * <pre>
@@ -210,6 +220,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * </pre>
  *
  * <h2>Pretty Printing</h2>
+ *
  * <p>The XmlWriter can format the XML output and provides a number of options for controlling the appearance of the
  * output.</p>
  *
@@ -222,6 +233,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * &lt;?xml version="1.0" standalone="yes"?&gt;
  * &lt;elem1&gt;&lt;elem2&gt;Hello World&lt;/elem2&gt;&lt;/elem1&gt;
  * </pre>
+ *
  * <p>results in this output:</p>
  * <pre>
  * &lt;?xml version="1.0" standalone="yes"?&gt;
@@ -234,10 +246,11 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * <p><strong>Pretty Printing Attributes -</strong> By default the XmlWriter writes element attributes on the same
  * line as the element name. Call {@link #setAttrPerLine(boolean) setAttrPerLine} with a value of {@code true} to
  * have each attribute written on a separate line. The formatting of attributes can be selected independently basic
- * pretty printing. By default element attributes are written as:</p>
+ * pretty printing. By default, element attributes are written as:</p>
  * <pre>
  * &lt;elem1 a1="v1" a2="v2" a3="v3"/&gt;
  * </pre>
+ *
  * <p>Using attribute formatting, element attributes are written as:</p>
  * <pre>
  * &lt;elem1
