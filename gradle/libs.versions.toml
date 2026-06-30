@@ -17,7 +17,7 @@ versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
 apiGuardian = "org.apiguardian:apiguardian-api:1.1.2"
 assertJ = "org.assertj:assertj-core:3.27.6"
 cthingAnnots = "org.cthing:cthing-annotations:2.0.0"
-escapers = "org.cthing:escapers:2.0.0"
+escapers = "org.cthing:escapers:2.1.0"
 jspecify = "org.jspecify:jspecify:1.0.0"
 junitApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
